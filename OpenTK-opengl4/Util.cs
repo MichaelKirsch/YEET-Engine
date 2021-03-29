@@ -74,5 +74,42 @@ namespace OpenTK_opengl4
             GL.CreateVertexArrays(1, out VAO);
             LabelObject(ObjectLabelIdentifier.VertexArray, VAO, $"VAO: {Name}");
         }
+
+        public class StopWatchSeconds
+        {
+            public StopWatchSeconds()
+            {
+                _stopwatch = new Stopwatch();
+                _stopwatch.Start();
+            }
+
+            public double result()
+            {
+                _stopwatch.Stop();
+                TimeSpan stopwatchElapsed = _stopwatch.Elapsed;
+                return stopwatchElapsed.TotalSeconds;
+            }
+
+            private Stopwatch _stopwatch;
+
+        }
+        
+        public class StopWatchMilliseconds
+        {
+            public StopWatchMilliseconds()
+            {
+                _stopwatch = new Stopwatch();
+                _stopwatch.Start();
+            }
+
+            public double Result()
+            {
+                _stopwatch.Stop();
+                TimeSpan stopwatchElapsed = _stopwatch.Elapsed;
+                return stopwatchElapsed.TotalMilliseconds;
+            }
+
+            private Stopwatch _stopwatch;
+        }
     }
 }

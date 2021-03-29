@@ -27,16 +27,42 @@ namespace OpenTK_opengl4
         private bool Initialized = false;
 
         private readonly (ShaderType Type, string Path)[] Files;
-
-        public Shader(string name, string vertexShader, string fragmentShader)
+        
+        
+        public Shader(string name, string vertexShader, string fragmentShader,bool isFromFile=false)
         {
+            
             Name = name;
-            Files = new[]{
-                (ShaderType.VertexShader, vertexShader),
-                (ShaderType.FragmentShader, fragmentShader),
-            };
+            if (!isFromFile)
+            {
+                Files = new[]{
+                    (ShaderType.VertexShader, vertexShader),
+                    (ShaderType.FragmentShader, fragmentShader),
+                };
+            }
+            else
+            {
+                string VertexShaderSource;
+                using (StreamReader reader = new StreamReader(vertexShader, Encoding.UTF8))
+                {
+                    VertexShaderSource = reader.ReadToEnd();
+                }
+
+                string FragmentShaderSource;
+
+                using (StreamReader reader = new StreamReader(fragmentShader, Encoding.UTF8))
+                {
+                    FragmentShaderSource = reader.ReadToEnd();
+                }
+                Files = new[]{
+                    (ShaderType.VertexShader, FragmentShaderSource),
+                    (ShaderType.FragmentShader, VertexShaderSource),
+                };
+            }
             Program = CreateProgram(name, Files);
         }
+        
+        
         public void UseShader()
         {
             GL.UseProgram(Program);

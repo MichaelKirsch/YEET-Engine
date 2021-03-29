@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections;
+using System.Diagnostics;
 using System.Runtime.CompilerServices;
 using System.Threading;
 using System.Threading.Tasks;
@@ -16,7 +17,7 @@ namespace OpenTK_opengl4
     {
         public State1()
         {
-            Console.WriteLine("State1 construct");
+            Debug.WriteLine("State1 construct");
             counter = 0;
             
         }
@@ -24,7 +25,7 @@ namespace OpenTK_opengl4
         public override void OnUpdate()
         {
             base.OnUpdate();
-            Console.WriteLine("State1 update");
+            Debug.WriteLine("State1 update");
             counter++;
             if (counter > 100)
             {
@@ -36,20 +37,20 @@ namespace OpenTK_opengl4
 
         public override void OnRender()
         {
-            Console.WriteLine("Render");
+            Debug.WriteLine("Render");
             base.OnRender();
         }
 
         public override void OnStart()
         {
             //StateMaschine._Context.SetClearColor(1.0f);
-            System.Console.WriteLine("State1 onstart");
+            Debug.WriteLine("State1 onstart");
             base.OnStart();
         }
 
         public override void OnLeave()
         {
-            System.Console.WriteLine("State1 leaving");
+            Debug.WriteLine("State1 leaving");
             base.OnLeave();
         }
         private int counter =0;
@@ -59,14 +60,14 @@ namespace OpenTK_opengl4
     {
         public State2()
         {
-            System.Console.WriteLine("State2 construct");
+            Debug.WriteLine("State2 construct");
             
             counter = 0;
         }
         public override void OnUpdate()
         {
             base.OnUpdate();
-            System.Console.WriteLine("State2 update");
+            Debug.WriteLine("State2 update");
             counter++;
             if (counter > 100)
             {
@@ -84,14 +85,14 @@ namespace OpenTK_opengl4
 
         public override void OnStart()
         {
-            System.Console.WriteLine("State2 onstart");
+            Debug.WriteLine("State2 onstart");
             
             base.OnStart();
         }
 
         public override void OnLeave()
         {
-            System.Console.WriteLine("State2 leaving");
+            Debug.WriteLine("State2 leaving");
             base.OnLeave();
         }
 

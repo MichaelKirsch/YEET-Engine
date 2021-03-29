@@ -3,6 +3,8 @@ using OpenTK.Graphics.OpenGL4;
 using OpenTK.Mathematics;
 using OpenTK.Windowing.Common;
 using System;
+using System.Diagnostics;
+using System.Threading;
 using ImGuiNET;
 
 namespace OpenTK_opengl4
@@ -37,9 +39,8 @@ namespace OpenTK_opengl4
         
         protected override void OnRenderFrame(FrameEventArgs e)
         {
+            var watch = new Util.StopWatchMilliseconds();
             base.OnRenderFrame(e);
-
-            _controller.Update(this, (float)e.Time);
             
             GL.ClearColor(new Color4(0, 32, 48, 255));
             GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit | ClearBufferMask.StencilBufferBit);
@@ -50,15 +51,20 @@ namespace OpenTK_opengl4
             
             _controller.Render();
             
-
             SwapBuffers();
+            LastFrameRenderTime = watch.Result();
         }
 
-        protected override void OnUpdateFrame(FrameEventArgs args)
+        protected override void OnUpdateFrame(FrameEventArgs e)
         {
+            var watch = new Util.StopWatchMilliseconds();
+            base.OnUpdateFrame(e);
+            _controller.Update(this, (float)e.Time);
             StateMaschine.Update();
-            base.OnUpdateFrame(args);
+            
+            LastFrameUpdateTime = watch.Result();
         }
+        
 
         protected override void OnTextInput(TextInputEventArgs e)
         {
@@ -72,9 +78,10 @@ namespace OpenTK_opengl4
             
             _controller.MouseScroll(e.Offset);
         }
-        
-        
-        private ImGuiController _controller;
+
+        public double LastFrameRenderTime;
+        public double LastFrameUpdateTime;
+        public ImGuiController _controller;
 
     }
 }
