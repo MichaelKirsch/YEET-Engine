@@ -8,11 +8,7 @@ namespace OpenTK_opengl4
     {
         static void Main(string[] args)
         {
-            Console.WriteLine("Hello World!");
-            StateMaschine stateMaschine = new StateMaschine();
-            stateMaschine.Run(new State1(stateMaschine));
-            
-            
+            StateMaschine.Run(new State1(), 60, 30);
         }
     }
 }

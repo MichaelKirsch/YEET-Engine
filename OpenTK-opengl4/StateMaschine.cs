@@ -1,42 +1,70 @@
-﻿namespace OpenTK_opengl4
+﻿using System;
+using System.Runtime.InteropServices;
+using System.Timers;
+
+namespace OpenTK_opengl4
 {
-    public class State
+    public static class StateMaschine
     {
-        public State(StateMaschine parentMaschine)
+        static StateMaschine()
         {
-            _Parent = parentMaschine;
+            Console.WriteLine("StateMaschine Started");
         }
 
-        public virtual void OnUpdate(){}
-        public virtual void OnStart(){}
-        public virtual void OnLeave(){}
-        protected StateMaschine _Parent;
-    }
-    
-    public class StateMaschine
-    {
-        public StateMaschine()
+        public static void Run(State start,int updateRate, int frameRate)
         {
-            
+            _Context = new MainWindow(updateRate,frameRate);
+            _currentState = start;
+            _Context.Run();
         }
-        public bool ShouldClose { get; set; }
-        public void Run(State startState)
+        
+        public static void Render()
         {
-            _currentState = startState;
-            startState.OnStart();
-            while (!ShouldClose)
-            {
-                _currentState.OnUpdate();
-            }
+            _currentState.OnRender();
         }
 
-        public void SwitchState(State nextState)
+        public static void Update()
+        {
+            _currentState.OnUpdate();
+        }
+        
+        public static void SwitchState(State nextState)
         {
             _currentState.OnLeave();
             _currentState = nextState;
             _currentState.OnStart();
         }
-        
-        private State _currentState;
+
+
+        private static State _currentState;
+        public static MainWindow _Context;
     }
+
+    public class State
+    {
+        public State()
+        {
+            
+        }
+
+        public virtual void OnUpdate()
+        {
+            
+        }
+
+        public virtual void OnRender()
+        {
+            
+        }
+
+        public virtual void OnStart()
+        {
+        }
+
+        public virtual void OnLeave()
+        {
+        }
+    }
+
+    
 }

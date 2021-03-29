@@ -4,10 +4,26 @@
         <OutputType>Exe</OutputType>
         <TargetFramework>net5.0</TargetFramework>
         <RootNamespace>OpenTK_opengl4</RootNamespace>
+		<PublishReadyToRun>true</PublishReadyToRun>
+        <TieredCompilation>false</TieredCompilation>
+    </PropertyGroup>
+
+    <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
+      <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
     </PropertyGroup>
 
     <ItemGroup>
+      <PackageReference Include="ImGui.NET" Version="1.78.0" />
       <PackageReference Include="OpenTK" Version="4.6.3" />
+      <PackageReference Include="SimplexNoise" Version="2.0.0" />
+	  <PackageReference Include="System.Drawing.Common" Version="5.0.0" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <None Remove="Shader\vert.glsl" />
+      <Content Include="Shader\vert.glsl">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </Content>
     </ItemGroup>
 
 </Project>
