@@ -25,7 +25,7 @@ namespace OpenTK_opengl4
         private int _indexBufferSize;
 
         private Texture _fontTexture;
-        private Shader _shader;
+        private ShaderLoader _shaderLoader;
         
         private int _windowWidth;
         private int _windowHeight;
@@ -111,7 +111,7 @@ void main()
 {
     outputColor = color * texture(in_fontTexture, texCoord);
 }";
-            _shader = new Shader("ImGui", VertexSource, FragmentSource);
+            _shaderLoader = new ShaderLoader("ImGui", VertexSource, FragmentSource);
 
             GL.VertexArrayVertexBuffer(_vertexArray, 0, _vertexBuffer, IntPtr.Zero, Unsafe.SizeOf<ImDrawVert>());
             GL.VertexArrayElementBuffer(_vertexArray, _indexBuffer);
@@ -312,9 +312,9 @@ void main()
                 -1.0f,
                 1.0f);
 
-            _shader.UseShader();
-            GL.UniformMatrix4(_shader.GetUniformLocation("projection_matrix"), false, ref mvp);
-            GL.Uniform1(_shader.GetUniformLocation("in_fontTexture"), 0);
+            _shaderLoader.UseShader();
+            GL.UniformMatrix4(_shaderLoader.GetUniformLocation("projection_matrix"), false, ref mvp);
+            GL.Uniform1(_shaderLoader.GetUniformLocation("in_fontTexture"), 0);
             Util.CheckGLError("Projection");
 
             GL.BindVertexArray(_vertexArray);
@@ -387,7 +387,7 @@ void main()
         public void Dispose()
         {
             _fontTexture.Dispose();
-            _shader.Dispose();
+            _shaderLoader.Dispose();
         }
     }
 }

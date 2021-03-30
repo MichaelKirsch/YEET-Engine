@@ -24,7 +24,7 @@ namespace OpenTK_opengl4
             base.OnLoad();
 
             Title += ": OpenGL Version: " + GL.GetString(StringName.Version);
-
+            
             _controller = new ImGuiController(ClientSize.X, ClientSize.Y);
         }
         
@@ -43,6 +43,7 @@ namespace OpenTK_opengl4
         {
             var watch = new Util.StopWatchMilliseconds();
             base.OnRenderFrame(e);
+            _controller.Update(this, (float)e.Time);
             GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit | ClearBufferMask.StencilBufferBit);
             StateMaschine.Render();
             _controller.Render();
@@ -54,7 +55,6 @@ namespace OpenTK_opengl4
         {
             var watch = new Util.StopWatchMilliseconds();
             base.OnUpdateFrame(e);
-            _controller.Update(this, (float)e.Time);
             StateMaschine.Update();
             LastFrameUpdateTime = watch.Result();
             GenerateAverageFrameRenderTime();

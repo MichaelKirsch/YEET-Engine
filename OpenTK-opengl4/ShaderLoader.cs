@@ -19,7 +19,7 @@ namespace OpenTK_opengl4
         public ActiveUniformType Type;
     }
 
-    class Shader
+    class ShaderLoader
     {
         public readonly string Name;
         public int Program { get; private set; }
@@ -28,8 +28,14 @@ namespace OpenTK_opengl4
 
         private readonly (ShaderType Type, string Path)[] Files;
         
-        
-        public Shader(string name, string vertexShader, string fragmentShader,bool isFromFile=false)
+        /// <summary>
+        /// Load Shaders from File or from Strings. Shaders have to be placed n the "Shaders"-Folder
+        /// </summary>
+        /// <param name="name"></param>
+        /// <param name="vertexShader"></param>
+        /// <param name="fragmentShader"></param>
+        /// <param name="isFromFile"></param>
+        public ShaderLoader(string name, string vertexShader, string fragmentShader,bool isFromFile=false)
         {
             
             Name = name;
@@ -43,20 +49,20 @@ namespace OpenTK_opengl4
             else
             {
                 string VertexShaderSource;
-                using (StreamReader reader = new StreamReader(vertexShader, Encoding.UTF8))
+                using (StreamReader reader = new StreamReader("Shaders/" + vertexShader+".glsl", Encoding.UTF8))
                 {
                     VertexShaderSource = reader.ReadToEnd();
                 }
 
                 string FragmentShaderSource;
 
-                using (StreamReader reader = new StreamReader(fragmentShader, Encoding.UTF8))
+                using (StreamReader reader = new StreamReader("Shaders/" +fragmentShader+".glsl", Encoding.UTF8))
                 {
                     FragmentShaderSource = reader.ReadToEnd();
                 }
                 Files = new[]{
-                    (ShaderType.VertexShader, FragmentShaderSource),
-                    (ShaderType.FragmentShader, VertexShaderSource),
+                    (ShaderType.VertexShader, VertexShaderSource),
+                    (ShaderType.FragmentShader, FragmentShaderSource),
                 };
             }
             Program = CreateProgram(name, Files);
@@ -109,7 +115,7 @@ namespace OpenTK_opengl4
 
                 if (location == -1)
                 {
-                    Debug.Print($"The uniform '{uniform}' does not exist in the shader '{Name}'!");
+                    Console.WriteLine($"The uniform '{uniform}' does not exist in the shader '{Name}'!");
                 }
             }
             
@@ -159,7 +165,7 @@ namespace OpenTK_opengl4
             if (success == 0)
             {
                 string Info = GL.GetShaderInfoLog(Shader);
-                Debug.WriteLine($"GL.CompileShader for shader '{Name}' [{type}] had info log:\n{Info}");
+                Console.WriteLine($"GL.CompileShader for shader '{Name}' [{type}] had info log:\n{Info}");
             }
             
             return Shader;

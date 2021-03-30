@@ -21,7 +21,15 @@
 
     <ItemGroup>
       <None Remove="Shader\vert.glsl" />
-      <Content Include="Shader\vert.glsl">
+    </ItemGroup>
+
+    <ItemGroup>
+      <None Remove="Shaders\TriangleFrag.glsl" />
+      <Content Include="Shaders\TriangleFrag.glsl">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </Content>
+      <None Remove="Shaders\TriangleVert.glsl" />
+      <Content Include="Shaders\TriangleVert.glsl">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </Content>
     </ItemGroup>
