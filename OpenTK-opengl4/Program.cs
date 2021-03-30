@@ -8,7 +8,7 @@ namespace OpenTK_opengl4
     {
         static void Main(string[] args)
         {
-            StateMaschine.Run(new State1(), 60, 60);
+            StateMaschine.Run(new RenderingTest(), 60, 60);
         }
     }
 }

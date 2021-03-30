@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Collections;
 using System.Diagnostics;
+using System.Numerics;
 using System.Runtime.CompilerServices;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Timers;
+using ImGuiNET;
 using OpenTK.Graphics.OpenGL4;
 using OpenTK.Input;
 using OpenTK.Windowing.Common.Input;
@@ -13,92 +15,126 @@ using SimplexNoise;
 
 namespace OpenTK_opengl4
 {
-    public class State1 : State
+    public class RenderingTest : State
     {
-        public State1()
+        public RenderingTest()
         {
-            Debug.WriteLine("State1 construct");
-            counter = 0;
-            
+            Console.WriteLine("State1 construct");
         }
 
         public override void OnUpdate()
         {
             base.OnUpdate();
-            Debug.WriteLine("State1 update");
-            counter++;
-            if (counter > 100)
-            {
-                
-                StateMaschine.SwitchState(new State2());
-            }
             
         }
 
         public override void OnRender()
         {
-            Debug.WriteLine("Render");
+            //Console.WriteLine("Render");
+            ImGui.Begin("Debug Window");
+            ImGui.SetWindowFontScale(3.0f);
+            if (ImGui.Button("Click here for purple"))
+            {
+                Console.WriteLine("Was Clicked");
+                GL.ClearColor(0.1f,0.0f,0.2f,1.0f);
+            }
+            
+            if (ImGui.Button("Click here for grey"))
+            {
+                Console.WriteLine("Was Clicked");
+                GL.ClearColor(0.1f,0.1f,0.2f,1.0f);
+            }
+                
+            if (ImGui.Button("Click here for State 2"))
+            {
+                Console.WriteLine("Was Clicked");
+                StateMaschine.SwitchState(new RenderingTest2());
+            }
+            
+            
+            
+            ImGui.Text("Frametime:" + StateMaschine.Context.LastFrameRenderTime);
+            ImGui.Text("Frametime Average:" + StateMaschine.Context.AverageLastFrameRenderTime);
+            ImGui.End();
             base.OnRender();
         }
 
         public override void OnStart()
         {
-            //StateMaschine._Context.SetClearColor(1.0f);
-            Debug.WriteLine("State1 onstart");
+            Console.WriteLine("State1 onstart");
+            GL.ClearColor(0.1f,0.0f,0.2f,1.0f);
             base.OnStart();
         }
 
         public override void OnLeave()
         {
-            Debug.WriteLine("State1 leaving");
+            Console.WriteLine("State1 leaving");
             base.OnLeave();
         }
-        private int counter =0;
     }
-
-    public class State2 : State
+    
+    public class RenderingTest2 : State
     {
-        public State2()
+        public RenderingTest2()
         {
-            Debug.WriteLine("State2 construct");
-            
-            counter = 0;
+            Console.WriteLine("State1 construct");
         }
+
         public override void OnUpdate()
         {
             base.OnUpdate();
-            Debug.WriteLine("State2 update");
-            counter++;
-            if (counter > 100)
-            {
-                
-                StateMaschine.SwitchState(new State1());
-            }
             
         }
 
         public override void OnRender()
         {
+            //Console.WriteLine("Render");
+            ImGui.Begin("Debug Window");
+            ImGui.SetWindowFontScale(3.0f);
+            if (ImGui.Button("Click here for purple"))
+            {
+                Console.WriteLine("Was Clicked");
+                GL.ClearColor(0.1f,0.0f,0.2f,1.0f);
+            }
             
+            if (ImGui.Button("Click here for grey"))
+            {
+                Console.WriteLine("Was Clicked");
+                GL.ClearColor(0.1f,0.1f,0.2f,1.0f);
+            }
+            
+            if (ImGui.Button("Exit"))
+            {
+                StateMaschine.Exit();
+            }
+            
+            if (ImGui.Button("Click here for State 1"))
+            {
+                Console.WriteLine("Was Clicked");
+                StateMaschine.SwitchState(new RenderingTest());
+            }
+            
+            ImGui.Text("Frametime:" + StateMaschine.Context.LastFrameRenderTime);
+            ImGui.Text("Frametime Average:" + StateMaschine.Context.AverageLastFrameRenderTime);
+            ImGui.End();
             base.OnRender();
         }
 
         public override void OnStart()
         {
-            Debug.WriteLine("State2 onstart");
-            
+            Console.WriteLine("State1 onstart");
+            GL.ClearColor(0.0f,0.2f,0.2f,1.0f);
             base.OnStart();
         }
 
         public override void OnLeave()
         {
-            Debug.WriteLine("State2 leaving");
+            Console.WriteLine("State1 leaving");
             base.OnLeave();
         }
-
-        private int counter = 0;
-
     }
+    
+    
     
     
 }

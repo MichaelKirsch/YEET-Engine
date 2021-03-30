@@ -3,7 +3,9 @@ using OpenTK.Graphics.OpenGL4;
 using OpenTK.Mathematics;
 using OpenTK.Windowing.Common;
 using System;
+using System.Collections.Generic;
 using System.Diagnostics;
+using System.Linq;
 using System.Threading;
 using ImGuiNET;
 
@@ -41,16 +43,9 @@ namespace OpenTK_opengl4
         {
             var watch = new Util.StopWatchMilliseconds();
             base.OnRenderFrame(e);
-            
-            GL.ClearColor(new Color4(0, 32, 48, 255));
             GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit | ClearBufferMask.StencilBufferBit);
-            
             StateMaschine.Render();
-            
-            ImGui.ShowDemoWindow();
-            
             _controller.Render();
-            
             SwapBuffers();
             LastFrameRenderTime = watch.Result();
         }
@@ -61,8 +56,8 @@ namespace OpenTK_opengl4
             base.OnUpdateFrame(e);
             _controller.Update(this, (float)e.Time);
             StateMaschine.Update();
-            
             LastFrameUpdateTime = watch.Result();
+            GenerateAverageFrameRenderTime();
         }
         
 
@@ -79,9 +74,18 @@ namespace OpenTK_opengl4
             _controller.MouseScroll(e.Offset);
         }
 
+        private void GenerateAverageFrameRenderTime()
+        {
+            ListLastFrameTimes.Enqueue(LastFrameRenderTime);
+            if (ListLastFrameTimes.Count > 50)
+                ListLastFrameTimes.Dequeue();
+            AverageLastFrameRenderTime = ListLastFrameTimes.Average();
+        }
+        
         public double LastFrameRenderTime;
+        public double AverageLastFrameRenderTime;
         public double LastFrameUpdateTime;
         public ImGuiController _controller;
-
+        private Queue<double> ListLastFrameTimes = new Queue<double>();
     }
 }

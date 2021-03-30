@@ -13,18 +13,20 @@ namespace OpenTK_opengl4
 
         public static void Run(State start,int updateRate, int frameRate)
         {
-            _Context = new MainWindow(updateRate,frameRate);
-            _currentState = start;
-            _Context.Run();
+            _currentState = new Startupstate(start);
+            Context = new MainWindow(updateRate,frameRate);
+            Context.Run();
         }
         
         public static void Render()
         {
+            
             _currentState.OnRender();
         }
 
         public static void Update()
         {
+            
             _currentState.OnUpdate();
         }
         
@@ -35,9 +37,17 @@ namespace OpenTK_opengl4
             _currentState.OnStart();
         }
 
+        public static void Exit()
+        {
+            _currentState.OnLeave();
+            Context.Close();
+            Context.Dispose();
+        }
+        
+        
 
         private static State _currentState;
-        public static MainWindow _Context;
+        public static MainWindow Context;
     }
 
     public class State
@@ -65,6 +75,23 @@ namespace OpenTK_opengl4
         {
         }
     }
+
+    public class Startupstate : State
+    {
+        public Startupstate(State new_state)
+        {
+            _startState = new_state;
+        }
+        public override void OnUpdate()
+        {
+            Console.WriteLine("Startup created. Will switch to First State now");
+            base.OnUpdate();
+            StateMaschine.SwitchState(_startState);
+        }
+
+        private State _startState;
+    }
+    
 
     
 }
