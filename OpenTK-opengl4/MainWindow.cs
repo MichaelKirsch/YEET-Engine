@@ -55,7 +55,7 @@ namespace OpenTK_opengl4
         {
             var watch = new Util.StopWatchMilliseconds();
             base.OnUpdateFrame(e);
-            StateMaschine.Update();
+            StateMaschine.Update(e);
             LastFrameUpdateTime = watch.Result();
             GenerateAverageFrameRenderTime();
         }
@@ -74,6 +74,12 @@ namespace OpenTK_opengl4
             _controller.MouseScroll(e.Offset);
         }
 
+        protected override void OnKeyDown(KeyboardKeyEventArgs e)
+        {
+            base.OnKeyDown(e);
+            
+        }
+
         private void GenerateAverageFrameRenderTime()
         {
             ListLastFrameTimes.Enqueue(LastFrameRenderTime);
@@ -88,4 +94,7 @@ namespace OpenTK_opengl4
         public ImGuiController _controller;
         private Queue<double> ListLastFrameTimes = new Queue<double>();
     }
+    
+    
+    
 }

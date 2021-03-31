@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Runtime.InteropServices;
 using System.Timers;
+using OpenTK.Windowing.Common;
 
 namespace OpenTK_opengl4
 {
@@ -17,10 +18,10 @@ namespace OpenTK_opengl4
             {
                 _startState = new_state;
             }
-            public override void OnUpdate()
+            public override void OnUpdate(FrameEventArgs e)
             {
                 Console.WriteLine("Startup created. Will switch to First State now");
-                base.OnUpdate();
+                base.OnUpdate(e);
                 StateMaschine.SwitchState(_startState);
             }
 
@@ -41,10 +42,10 @@ namespace OpenTK_opengl4
             _currentState.OnGui();
         }
 
-        public static void Update()
+        public static void Update(FrameEventArgs e)
         {
-            
-            _currentState.OnUpdate();
+            _currentState.OnInput();
+            _currentState.OnUpdate(e);
         }
         
         public static void SwitchState(State nextState)
@@ -81,10 +82,16 @@ namespace OpenTK_opengl4
         {
             
         }
+
+        public virtual void OnInput()
+        {
+            
+        }
+        
         /// <summary>
         /// Add all update functions in this block. It is Time-managed through the opentk game window
         /// </summary>
-        public virtual void OnUpdate()
+        public virtual void OnUpdate( FrameEventArgs e)
         {
             
         }
