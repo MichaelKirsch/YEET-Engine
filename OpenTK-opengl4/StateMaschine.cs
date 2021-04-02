@@ -2,6 +2,7 @@
 using System.Runtime.InteropServices;
 using System.Timers;
 using OpenTK.Windowing.Common;
+using OpenTK.Windowing.Desktop;
 
 namespace OpenTK_opengl4
 {
@@ -42,9 +43,14 @@ namespace OpenTK_opengl4
             _currentState.OnGui();
         }
 
-        public static void Update(FrameEventArgs e)
+        public static void Input()
         {
             _currentState.OnInput();
+        }
+        
+        public static void Update(FrameEventArgs e)
+        {
+            
             _currentState.OnUpdate(e);
         }
         

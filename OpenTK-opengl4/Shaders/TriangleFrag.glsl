@@ -3,26 +3,15 @@
 out vec4 FragColor;
 in vec3 oColor;
 uniform vec3 rgb;
+uniform float MaxHeight;
+uniform float MinHeight;
+
+float map(float x, float in_min, float in_max, float out_min, float out_max)
+{
+  return (x - in_min) * (out_max - out_min) / (in_max - in_min) + out_min;
+}
+
 void main()
 {
-    if(oColor[0]<rgb[0])
-    {
-        FragColor = vec4(0, 0.031, 1,1.0);
-        return;
-    }
-    if(oColor[0]>=rgb[0] && oColor[0]<rgb[1])
-    {
-        FragColor = vec4(1, 0.666, 0,1.0);
-        return;
-    }
-    if(oColor[0]>=rgb[1] && oColor[0]<rgb[2])
-    {
-        FragColor = vec4(0.121, 0.6, 0,1.0);
-        return;
-    }  
-    if(oColor[0]>rgb[2])
-    {
-        FragColor = vec4(0.458, 0.458, 0.458,1.0);
-        return;
-    } 
+        FragColor = vec4(0.0, map(oColor[1],MinHeight,MaxHeight,0.0,1.0), 0.5,1.0);
 }

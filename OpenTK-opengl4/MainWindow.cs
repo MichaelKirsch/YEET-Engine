@@ -17,6 +17,7 @@ namespace OpenTK_opengl4
         {
             UpdateFrequency = updateRate;
             RenderFrequency = frameRate;
+            
         }
         
         protected override void OnLoad()
@@ -55,11 +56,24 @@ namespace OpenTK_opengl4
         {
             var watch = new Util.StopWatchMilliseconds();
             base.OnUpdateFrame(e);
+            StateMaschine.Input();
             StateMaschine.Update(e);
             LastFrameUpdateTime = watch.Result();
             GenerateAverageFrameRenderTime();
         }
-        
+
+
+        protected override void OnMouseMove(MouseMoveEventArgs e)
+        {
+            base.OnMouseMove(e);
+        }
+
+        protected override void OnMouseEnter()
+        {
+            base.OnMouseEnter();
+            
+        }
+
 
         protected override void OnTextInput(TextInputEventArgs e)
         {
@@ -72,12 +86,6 @@ namespace OpenTK_opengl4
             base.OnMouseWheel(e);
             
             _controller.MouseScroll(e.Offset);
-        }
-
-        protected override void OnKeyDown(KeyboardKeyEventArgs e)
-        {
-            base.OnKeyDown(e);
-            
         }
 
         private void GenerateAverageFrameRenderTime()

@@ -19,7 +19,7 @@ namespace OpenTK_opengl4
         public ActiveUniformType Type;
     }
 
-    class ShaderLoader
+    public class ShaderLoader
     {
         public readonly string Name;
         public int Program { get; private set; }
@@ -83,7 +83,7 @@ namespace OpenTK_opengl4
             }
         }
 
-        public UniformFieldInfo[] GetUniforms()
+        UniformFieldInfo[] GetUniforms()
         {
             GL.GetProgram(Program, GetProgramParameterName.ActiveUniforms, out int UnifromCount);
 

@@ -8,81 +8,29 @@ using OpenTK;
 using OpenTK.Input;
 using OpenTK.Mathematics;
 using OpenTK.Windowing.Common;
+using OpenTK_opengl4.Ants;
 using SimplexNoise;
 using Buffer = System.Buffer;
-using SFML;
-using SFML.Window;
+
 
 namespace OpenTK_opengl4
 {
     public class RenderingTest : State
     {
-        
-        private ShaderLoader ProgrammTriangle;
-        
-        float[] triangle1  = {
-            -0.005f, -0.005f, 0.0f, //Bottom-left vertex
-            0.005f, -0.005f, 0.0f, //Bottom-right vertex
-            -0.005f,  0.005f, 0.0f,  //Top vertex
-        };
-        
-        float[] triangle2  = {
-            0.005f, -0.005f, 0.0f, //Bottom-right vertex
-            0.005f,  0.005f, 0.0f,  //Top Right
-            -0.005f, 0.005f, 0.0f, //Bottom-left vertex
-        };
-        
-        
-        
-        private int offsetx=1000, offsety=1000;
-
-        private float perlin_noise_scale;
-        private int VAO, VBO;
-        float red,green,blue;
-        private bool scroll;
-        
+        private Playfield _playfield;
+        private Camera _camera;
+        private bool mouse_locked,wireframe;
+        private OBJLoader loader;
         public RenderingTest()
         {
             Console.WriteLine("State1 construct");
-            
+            _camera = new Camera();
         }
 
         public override void OnUpdate(FrameEventArgs e)
         {
             base.OnUpdate(e);
-            if (scroll)
-            {
-                offsetx++;
-                offsety++;  
-            }
-            List<Vector3> buffer =new List<Vector3>();
-            
-            for (int x = -100; x < 100; x++)
-            {
-                for (int y = -100; y < 100; y++)
-                {
-                    var xPos = x / 100f;
-                    var yPos = y / 100f;
-                    float rnd_col = SimplexNoise.Noise.CalcPixel2D(x+offsetx, y+offsety, perlin_noise_scale) % 255.0f / 255.0f;
-                    var Color = new Vector3(rnd_col,rnd_col,rnd_col);
-                    buffer.Add((triangle1[0] + xPos, triangle1[1] + yPos, triangle1[2]));
-                    buffer.Add(Color);
-                    buffer.Add((triangle1[3] + xPos, triangle1[4] + yPos, triangle1[5]));
-                    buffer.Add(Color);
-                    buffer.Add((triangle1[6] + xPos, triangle1[7] + yPos, triangle1[8]));
-                    buffer.Add(Color);
-                    buffer.Add((triangle2[0] + xPos, triangle2[1] + yPos, triangle2[2]));
-                    buffer.Add(Color);
-                    buffer.Add((triangle2[3] + xPos, triangle2[4] + yPos, triangle2[5]));
-                    buffer.Add(Color);
-                    buffer.Add((triangle2[6] + xPos, triangle2[7] + yPos, triangle2[8]));
-                    buffer.Add(Color);
-                }
-            }
-            
-            GL.BindVertexArray(VAO);
-            GL.BindBuffer(BufferTarget.ArrayBuffer,VBO);
-            GL.BufferData(BufferTarget.ArrayBuffer,buffer.Count*3*sizeof(float),buffer.ToArray(),BufferUsageHint.StreamDraw);
+
         }
         
         public override void OnGui()
@@ -105,46 +53,63 @@ namespace OpenTK_opengl4
             {
                 StateMaschine.Exit();
             }
-            ImGui.Text("Mouse Pos:" +Mouse.GetPosition());
-            ImGui.Text("Frametime Average:" + StateMaschine.Context.AverageLastFrameRenderTime);
-            ImGui.SliderFloat("Sealevel", ref red, 0.0f, 1.0f);
-            ImGui.SliderFloat("Landlevel", ref green, 0.0f, 1.0f);
-            ImGui.SliderFloat("Mountainlevel", ref blue, 0.0f, 1.0f);
-            ImGui.SliderFloat("Scale Noise", ref perlin_noise_scale, 0.0f, 0.1f);
-            ImGui.Checkbox("Scroll", ref scroll);
+
             
+            
+            
+            ImGui.Text("Frametime Average:" + 1000.0f/StateMaschine.Context.AverageLastFrameRenderTime);
+            ImGui.SliderInt("Width",ref _playfield.Width,100,1000);
+            ImGui.SliderInt("Height",ref _playfield.Height,100,1000);
+            ImGui.SliderFloat("MouseSens", ref _camera.MouseSensitivity, 0.0f, 1.0f);
+            ImGui.Text((_camera.Yaw,_camera.Pitch).ToString());
+            ImGui.SliderFloat("Noise Scale", ref _playfield.NoiseScaleMayor, 0.0f, 1.0f);
+            ImGui.SliderFloat("Height Scale", ref _playfield.HeightScaler, 10.0f, 300.0f);
+            if(ImGui.Button("Generate"))
+                _playfield.Generate();
+            
+            ImGui.Checkbox("Wireframe", ref wireframe);
+            
+            ImGui.Text(_camera.Position.ToString());
+            ImGui.Checkbox("Mouse Lock", ref mouse_locked);
             ImGui.End();
         }
 
         public override void OnRender()
         {
             base.OnRender();
+            if(wireframe)
+                GL.PolygonMode(MaterialFace.FrontAndBack,PolygonMode.Line);
+            else
+            {
+                GL.PolygonMode(MaterialFace.FrontAndBack,PolygonMode.Fill);
+            }
             
-            GL.BindVertexArray(VAO);
-            ProgrammTriangle.UseShader();
-            GL.Uniform3(ProgrammTriangle.GetUniformLocation("rgb"),red,green,blue);
-            GL.DrawArrays(PrimitiveType.Triangles, 0, 200*200*3*2);
+            
+            _playfield.Draw();
+            loader.Draw();
+            GL.UniformMatrix4(_playfield.shaderLoader.GetUniformLocation("view"),false,ref _camera.View);
+            GL.UniformMatrix4(_playfield.shaderLoader.GetUniformLocation("projection"),false,ref _camera.Projection);
+            GL.Uniform1(_playfield.shaderLoader.GetUniformLocation("MinHeight"), _playfield.MINHEIGHT);
+            GL.Uniform1(_playfield.shaderLoader.GetUniformLocation("MaxHeight"), _playfield.MAXHEIGHT);
+            
+            
+            
+            
         }
 
         public override void OnStart()
         {
+            GL.Enable(EnableCap.DepthTest);
+            GL.Enable(EnableCap.CullFace);
             Console.WriteLine("State1 onstart");
             Random rnd = new Random();
             SimplexNoise.Noise.Seed = rnd.Next();
             GL.ClearColor(0.1f,0.0f,0.2f,1.0f);
-            ProgrammTriangle = new ShaderLoader("Triangle","TriangleVert", "TriangleFrag", true);
+            _playfield = new Playfield();
+            _playfield.Generate();
+            _camera.Reset();
+            loader = new OBJLoader("cube",_playfield.shaderLoader);
             base.OnStart();
-            
-            
-            
-            VBO = GL.GenBuffer();
-            VAO = GL.GenVertexArray();
-            GL.BindVertexArray(VAO);
-            GL.BindBuffer(BufferTarget.ArrayBuffer,VBO);
-            GL.VertexAttribPointer(0, 3, VertexAttribPointerType.Float, false, 6 * sizeof(float), 0);
-            GL.EnableVertexAttribArray(0);
-            GL.VertexAttribPointer(1, 3, VertexAttribPointerType.Float, false, 6 * sizeof(float), 3*sizeof(float));
-            GL.EnableVertexAttribArray(1);
         }
 
         public override void OnLeave()
@@ -155,9 +120,25 @@ namespace OpenTK_opengl4
 
         public override void OnInput()
         {
+            if (StateMaschine.Context.KeyboardState[Keys.Escape])
+                mouse_locked = !mouse_locked;
+
+            if (StateMaschine.Context.KeyboardState[Keys.K])
+                wireframe = !wireframe;
+            
             base.OnInput();
-            
-            
+            _camera.ProcessKeyboard();
+            if (!mouse_locked)
+            {
+                StateMaschine.Context.CursorVisible = false;
+                
+                _camera.processMouse();
+            }
+            else
+            {
+                StateMaschine.Context.CursorVisible = true;
+                
+            }
         }
     }
 }

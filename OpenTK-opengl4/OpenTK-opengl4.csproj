@@ -16,7 +16,6 @@
       <PackageReference Include="ImGui.NET" Version="1.78.0" />
       <PackageReference Include="OpenTK" Version="4.6.3" />
       <PackageReference Include="OpenTK.Input" Version="4.6.3" />
-      <PackageReference Include="SFML.Net" Version="2.5.0" />
       <PackageReference Include="SimplexNoise" Version="2.0.0" />
 	  <PackageReference Include="System.Drawing.Common" Version="5.0.0" />
     </ItemGroup>
@@ -34,6 +33,26 @@
       <Content Include="Shaders\TriangleVert.glsl">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </Content>
+      <None Remove="Models\Palmtree.obj" />
+      <Content Include="Models\Palmtree.obj">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </Content>
+      <None Remove="Models\Palmtree.mtl" />
+      <Content Include="Models\Palmtree.mtl">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </Content>
+      <None Remove="Models\cube.mtl" />
+      <Content Include="Models\cube.mtl">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </Content>
+      <None Remove="Models\cube.obj" />
+      <Content Include="Models\cube.obj">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </Content>
+    </ItemGroup>
+
+    <ItemGroup>
+      <Folder Include="Models" />
     </ItemGroup>
 
 </Project>
