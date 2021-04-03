@@ -49,6 +49,22 @@
       <Content Include="Models\cube.obj">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </Content>
+      <None Remove="Models\Untitled-1.mtl" />
+      <Content Include="Models\Untitled-1.mtl">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </Content>
+      <None Remove="Models\Untitled-1.obj" />
+      <Content Include="Models\Untitled-1.obj">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </Content>
+      <None Remove="Models\ReferenceCube.mtl" />
+      <Content Include="Models\ReferenceCube.mtl">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </Content>
+      <None Remove="Models\ReferenceCube.obj" />
+      <Content Include="Models\ReferenceCube.obj">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </Content>
     </ItemGroup>
 
     <ItemGroup>

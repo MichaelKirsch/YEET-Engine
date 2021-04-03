@@ -47,6 +47,7 @@ namespace OpenTK_opengl4.Ants
         [SuppressMessage("ReSharper.DPA", "DPA0001: Memory allocation issues")]
         public void Generate()
         {
+            SimplexNoise.Noise.Seed = new Random().Next();
             MAXHEIGHT = 0;
             MINHEIGHT = 1000;
             vertices.Clear();

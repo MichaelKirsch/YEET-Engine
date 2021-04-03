@@ -108,7 +108,7 @@ namespace OpenTK_opengl4
             _playfield = new Playfield();
             _playfield.Generate();
             _camera.Reset();
-            loader = new OBJLoader("cube",_playfield.shaderLoader);
+            loader = new OBJLoader("Palmtree",_playfield.shaderLoader);
             base.OnStart();
         }
 
