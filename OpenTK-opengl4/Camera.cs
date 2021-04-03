@@ -50,14 +50,12 @@ namespace OpenTK_opengl4
             {
                 Pitch = -89.0f;
             }
-            
-            
             Front.X = (float)Math.Cos(MathHelper.DegreesToRadians(Pitch)) * (float)Math.Cos(MathHelper.DegreesToRadians(Yaw));
             Front.Y = (float)Math.Sin(MathHelper.DegreesToRadians(Pitch));
             Front.Z = (float)Math.Cos(MathHelper.DegreesToRadians(Pitch)) * (float)Math.Sin(MathHelper.DegreesToRadians(Yaw));
             Front = Vector3.Normalize(Front);
             Right = Vector3.Normalize(Vector3.Cross(Up, Front));
-            Projection = Matrix4.CreatePerspectiveFieldOfView(MathHelper.DegreesToRadians(Zoom), StateMaschine.Context.Size.X/StateMaschine.Context.Size.Y, 0.01f, 1000f);
+            Projection = Matrix4.CreatePerspectiveFieldOfView(MathHelper.DegreesToRadians(Zoom), StateMaschine.Context.Size.X/StateMaschine.Context.Size.Y, 1.01f, 1000f);
             View = Matrix4.LookAt(Position,Position+Front,Up);
         }
         public void ProcessKeyboard()

@@ -1,0 +1,29 @@
+# Created by Kenney (www.kenney.nl)
+
+newmtl Wood_Darker(Clone)
+Kd 0.3843 0.3137 0.251
+
+newmtl Wood_Medium(Clone)
+Kd 0.6275001 0.5255 0.3961
+
+newmtl Wood_Dark(Clone)
+Kd 0.5176 0.4196 0.3333
+
+newmtl Stone_Brit_Gray_Light(Clone)
+Kd 0.5725 0.4902 0.4275
+
+newmtl Stone_Bri_Gray_Lighter(Clone)
+Kd 0.6627 0.5961 0.5451
+
+newmtl Stone_Brit_Gray(Clone)
+Kd 0.4863 0.4235 0.3725
+
+newmtl Burlap(Clone)
+Kd 0.7255 0.6431001 0.5215999
+
+newmtl Dark_Red_Roof(Clone)
+Kd 0.4235 0.1804 0.1176
+
+newmtl Red_Roof(Clone)
+Kd 0.5765 0.2667 0.1922
+

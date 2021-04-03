@@ -9,6 +9,7 @@ using System.Linq;
 using System.Threading;
 using ImGuiNET;
 
+
 namespace OpenTK_opengl4
 {
     public class MainWindow : GameWindow
@@ -17,6 +18,11 @@ namespace OpenTK_opengl4
         {
             UpdateFrequency = updateRate;
             RenderFrequency = frameRate;
+            GL.Enable(EnableCap.DepthTest);
+            GL.Enable(EnableCap.CullFace);
+            //GL.CullFace(CullFaceMode.Front);
+            //GL.DepthRange(1.1f,100.0f);
+            //GL.DepthFunc(DepthFunction.Greater);
             
         }
         

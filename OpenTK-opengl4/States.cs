@@ -83,23 +83,18 @@ namespace OpenTK_opengl4
             {
                 GL.PolygonMode(MaterialFace.FrontAndBack,PolygonMode.Fill);
             }
-            
-            
             _playfield.Draw();
-            loader.Draw();
             GL.UniformMatrix4(_playfield.shaderLoader.GetUniformLocation("view"),false,ref _camera.View);
             GL.UniformMatrix4(_playfield.shaderLoader.GetUniformLocation("projection"),false,ref _camera.Projection);
             GL.Uniform1(_playfield.shaderLoader.GetUniformLocation("MinHeight"), _playfield.MINHEIGHT);
             GL.Uniform1(_playfield.shaderLoader.GetUniformLocation("MaxHeight"), _playfield.MAXHEIGHT);
-            
-            
-            
-            
+            loader.Draw();
+            GL.UniformMatrix4(loader.Loader.GetUniformLocation("view"),false,ref _camera.View);
+            GL.UniformMatrix4(loader.Loader.GetUniformLocation("projection"),false,ref _camera.Projection);
         }
 
         public override void OnStart()
         {
-            GL.Enable(EnableCap.DepthTest);
             GL.Enable(EnableCap.CullFace);
             Console.WriteLine("State1 onstart");
             Random rnd = new Random();
@@ -108,7 +103,7 @@ namespace OpenTK_opengl4
             _playfield = new Playfield();
             _playfield.Generate();
             _camera.Reset();
-            loader = new OBJLoader("Palmtree",_playfield.shaderLoader);
+            loader = new OBJLoader("Well");
             base.OnStart();
         }
 
@@ -137,7 +132,6 @@ namespace OpenTK_opengl4
             else
             {
                 StateMaschine.Context.CursorVisible = true;
-                
             }
         }
     }

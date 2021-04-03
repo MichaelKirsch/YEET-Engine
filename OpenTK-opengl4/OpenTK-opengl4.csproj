@@ -65,6 +65,22 @@
       <Content Include="Models\ReferenceCube.obj">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </Content>
+      <None Remove="Models\Well.obj" />
+      <Content Include="Models\Well.obj">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </Content>
+      <None Remove="Models\Well.mtl" />
+      <Content Include="Models\Well.mtl">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </Content>
+      <None Remove="Shaders\FlatShadedModelVert.glsl" />
+      <Content Include="Shaders\FlatShadedModelVert.glsl">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </Content>
+      <None Remove="Shaders\FlatShadedModelFrag.glsl" />
+      <Content Include="Shaders\FlatShadedModelFrag.glsl">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </Content>
     </ItemGroup>
 
     <ItemGroup>

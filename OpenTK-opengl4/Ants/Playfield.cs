@@ -38,10 +38,9 @@ namespace OpenTK_opengl4.Ants
         public void Draw()
         {
             shaderLoader.UseShader();
-            GL.CullFace(CullFaceMode.Back);
             GL.BindVertexArray(_VAO);
-            GL.DrawArrays(PrimitiveType.Triangles, 0, vertices.Count*3);
             
+            GL.DrawArrays(PrimitiveType.Triangles, 0, vertices.Count*3);
         }
         
         [SuppressMessage("ReSharper.DPA", "DPA0001: Memory allocation issues")]
@@ -78,6 +77,7 @@ namespace OpenTK_opengl4.Ants
             GL.BufferData(BufferTarget.ArrayBuffer,sizeof(float)*3*vertices.Count,vertices.ToArray(),BufferUsageHint.StaticDraw);
             GL.VertexAttribPointer(0, 3, VertexAttribPointerType.Float, false, 3 * sizeof(float), 0);
             GL.EnableVertexAttribArray(0);
+            GL.BindVertexArray(0);
         }
     }
 }
