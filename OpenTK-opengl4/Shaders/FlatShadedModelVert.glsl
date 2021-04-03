@@ -6,13 +6,18 @@ layout (location = 2) in vec3 aColor;
 
 
 out vec3 oColor;
-
+out vec3 oNormal;
+out vec3 oPos;
 
 uniform mat4 model;
 uniform mat4 view;
 uniform mat4 projection;
+
+
 void main()
 {
-    gl_Position =projection * view * vec4(aPosition, 1.0);
+    gl_Position =projection * view *  model * vec4(aPosition, 1.0);
     oColor = aColor;
+    oNormal = aNormal;
+    oPos = aPosition;
 }

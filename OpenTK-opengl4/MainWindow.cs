@@ -18,12 +18,8 @@ namespace OpenTK_opengl4
         {
             UpdateFrequency = updateRate;
             RenderFrequency = frameRate;
-            GL.Enable(EnableCap.DepthTest);
-            GL.Enable(EnableCap.CullFace);
-            //GL.CullFace(CullFaceMode.Front);
-            //GL.DepthRange(1.1f,100.0f);
-            //GL.DepthFunc(DepthFunction.Greater);
-            
+            //GL.Enable(EnableCap.CullFace);
+            //GL.CullFace(CullFaceMode.Back);
         }
         
         protected override void OnLoad()
@@ -49,6 +45,8 @@ namespace OpenTK_opengl4
         protected override void OnRenderFrame(FrameEventArgs e)
         {
             var watch = new Util.StopWatchMilliseconds();
+            GL.Enable(EnableCap.DepthTest);
+            GL.DepthMask(true);
             base.OnRenderFrame(e);
             _controller.Update(this, (float)e.Time);
             GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit | ClearBufferMask.StencilBufferBit);

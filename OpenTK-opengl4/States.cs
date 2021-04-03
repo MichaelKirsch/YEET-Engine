@@ -21,6 +21,8 @@ namespace OpenTK_opengl4
         private Camera _camera;
         private bool mouse_locked,wireframe;
         private OBJLoader loader;
+        private Vector3 LightPosition;
+        private int counter;
         public RenderingTest()
         {
             Console.WriteLine("State1 construct");
@@ -61,15 +63,16 @@ namespace OpenTK_opengl4
             ImGui.SliderInt("Width",ref _playfield.Width,100,1000);
             ImGui.SliderInt("Height",ref _playfield.Height,100,1000);
             ImGui.SliderFloat("MouseSens", ref _camera.MouseSensitivity, 0.0f, 1.0f);
-            ImGui.Text((_camera.Yaw,_camera.Pitch).ToString());
             ImGui.SliderFloat("Noise Scale", ref _playfield.NoiseScaleMayor, 0.0f, 1.0f);
             ImGui.SliderFloat("Height Scale", ref _playfield.HeightScaler, 10.0f, 300.0f);
+            ImGui.SliderFloat("Light Height:", ref LightPosition.Y,10,100);
+            ImGui.SliderFloat("Light X:", ref LightPosition.X,0,100);
+            ImGui.SliderFloat("Light Z:", ref LightPosition.Z,0,100);
             if(ImGui.Button("Generate"))
                 _playfield.Generate();
             
             ImGui.Checkbox("Wireframe", ref wireframe);
             
-            ImGui.Text(_camera.Position.ToString());
             ImGui.Checkbox("Mouse Lock", ref mouse_locked);
             ImGui.End();
         }
@@ -91,6 +94,11 @@ namespace OpenTK_opengl4
             loader.Draw();
             GL.UniformMatrix4(loader.Loader.GetUniformLocation("view"),false,ref _camera.View);
             GL.UniformMatrix4(loader.Loader.GetUniformLocation("projection"),false,ref _camera.Projection);
+            Matrix4 model;
+            Matrix4.CreateTranslation((1,2,3),out model);
+            model    = Matrix4.CreateRotationY((float)MathHelper.DegreesToRadians(counter++))*model;
+            GL.UniformMatrix4(loader.Loader.GetUniformLocation("model"),false,ref model);
+            GL.Uniform3(loader.Loader.GetUniformLocation("LightPosition"),LightPosition);
         }
 
         public override void OnStart()
