@@ -16,8 +16,9 @@ uniform mat4 projection;
 
 void main()
 {
-    gl_Position =projection * view *  model * vec4(aPosition, 1.0);
+    vec4 finalPos = projection * view *  model * vec4(aPosition, 1.0);
+    gl_Position = finalPos;
     oColor = aColor;
     oNormal = aNormal;
-    oPos = aPosition;
+    oPos = vec3(finalPos);
 }

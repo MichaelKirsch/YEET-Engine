@@ -22,7 +22,6 @@ namespace OpenTK_opengl4
         private bool mouse_locked,wireframe;
         private OBJLoader loader;
         private Vector3 LightPosition;
-        private int counter;
         public RenderingTest()
         {
             Console.WriteLine("State1 construct");
@@ -96,7 +95,6 @@ namespace OpenTK_opengl4
             GL.UniformMatrix4(loader.Loader.GetUniformLocation("projection"),false,ref _camera.Projection);
             Matrix4 model;
             Matrix4.CreateTranslation((1,2,3),out model);
-            model    = Matrix4.CreateRotationY((float)MathHelper.DegreesToRadians(counter++))*model;
             GL.UniformMatrix4(loader.Loader.GetUniformLocation("model"),false,ref model);
             GL.Uniform3(loader.Loader.GetUniformLocation("LightPosition"),LightPosition);
         }
@@ -111,7 +109,7 @@ namespace OpenTK_opengl4
             _playfield = new Playfield();
             _playfield.Generate();
             _camera.Reset();
-            loader = new OBJLoader("Well");
+            loader = new OBJLoader("Palmtree");
             base.OnStart();
         }
 
