@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using System.Runtime.CompilerServices;
 using System.Threading;
 using OpenTK.Graphics.OpenGL4;
+using OpenTK.Mathematics;
 
 namespace OpenTK_opengl4
 {
@@ -170,5 +171,21 @@ namespace OpenTK_opengl4
             
             return Shader;
         }
+
+        public void SetUniformMatrix4F(string name, ref Matrix4 to_set)
+        {
+            GL.UniformMatrix4(GetUniformLocation(name),false,ref to_set);
+        }
+        
+        public void SetUniformFloat(string name,float to_set)
+        {
+            GL.Uniform1(GetUniformLocation(name),to_set);
+        }
+        
+        public void SetUniformVec3(string name,Vector3 to_set)
+        {
+            GL.Uniform3(GetUniformLocation(name),to_set);
+        }
+        
     }
 }

@@ -58,7 +58,8 @@ namespace OpenTK_opengl4
             
             
             
-            ImGui.Text("Frametime Average:" + 1000.0f/StateMaschine.Context.AverageLastFrameRenderTime);
+            ImGui.Text("Avg Rendertime:" + 
+                       StateMaschine.Context.AverageLastFrameRenderTime.ToString("0.000")+"ms");
             ImGui.SliderInt("Width",ref _playfield.Width,100,1000);
             ImGui.SliderInt("Height",ref _playfield.Height,100,1000);
             ImGui.SliderFloat("MouseSens", ref _camera.MouseSensitivity, 0.0f, 1.0f);
@@ -86,17 +87,16 @@ namespace OpenTK_opengl4
                 GL.PolygonMode(MaterialFace.FrontAndBack,PolygonMode.Fill);
             }
             _playfield.Draw();
-            GL.UniformMatrix4(_playfield.shaderLoader.GetUniformLocation("view"),false,ref _camera.View);
-            GL.UniformMatrix4(_playfield.shaderLoader.GetUniformLocation("projection"),false,ref _camera.Projection);
-            GL.Uniform1(_playfield.shaderLoader.GetUniformLocation("MinHeight"), _playfield.MINHEIGHT);
-            GL.Uniform1(_playfield.shaderLoader.GetUniformLocation("MaxHeight"), _playfield.MAXHEIGHT);
+            _playfield.shaderLoader.SetUniformMatrix4F("view",ref _camera.View);
+            _playfield.shaderLoader.SetUniformMatrix4F("projection",ref _camera.Projection);
+            _playfield.shaderLoader.SetUniformFloat("MinHeight", _playfield.MINHEIGHT);
+            _playfield.shaderLoader.SetUniformFloat("MaxHeight", _playfield.MAXHEIGHT);
             loader.Draw();
-            GL.UniformMatrix4(loader.Loader.GetUniformLocation("view"),false,ref _camera.View);
-            GL.UniformMatrix4(loader.Loader.GetUniformLocation("projection"),false,ref _camera.Projection);
-            Matrix4 model;
-            Matrix4.CreateTranslation((1,2,3),out model);
-            GL.UniformMatrix4(loader.Loader.GetUniformLocation("model"),false,ref model);
-            GL.Uniform3(loader.Loader.GetUniformLocation("LightPosition"),LightPosition);
+            loader.SetPosition(LightPosition);
+            loader.Loader.SetUniformVec3("LightPosition",LightPosition);
+            loader.Loader.SetUniformMatrix4F("view",ref _camera.View);
+            loader.Loader.SetUniformMatrix4F("projection",ref _camera.Projection);
+            
         }
 
         public override void OnStart()
@@ -109,7 +109,7 @@ namespace OpenTK_opengl4
             _playfield = new Playfield();
             _playfield.Generate();
             _camera.Reset();
-            loader = new OBJLoader("Palmtree");
+            loader = new OBJLoader("Palmtree",new ShaderLoader("Model", "FlatShadedModelVert", "FlatShadedModelFrag", true));
             base.OnStart();
         }
 

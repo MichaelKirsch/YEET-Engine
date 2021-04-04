@@ -54,6 +54,7 @@ namespace OpenTK_opengl4
             _controller.Render();
             SwapBuffers();
             LastFrameRenderTime = watch.Result();
+            GenerateAverageFrameRenderTime();
         }
 
         protected override void OnUpdateFrame(FrameEventArgs e)
@@ -63,7 +64,6 @@ namespace OpenTK_opengl4
             StateMaschine.Input();
             StateMaschine.Update(e);
             LastFrameUpdateTime = watch.Result();
-            GenerateAverageFrameRenderTime();
         }
 
 

@@ -4,6 +4,7 @@ using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
 using OpenTK.Graphics.OpenGL4;
 using OpenTK.Mathematics;
 
@@ -14,6 +15,8 @@ namespace OpenTK_opengl4
     {
         private int VAO, VBO;
         private string current_material;
+
+        public Matrix4 ModelMatrix=new Matrix4();
         
         private List<Vector3> Vertices,Normals,ColorPerIndex,FinalVertexArray;
         private List<int> Indices, NormalIndices;
@@ -27,8 +30,9 @@ namespace OpenTK_opengl4
         /// <summary>
         /// </summary>
         /// <param name="path">Path from the Models Directory</param>
-        public OBJLoader(string path)
+        public OBJLoader(string path,ShaderLoader loader)
         {
+            Util.StopWatchMilliseconds watch = new Util.StopWatchMilliseconds();
             Vertices = new List<Vector3>();
             Normals = new List<Vector3>();
             ColorPerIndex = new List<Vector3>();
@@ -36,12 +40,13 @@ namespace OpenTK_opengl4
             Indices = new List<int>();
             MaterialsIndices = new Dictionary<string, int>();
             Materials = new Dictionary<string, Vector3>();
-            
-            Loader = new ShaderLoader("Model", "FlatShadedModelVert", "FlatShadedModelFrag", true);
-            
+            Loader = loader;
+            Matrix4.CreateTranslation(0, 0, 0,out ModelMatrix);
             ReadMaterials(path);
             ReadOBJ(path);
             GenerateFinalVertexArray();
+            
+            Console.WriteLine("Model "+path+ " constructed. Vertices:" + FinalVertexArray.Count+" Time:"+watch.Result()+" ms");
         }
 
         public void Draw()
@@ -50,6 +55,7 @@ namespace OpenTK_opengl4
             GL.BindVertexArray(VAO);
             GL.DrawArrays(PrimitiveType.Triangles, 0, FinalVertexArray.Count / 3);
             GL.BindVertexArray(0);
+            Loader.SetUniformMatrix4F("model",ref ModelMatrix);
         }
 
         private void SplitFLine(string[] line)
@@ -63,12 +69,36 @@ namespace OpenTK_opengl4
             }
         }
 
+        public void SetPosition(float x=0f, float y=0f, float z=0f)
+        {
+            Matrix4.CreateTranslation(x, y, z,out ModelMatrix);
+        }
+
+        public void SetPosition(Vector3 pos)
+        {
+            Matrix4.CreateTranslation(pos,out ModelMatrix);
+        }
+        
+        public void SetRotation(Vector3 rot, float z=0f)
+        {
+            Matrix4.CreateRotationX(rot.X, out ModelMatrix);
+            Matrix4.CreateRotationY(rot.Y, out ModelMatrix);
+            Matrix4.CreateRotationZ(rot.Z, out ModelMatrix);
+        }
+        
+        public void SetRotation(float x=0f, float y=0f, float z=0f)
+        {
+            Matrix4.CreateRotationX(x, out ModelMatrix);
+            Matrix4.CreateRotationY(y, out ModelMatrix);
+            Matrix4.CreateRotationZ(z, out ModelMatrix);
+        }
+        
         private void GenerateFinalVertexArray()
         {
             FinalVertexArray = new List<Vector3>();
             for (int x = 0; x < Indices.Count; x++)
             {
-                //vec3 position,vec3 normals, uint index_color
+                //vec3 position,vec3 normals, vec3 color
                 FinalVertexArray.Add(Vertices[Indices[x]]);
                 FinalVertexArray.Add(Normals[NormalIndices[x]]);
                 FinalVertexArray.Add(ColorPerIndex[x]);
@@ -87,7 +117,7 @@ namespace OpenTK_opengl4
             GL.BindVertexArray(0);
         }
 
-        public void ReadMaterials(string path)
+        private void ReadMaterials(string path)
         {
             StreamReader materialreader = new StreamReader("Models/" + path + ".mtl", Encoding.UTF8);
             string current_material_name = "", material_line;
@@ -110,7 +140,7 @@ namespace OpenTK_opengl4
             }
         }
 
-        public void ReadOBJ(string path)
+        private void ReadOBJ(string path)
         {
             string line;
 
