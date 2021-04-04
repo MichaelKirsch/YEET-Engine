@@ -9,7 +9,7 @@ using SimplexNoise;
 using OpenTK.Graphics.OpenGL4;
 
 
-namespace OpenTK_opengl4.Ants
+namespace YEET.Ants
 {
     public class Playfield
     {

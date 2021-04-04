@@ -2,7 +2,7 @@
 using OpenTK.Windowing.Desktop;
 
 
-namespace OpenTK_opengl4
+namespace YEET
 {
     class Program
     {

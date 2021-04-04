@@ -4,7 +4,7 @@ using System.Timers;
 using OpenTK.Windowing.Common;
 using OpenTK.Windowing.Desktop;
 
-namespace OpenTK_opengl4
+namespace YEET
 {
     public static class StateMaschine
     {

@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 using OpenTK.Graphics.OpenGL4;
 using PixelFormat = OpenTK.Graphics.OpenGL4.PixelFormat;
 
-namespace OpenTK_opengl4
+namespace YEET
 {
     public enum TextureCoordinate
     {

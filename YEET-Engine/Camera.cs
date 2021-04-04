@@ -2,7 +2,7 @@
 using OpenTK.Mathematics;
 using OpenTK.Windowing.GraphicsLibraryFramework;
 
-namespace OpenTK_opengl4
+namespace YEET
 {
     public class Camera
     {

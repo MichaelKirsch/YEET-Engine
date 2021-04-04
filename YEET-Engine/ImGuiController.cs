@@ -8,7 +8,7 @@ using OpenTK.Windowing.Common.Input;
 using OpenTK.Windowing.Desktop;
 using OpenTK.Windowing.GraphicsLibraryFramework;
 
-namespace OpenTK_opengl4
+namespace YEET
 {
     /// <summary>
     /// A modified version of Veldrid.ImGui's ImGuiRenderer.

@@ -1,4 +1,4 @@
-﻿namespace OpenTK_opengl4.Ants
+﻿namespace YEET.Ants
 {
     public class Ant
     {

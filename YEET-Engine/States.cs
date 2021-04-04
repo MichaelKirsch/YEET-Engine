@@ -8,12 +8,12 @@ using OpenTK;
 using OpenTK.Input;
 using OpenTK.Mathematics;
 using OpenTK.Windowing.Common;
-using OpenTK_opengl4.Ants;
 using SimplexNoise;
+using YEET.Ants;
 using Buffer = System.Buffer;
 
 
-namespace OpenTK_opengl4
+namespace YEET
 {
     public class RenderingTest : State
     {

@@ -1,4 +1,4 @@
-﻿namespace OpenTK_opengl4
+﻿namespace YEET
 {
     public class Metrics
     {

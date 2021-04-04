@@ -10,7 +10,7 @@ using System.Threading;
 using ImGuiNET;
 
 
-namespace OpenTK_opengl4
+namespace YEET
 {
     public class MainWindow : GameWindow
     {
@@ -25,7 +25,7 @@ namespace OpenTK_opengl4
         protected override void OnLoad()
         {
             base.OnLoad();
-
+            Title = "YEET-Engine";
             Title += ": OpenGL Version: " + GL.GetString(StringName.Version);
             
             _controller = new ImGuiController(ClientSize.X, ClientSize.Y);

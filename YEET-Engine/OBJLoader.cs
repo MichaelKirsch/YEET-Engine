@@ -9,7 +9,7 @@ using OpenTK.Graphics.OpenGL4;
 using OpenTK.Mathematics;
 
 
-namespace OpenTK_opengl4
+namespace YEET
 {
     public class OBJLoader
     {
