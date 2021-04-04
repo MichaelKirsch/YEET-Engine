@@ -187,5 +187,10 @@ namespace YEET
             GL.Uniform3(GetUniformLocation(name),to_set);
         }
         
+        public void SetUniformVec3(string name,float x, float y,float z)
+        {
+            GL.Uniform3(GetUniformLocation(name),new Vector3(x,y,z));
+        }
+        
     }
 }

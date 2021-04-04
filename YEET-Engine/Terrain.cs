@@ -11,7 +11,7 @@ using OpenTK.Graphics.OpenGL4;
 
 namespace YEET.Ants
 {
-    public class Playfield
+    public class Terrain
     {
         public int Width = 100;
         public int Height = 100;
@@ -27,7 +27,7 @@ namespace YEET.Ants
         private int _VAO, _VBO;
         public ShaderLoader shaderLoader { get; }
         
-        public Playfield()
+        public Terrain()
         {
             shaderLoader = new ShaderLoader("Playfield", "TriangleVert", "TriangleFrag", true);
             _VBO = GL.GenBuffer();

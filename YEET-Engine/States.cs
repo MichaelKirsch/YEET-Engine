@@ -17,27 +17,22 @@ namespace YEET
 {
     public class RenderingTest : State
     {
-        private Playfield _playfield;
-        private Camera _camera;
-        private bool mouse_locked,wireframe;
-        private OBJLoader loader;
-        private Vector3 LightPosition;
+        private Terrain _Terrain;
+        private Camera _Camera;
+        private bool _MouseLocked,_WireFrame;
+        private OBJLoader _Palmtree;
+        private Vector3 _LightPosition;
+        private Grid _Grid;
+
         public RenderingTest()
         {
             Console.WriteLine("State1 construct");
-            _camera = new Camera();
+            _Camera = new Camera();
         }
 
-        public override void OnUpdate(FrameEventArgs e)
-        {
-            base.OnUpdate(e);
-
-        }
-        
         public override void OnGui()
         {
             base.OnGui();
-
             ImGui.Begin("Main");
             ImGui.SetWindowFontScale(2.0f);
             if (ImGui.Button("Click here for purple"))
@@ -54,62 +49,60 @@ namespace YEET
             {
                 StateMaschine.Exit();
             }
-
-            
-            
-            
             ImGui.Text("Avg Rendertime:" + 
                        StateMaschine.Context.AverageLastFrameRenderTime.ToString("0.000")+"ms");
-            ImGui.SliderInt("Width",ref _playfield.Width,100,1000);
-            ImGui.SliderInt("Height",ref _playfield.Height,100,1000);
-            ImGui.SliderFloat("MouseSens", ref _camera.MouseSensitivity, 0.0f, 1.0f);
-            ImGui.SliderFloat("Noise Scale", ref _playfield.NoiseScaleMayor, 0.0f, 1.0f);
-            ImGui.SliderFloat("Height Scale", ref _playfield.HeightScaler, 10.0f, 300.0f);
-            ImGui.SliderFloat("Light Height:", ref LightPosition.Y,10,100);
-            ImGui.SliderFloat("Light X:", ref LightPosition.X,0,100);
-            ImGui.SliderFloat("Light Z:", ref LightPosition.Z,0,100);
+            ImGui.SliderInt("Width",ref _Terrain.Width,100,1000);
+            ImGui.SliderInt("Height",ref _Terrain.Height,100,1000);
+            ImGui.SliderFloat("MouseSens", ref _Camera.MouseSensitivity, 0.0f, 1.0f);
+            ImGui.SliderFloat("Noise Scale", ref _Terrain.NoiseScaleMayor, 0.0f, 1.0f);
+            ImGui.SliderFloat("Height Scale", ref _Terrain.HeightScaler, 10.0f, 300.0f);
+            ImGui.SliderFloat("Light Height:", ref _LightPosition.Y,10,100);
+            ImGui.SliderFloat("Light X:", ref _LightPosition.X,0,100);
+            ImGui.SliderFloat("Light Z:", ref _LightPosition.Z,0,100);
+
+            ImGui.ColorPicker3("Color", ref _Grid.rgb_plane, ImGuiColorEditFlags.Float);
+            ImGui.ColorPicker3("Color Lines", ref _Grid.rgb_grid, ImGuiColorEditFlags.Float);
             if(ImGui.Button("Generate"))
-                _playfield.Generate();
-            
-            ImGui.Checkbox("Wireframe", ref wireframe);
-            
-            ImGui.Checkbox("Mouse Lock", ref mouse_locked);
+                _Terrain.Generate();
+            ImGui.Checkbox("Wireframe", ref _WireFrame);
+            ImGui.Checkbox("Mouse Lock", ref _MouseLocked);
             ImGui.End();
         }
 
         public override void OnRender()
         {
             base.OnRender();
-            if(wireframe)
+            if(_WireFrame)
                 GL.PolygonMode(MaterialFace.FrontAndBack,PolygonMode.Line);
             else
             {
                 GL.PolygonMode(MaterialFace.FrontAndBack,PolygonMode.Fill);
             }
-            _playfield.Draw();
-            _playfield.shaderLoader.SetUniformMatrix4F("view",ref _camera.View);
-            _playfield.shaderLoader.SetUniformMatrix4F("projection",ref _camera.Projection);
-            _playfield.shaderLoader.SetUniformFloat("MinHeight", _playfield.MINHEIGHT);
-            _playfield.shaderLoader.SetUniformFloat("MaxHeight", _playfield.MAXHEIGHT);
-            loader.Draw();
-            loader.SetPosition(LightPosition);
-            loader.Loader.SetUniformVec3("LightPosition",LightPosition);
-            loader.Loader.SetUniformMatrix4F("view",ref _camera.View);
-            loader.Loader.SetUniformMatrix4F("projection",ref _camera.Projection);
-            
+            //_Terrain.Draw();
+            _Terrain.shaderLoader.SetUniformMatrix4F("view",ref _Camera.View);
+            _Terrain.shaderLoader.SetUniformMatrix4F("projection",ref _Camera.Projection);
+            _Terrain.shaderLoader.SetUniformFloat("MinHeight", _Terrain.MINHEIGHT);
+            _Terrain.shaderLoader.SetUniformFloat("MaxHeight", _Terrain.MAXHEIGHT);
+            _Palmtree.Draw();
+            _Palmtree.SetPosition(_LightPosition);
+            _Palmtree.Loader.SetUniformVec3("LightPosition",_LightPosition);
+            _Palmtree.Loader.SetUniformMatrix4F("view",ref _Camera.View);
+            _Palmtree.Loader.SetUniformMatrix4F("projection",ref _Camera.Projection);
+            _Grid.Draw();
+            _Grid._loader.SetUniformMatrix4F("view",ref _Camera.View);
+            _Grid._loader.SetUniformMatrix4F("projection",ref _Camera.Projection);
         }
 
         public override void OnStart()
         {
-            GL.Enable(EnableCap.CullFace);
             Console.WriteLine("State1 onstart");
-            Random rnd = new Random();
-            SimplexNoise.Noise.Seed = rnd.Next();
             GL.ClearColor(0.1f,0.0f,0.2f,1.0f);
-            _playfield = new Playfield();
-            _playfield.Generate();
-            _camera.Reset();
-            loader = new OBJLoader("Palmtree",new ShaderLoader("Model", "FlatShadedModelVert", "FlatShadedModelFrag", true));
+            _Terrain = new Terrain();
+            _Palmtree = new OBJLoader("BigTree",new ShaderLoader("Model", "FlatShadedModelVert", "FlatShadedModelFrag", true));
+            _Terrain.Generate();
+            _Camera.Start();
+            _Camera.GrabCursor(false);
+            _Grid = new Grid(new ShaderLoader("Grid","GridVert","GridFrag",true), (100, 100), 0.02f);
             base.OnStart();
         }
 
@@ -122,23 +115,19 @@ namespace YEET
         public override void OnInput()
         {
             if (StateMaschine.Context.KeyboardState[Keys.Escape])
-                mouse_locked = !mouse_locked;
-
+            {
+                _MouseLocked = !_MouseLocked;
+                _Camera.GrabCursor(_MouseLocked);
+            }
             if (StateMaschine.Context.KeyboardState[Keys.K])
-                wireframe = !wireframe;
+                _WireFrame = !_WireFrame;
+            
+            
+                
             
             base.OnInput();
-            _camera.ProcessKeyboard();
-            if (!mouse_locked)
-            {
-                StateMaschine.Context.CursorVisible = false;
-                
-                _camera.processMouse();
-            }
-            else
-            {
-                StateMaschine.Context.CursorVisible = true;
-            }
+            _Camera.ProcessKeyboard();
+            _Camera.processMouse();
         }
     }
 }

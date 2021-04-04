@@ -81,6 +81,22 @@
       <Content Include="Shaders\FlatShadedModelFrag.glsl">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </Content>
+      <None Remove="Shaders\GridFrag.glsl" />
+      <Content Include="Shaders\GridFrag.glsl">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </Content>
+      <None Remove="Shaders\GridVert.glsl" />
+      <Content Include="Shaders\GridVert.glsl">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </Content>
+      <None Remove="Models\BigTree.mtl" />
+      <Content Include="Models\BigTree.mtl">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </Content>
+      <None Remove="Models\BigTree.obj" />
+      <Content Include="Models\BigTree.obj">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </Content>
     </ItemGroup>
 
     <ItemGroup>
