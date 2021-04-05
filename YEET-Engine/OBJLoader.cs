@@ -23,7 +23,7 @@ namespace YEET
         
         private Dictionary<string, Vector3> Materials;
         private Dictionary<string,int> MaterialsIndices;
-        
+        public Vector3 Position;
         public ShaderLoader Loader;
         
         
@@ -55,6 +55,8 @@ namespace YEET
             GL.BindVertexArray(VAO);
             GL.DrawArrays(PrimitiveType.Triangles, 0, FinalVertexArray.Count / 3);
             GL.BindVertexArray(0);
+            Matrix4.CreateTranslation(Position,out ModelMatrix);
+            
             Loader.SetUniformMatrix4F("model",ref ModelMatrix);
         }
 
@@ -72,11 +74,12 @@ namespace YEET
         public void SetPosition(float x=0f, float y=0f, float z=0f)
         {
             Matrix4.CreateTranslation(x, y, z,out ModelMatrix);
+            Position = new Vector3(x, y, z);
         }
 
         public void SetPosition(Vector3 pos)
         {
-            Matrix4.CreateTranslation(pos,out ModelMatrix);
+            Position = pos;
         }
         
         public void SetRotation(Vector3 rot, float z=0f)

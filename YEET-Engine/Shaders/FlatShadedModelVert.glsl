@@ -16,9 +16,10 @@ uniform mat4 projection;
 
 void main()
 {
+    mat3 NormalMatrix = transpose(inverse(mat3(model))); 
     vec4 finalPos = projection * view *  model * vec4(aPosition, 1.0);
     gl_Position = finalPos;
     oColor = aColor;
-    oNormal = aNormal;
+    oNormal = NormalMatrix*aNormal;
     oPos = vec3(finalPos);
 }

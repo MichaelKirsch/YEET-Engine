@@ -14,14 +14,15 @@ namespace YEET
         public ShaderLoader _loader;
         List<Vector3> FinalVertices = new List<Vector3>();
         private List<Vector3> PlaneVertices = new List<Vector3>();
-        private int _VAO,VAO_Plane;
+        private int _VAO, VAO_Plane;
         public System.Numerics.Vector3 rgb_grid, rgb_plane;
+
         public Grid(ShaderLoader i_loader, Vector2i _dimensions, float _line_thickness)
         {
             _loader = i_loader;
-            
-            rgb_grid = new System.Numerics.Vector3(0.8f, 0.501f, 0f);
-            rgb_plane = new System.Numerics.Vector3(0.541f, 0.541f, 0.541f);
+
+            rgb_grid = new System.Numerics.Vector3(0.072f, 0.293f, 0.294f);
+            rgb_plane = new System.Numerics.Vector3(0.158f, 0.158f, 0.158f);
             for (int x = 0; x <= _dimensions.X; x++)
             {
                 Vector3 startpoint = new Vector3(x, 0, 0);
@@ -43,20 +44,20 @@ namespace YEET
                 FinalVertices.AddRange(MakeQuad(c, d, d2, c2)); //bottom
                 FinalVertices.AddRange(MakeQuad(b, b2, c2, c)); //left
             }
-            
+
             for (int x = 0; x <= _dimensions.X; x++)
             {
                 Vector3 startpoint = new Vector3(0, 0, x);
                 Vector3 endpoint = new Vector3(_dimensions.Y, 0, x);
-                Vector3 a = new Vector3(startpoint.X , startpoint.Y + _line_thickness, startpoint.Z+ _line_thickness);
-                Vector3 b = new Vector3(startpoint.X , startpoint.Y + _line_thickness, startpoint.Z- _line_thickness);
-                Vector3 c = new Vector3(startpoint.X , startpoint.Y - _line_thickness, startpoint.Z+ _line_thickness);
-                Vector3 d = new Vector3(startpoint.X , startpoint.Y - _line_thickness, startpoint.Z- _line_thickness);
+                Vector3 a = new Vector3(startpoint.X, startpoint.Y + _line_thickness, startpoint.Z + _line_thickness);
+                Vector3 b = new Vector3(startpoint.X, startpoint.Y + _line_thickness, startpoint.Z - _line_thickness);
+                Vector3 c = new Vector3(startpoint.X, startpoint.Y - _line_thickness, startpoint.Z + _line_thickness);
+                Vector3 d = new Vector3(startpoint.X, startpoint.Y - _line_thickness, startpoint.Z - _line_thickness);
 
-                Vector3 a2 = new Vector3(endpoint.X , endpoint.Y + _line_thickness, endpoint.Z+ _line_thickness);
-                Vector3 b2 = new Vector3(endpoint.X , endpoint.Y + _line_thickness, endpoint.Z- _line_thickness);
-                Vector3 c2 = new Vector3(endpoint.X , endpoint.Y - _line_thickness, endpoint.Z+ _line_thickness);
-                Vector3 d2 = new Vector3(endpoint.X , endpoint.Y - _line_thickness, endpoint.Z- _line_thickness);
+                Vector3 a2 = new Vector3(endpoint.X, endpoint.Y + _line_thickness, endpoint.Z + _line_thickness);
+                Vector3 b2 = new Vector3(endpoint.X, endpoint.Y + _line_thickness, endpoint.Z - _line_thickness);
+                Vector3 c2 = new Vector3(endpoint.X, endpoint.Y - _line_thickness, endpoint.Z + _line_thickness);
+                Vector3 d2 = new Vector3(endpoint.X, endpoint.Y - _line_thickness, endpoint.Z - _line_thickness);
 
                 FinalVertices.AddRange(MakeQuad(a, b, c, d)); //front
                 FinalVertices.AddRange(MakeQuad(a2, b2, c2, d2)); //back
@@ -65,6 +66,7 @@ namespace YEET
                 FinalVertices.AddRange(MakeQuad(c, d, d2, c2)); //bottom
                 FinalVertices.AddRange(MakeQuad(b, b2, c2, c)); //left
             }
+
             int _VBO = GL.GenBuffer();
             _VAO = GL.GenVertexArray();
             GL.BindVertexArray(_VAO);
@@ -74,13 +76,12 @@ namespace YEET
             GL.VertexAttribPointer(0, 3, VertexAttribPointerType.Float, false, 3 * sizeof(float), 0);
             GL.EnableVertexAttribArray(0);
             GL.BindVertexArray(0);
-            
-            
-            
-            PlaneVertices.AddRange(MakeQuad((0,0,0),
-                                                    (_dimensions.X,0,0),
-                                                    (_dimensions.X,0,_dimensions.Y),
-                                                    (0,0,_dimensions.Y)));
+
+
+            PlaneVertices.AddRange(MakeQuad((0, 0, 0),
+                (_dimensions.X, 0, 0),
+                (_dimensions.X, 0, _dimensions.Y),
+                (0, 0, _dimensions.Y)));
             int VBO_plane = GL.GenBuffer();
             VAO_Plane = GL.GenVertexArray();
             GL.BindVertexArray(VAO_Plane);
@@ -90,10 +91,6 @@ namespace YEET
             GL.VertexAttribPointer(0, 3, VertexAttribPointerType.Float, false, 3 * sizeof(float), 0);
             GL.EnableVertexAttribArray(0);
             GL.BindVertexArray(0);
-            
-            
-            
-            
         }
 
 
@@ -102,15 +99,16 @@ namespace YEET
             _loader.UseShader();
             GL.BindVertexArray(_VAO);
             GL.DrawArrays(PrimitiveType.Triangles, 0, FinalVertices.Count * 3);
-            _loader.SetUniformVec3("rgb",rgb_plane.X,rgb_plane.Y,rgb_plane.Z);
+            _loader.SetUniformVec3("rgb", rgb_plane.X, rgb_plane.Y, rgb_plane.Z);
             GL.BindVertexArray(VAO_Plane);
             GL.DrawArrays(PrimitiveType.Triangles, 0, PlaneVertices.Count * 3);
-            _loader.SetUniformVec3("rgb",rgb_grid.X,rgb_grid.Y,rgb_grid.Z);
+            _loader.SetUniformVec3("rgb", rgb_grid.X, rgb_grid.Y, rgb_grid.Z);
         }
 
         List<Vector3> MakeQuad(Vector3 a, Vector3 b, Vector3 c, Vector3 d)
         {
             var list = new List<Vector3>();
+
             list.Add(a);
             list.Add(b);
             list.Add(c);
@@ -118,6 +116,7 @@ namespace YEET
             list.Add(c);
             list.Add(d);
             list.Add(a);
+
             return list;
         }
     }
