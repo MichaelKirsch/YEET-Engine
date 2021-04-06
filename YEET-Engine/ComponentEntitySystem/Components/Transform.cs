@@ -1,6 +1,6 @@
 
 using System;
-using System.Numerics;
+using OpenTK.Mathematics;
 
 namespace YEET
 {
@@ -8,16 +8,16 @@ namespace YEET
     {
         public Transform(Entity owner) : base(owner)
         {
-            _position = new Vector2();
+            _position = new Vector3();
             Console.WriteLine("Transform added");
         }
 
-        public void SetPosition(Vector2 newpos)
+        public void SetPosition(Vector3 newpos)
         {
             _position = newpos;
         }
 
-        public Vector2 GetPosition()
+        public Vector3 GetPosition()
         {
             return _position;
         }
@@ -37,9 +37,18 @@ namespace YEET
         }
         public void SetY(double y)
         {
-            _position.X = Convert.ToSingle(y);
+            _position.Y = Convert.ToSingle(y);
         }
         
-        private Vector2 _position;
+        public void SetZ(float z)
+        {
+            _position.Z = z;
+        }
+        public void SetZ(double z)
+        {
+            _position.Z = Convert.ToSingle(z);
+        }
+        
+        private Vector3 _position;
     }
 }

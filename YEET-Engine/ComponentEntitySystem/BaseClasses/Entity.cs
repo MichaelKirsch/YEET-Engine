@@ -1,15 +1,17 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace YEET
 {
     public class Entity
     {
         private List<Component> _components;
-        
+        public Guid ID { get; }
         public Entity()
         {
             _components = new List<Component>();
             _components.Add(new Transform(this));
+            ID = new Guid();
         }
 
         public virtual void OnStart()
@@ -37,11 +39,7 @@ namespace YEET
            _components.Add(toadd); 
         }
         
-        /// <summary>
-        /// Remove Component, return if success
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <returns></returns>
+        
         public bool RemoveComponent<T>()
         {
             foreach (Component component in _components)
@@ -55,13 +53,13 @@ namespace YEET
             return false;
         }
 
-        public Component GetComponent<T>()  //get a derivative of Component
+        public T GetComponent<T>() where T : Component//get a derivative of Component
         {
             foreach (var item in _components)
             {
                 if (item is T)
                 {
-                    return item;
+                    return (T)item;
                 }
             }
             return null;

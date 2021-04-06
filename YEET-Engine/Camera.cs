@@ -4,15 +4,15 @@ using OpenTK.Windowing.GraphicsLibraryFramework;
 
 namespace YEET
 {
-    public class Camera
+    public static class Camera
     {
-        public Vector3 Position, Front, Up, Right, WorldUp;
-        public float Yaw, Pitch, MovementSpeed, MouseSensitivity, Zoom;
-        public Matrix4 View, Projection;
-        private Vector2 MousePrevious = Vector2.Zero;
-        private bool Grabbed;
+        static public Vector3 Position, Front, Up, Right, WorldUp;
+        static public float Yaw, Pitch, MovementSpeed, MouseSensitivity, Zoom;
+        static public Matrix4 View, Projection;
+        static private Vector2 MousePrevious = Vector2.Zero;
+        static private bool Grabbed;
 
-        public Camera()
+        static Camera()
         {
             Position = new Vector3(0.0f, 0.0f, 0.0f);
             Up = new Vector3(0.0f, 1.0f, 0.0f);
@@ -23,7 +23,7 @@ namespace YEET
             Zoom = 90.0f;
         }
 
-        public void Start()
+        public static void Start()
         {
             Console.WriteLine(StateMaschine.Context.MousePosition);
             GrabCursor(false);
@@ -32,7 +32,7 @@ namespace YEET
             MousePrevious = StateMaschine.Context.MousePosition;
         }
 
-        public void GrabCursor(bool state)
+        public static void GrabCursor(bool state)
         {
             //StateMaschine.Context.CursorGrabbed = state;
             StateMaschine.Context.CursorVisible = !state;
@@ -40,14 +40,14 @@ namespace YEET
             Grabbed = state;
         }
 
-        public void ResetCursor()
+        public static void ResetCursor()
         {
             StateMaschine.Context.MousePosition =
                 new Vector2(StateMaschine.Context.Size.X / 2, StateMaschine.Context.Size.Y / 2);
             MousePrevious = new Vector2(StateMaschine.Context.Size.X / 2, StateMaschine.Context.Size.Y / 2);
         }
 
-        public void processMouse()
+        public static void processMouse()
         {
             if (Grabbed)
             {
@@ -80,7 +80,7 @@ namespace YEET
             }
         }
 
-        public void ProcessKeyboard()
+        public static void ProcessKeyboard()
         {
             float velocity = 1.01f * Convert.ToSingle(StateMaschine.Context.LastFrameRenderTime);
             if (StateMaschine.Context.KeyboardState[Keys.W])

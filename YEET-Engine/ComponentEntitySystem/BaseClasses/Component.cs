@@ -2,7 +2,7 @@
 {
     public class Component
     {
-        private Entity Owner { get; }
+        protected Entity Owner { get; }
 
         private bool Active { get; set; }
         

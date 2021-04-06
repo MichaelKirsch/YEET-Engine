@@ -100,9 +100,14 @@ namespace YEET
             GL.BindVertexArray(_VAO);
             GL.DrawArrays(PrimitiveType.Triangles, 0, FinalVertices.Count * 3);
             _loader.SetUniformVec3("rgb", rgb_plane.X, rgb_plane.Y, rgb_plane.Z);
+            _loader.SetUniformMatrix4F("view", ref Camera.View);
+            _loader.SetUniformMatrix4F("projection",ref Camera.Projection);
             GL.BindVertexArray(VAO_Plane);
             GL.DrawArrays(PrimitiveType.Triangles, 0, PlaneVertices.Count * 3);
             _loader.SetUniformVec3("rgb", rgb_grid.X, rgb_grid.Y, rgb_grid.Z);
+            _loader.SetUniformMatrix4F("view", ref Camera.View);
+            _loader.SetUniformMatrix4F("projection",ref Camera.Projection);
+            
         }
 
         List<Vector3> MakeQuad(Vector3 a, Vector3 b, Vector3 c, Vector3 d)
