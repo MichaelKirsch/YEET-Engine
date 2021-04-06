@@ -49,6 +49,6 @@ namespace YEET
             _position.Z = Convert.ToSingle(z);
         }
         
-        private Vector3 _position;
+        public Vector3 _position;
     }
 }

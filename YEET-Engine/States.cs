@@ -22,6 +22,7 @@ namespace YEET
         private Vector3 _LightPosition;
         private Grid _Grid;
         private LineDrawer _line;
+        private LineDrawer.Line cameraPlayer, treeCamera, TreeLight;
         private TestEntitiy _testEntitiy;
 
         private Vector3 corner1=(0,0,0), corner2=(0,0,100), corner3=(100,0,100), corner4=(100,0,0);
@@ -31,6 +32,29 @@ namespace YEET
         public RenderingTest()
         {
             Console.WriteLine("State1 construct");
+        }
+        
+        public override void OnStart()
+        {
+            Console.WriteLine("State1 onstart");
+            GL.ClearColor(0.1f, 0.0f, 0.2f, 1.0f);
+            Camera.Start();
+            _staticObjModelTest = new StaticOBJModel("Palmtree", new Vector3(10, 0, 20));
+
+            Camera.Position = (50, 50, 50);
+            _line = new LineDrawer(new Vector3(1f, 0.0f, 0.0f));
+
+            cameraPlayer = _line.AddLine(ref Camera.Position, ref _LightPosition, Colors.Red);
+            treeCamera = _line.AddLine(ref _staticObjModelTest.GetComponent<Transform>()._position, ref corner1, Colors.Green);
+            TreeLight = _line.AddLine(ref _LightPosition, ref _staticObjModelTest.GetComponent<Transform>()._position, Colors.Blue);
+            _testEntitiy = new TestEntitiy();
+            
+            
+            
+            Camera.GrabCursor(false);
+            _Grid = new Grid(new ShaderLoader("Grid", "GridVert", "GridFrag", true), (100, 100), 0.04f);
+            base.OnStart();
+            
         }
 
         public override void OnGui()
@@ -75,6 +99,12 @@ namespace YEET
                 treeposx = 0;
             _staticObjModelTest.GetComponent<Transform>().SetX(treeposx);;
             _staticObjModelTest.GetComponent<Transform>().SetZ(50+treeposx*Math.Sin(treeposx/10));
+            treeCamera.Start = corner4;
+            treeCamera.End = _staticObjModelTest.GetComponent<Transform>().GetPosition();
+            cameraPlayer.Start = _staticObjModelTest.GetComponent<Transform>().GetPosition();
+            cameraPlayer.End = corner1;
+            TreeLight.End = _LightPosition;
+            TreeLight.Start = _staticObjModelTest.GetComponent<Transform>().GetPosition();
         }
 
 
@@ -88,41 +118,11 @@ namespace YEET
                 GL.PolygonMode(MaterialFace.FrontAndBack, PolygonMode.Fill);
             }
             _Grid.Draw();
-            _line.ChangeLine("lightTree",_staticObjModelTest.GetComponent<Transform>().GetPosition(),
-                _LightPosition,new Vector3(1,0,1));
-            _line.ChangeLine("treeorigin",_staticObjModelTest.GetComponent<Transform>().GetPosition(),Vector3.Zero, new Vector3(0,0,1));
-            _line.ChangeLine("corner1",_staticObjModelTest.GetComponent<Transform>().GetPosition(),corner1,new Vector3(1,1,1));
-            _line.ChangeLine("corner2",_staticObjModelTest.GetComponent<Transform>().GetPosition(),corner2,new Vector3(1,1,1));
-            _line.ChangeLine("corner3",_staticObjModelTest.GetComponent<Transform>().GetPosition(),corner3,new Vector3(1,1,1));
-            _line.ChangeLine("corner4",_staticObjModelTest.GetComponent<Transform>().GetPosition(),corner4,new Vector3(1,1,1));
-            _line.ChangeLine("cameraTree",_staticObjModelTest.GetComponent<Transform>().GetPosition(), (Camera.Position.X,Camera.Position.Y-1,Camera.Position.Z),new Vector3(0,1,0));
             _line.Draw(Camera.View,Camera.Projection);
             _staticObjModelTest.OnDraw();
         }
 
-        public override void OnStart()
-        {
-            Console.WriteLine("State1 onstart");
-            GL.ClearColor(0.1f, 0.0f, 0.2f, 1.0f);
-            Camera.Start();
-            _staticObjModelTest = new StaticOBJModel("Palmtree", new Vector3(10, 0, 20));
 
-            Camera.Position = (50, 50, 50);
-            _line = new LineDrawer(new Vector3(1f, 0.0f, 0.0f));
-            _line.AddLine("lightTree",_staticObjModelTest.GetComponent<Transform>().GetPosition(),_LightPosition,new Vector3(1,0,0));
-            _line.AddLine("treeorigin",_staticObjModelTest.GetComponent<Transform>().GetPosition(),_LightPosition,new Vector3(1,0,0));
-            _line.AddLine("cameraTree",_staticObjModelTest.GetComponent<Transform>().GetPosition(),(Camera.Position.X,Camera.Position.Y+2,Camera.Position.Z),new Vector3(1,0,0));
-            _line.AddLine("corner1",_staticObjModelTest.GetComponent<Transform>().GetPosition(),corner1,new Vector3(1,1,1));
-            _line.AddLine("corner2",_staticObjModelTest.GetComponent<Transform>().GetPosition(),corner2,new Vector3(1,1,1));
-            _line.AddLine("corner3",_staticObjModelTest.GetComponent<Transform>().GetPosition(),corner3,new Vector3(1,1,1));
-            _line.AddLine("corner4",_staticObjModelTest.GetComponent<Transform>().GetPosition(),corner4,new Vector3(1,1,1));
-            _testEntitiy = new TestEntitiy();
-            Camera.GrabCursor(false);
-            _Grid = new Grid(new ShaderLoader("Grid", "GridVert", "GridFrag", true), (100, 100), 0.04f);
-            
-            base.OnStart();
-            
-        }
 
         public override void OnLeave()
         {
