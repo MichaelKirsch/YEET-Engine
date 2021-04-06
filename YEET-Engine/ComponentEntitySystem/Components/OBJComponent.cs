@@ -1,9 +1,9 @@
 ﻿namespace YEET
 {
-    public class FlatShadedOBJ : Component
+    public class OBJComponent : Component
     {
         private OBJLoader _loader;
-        public FlatShadedOBJ(Entity owner, string modelpath) : base(owner)
+        public OBJComponent(Entity owner, string modelpath) : base(owner)
         {
             _loader = new OBJLoader(modelpath, new ShaderLoader("lo", "FlatShadedModelVert",
                 "FlatShadedModelFrag", true));

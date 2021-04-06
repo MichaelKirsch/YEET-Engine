@@ -108,6 +108,14 @@
       <Content Include="Shaders\LinesFrag.glsl">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </Content>
+      <None Remove="Models\PointLight.obj" />
+      <Content Include="Models\PointLight.obj">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </Content>
+      <None Remove="Models\PointLight.mtl" />
+      <Content Include="Models\PointLight.mtl">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </Content>
     </ItemGroup>
 
     <ItemGroup>
