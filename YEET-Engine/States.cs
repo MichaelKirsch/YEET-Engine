@@ -9,6 +9,7 @@ using OpenTK.Input;
 using OpenTK.Mathematics;
 using OpenTK.Windowing.Common;
 using SimplexNoise;
+using YEET.ComponentEntitySystem.Entities;
 using Buffer = System.Buffer;
 
 
@@ -22,7 +23,7 @@ namespace YEET
         private Vector3 _LightPosition;
         private Grid _Grid;
         private LineDrawer _line;
-
+        private TestEntitiy _testEntitiy;
 
         private Vector3 corner1=(0,0,0), corner2=(0,0,100), corner3=(100,0,100), corner4=(100,0,0);
         
@@ -114,6 +115,7 @@ namespace YEET
             _Palmtree = new OBJLoader("BigTree",
                 new ShaderLoader("Model", "FlatShadedModelVert", "FlatShadedModelFrag", true));
             _Camera.Start();
+            _Camera.Position = (50, 50, 50);
             _line = new LineDrawer(new Vector3(1f, 0.0f, 0.0f));
             _line.AddLine("lightTree",_Palmtree.Position,_LightPosition,new Vector3(1,0,0));
             _line.AddLine("treeorigin",_Palmtree.Position,_LightPosition,new Vector3(1,0,0));
@@ -123,6 +125,7 @@ namespace YEET
             _line.AddLine("corner2",_Palmtree.Position,corner2,new Vector3(1,1,1));
             _line.AddLine("corner3",_Palmtree.Position,corner3,new Vector3(1,1,1));
             _line.AddLine("corner4",_Palmtree.Position,corner4,new Vector3(1,1,1));
+            _testEntitiy = new TestEntitiy();
             _Camera.GrabCursor(false);
             _Grid = new Grid(new ShaderLoader("Grid", "GridVert", "GridFrag", true), (100, 100), 0.04f);
             base.OnStart();
