@@ -11,6 +11,8 @@ namespace YEET
         static public Matrix4 View, Projection;
         static private Vector2 MousePrevious = Vector2.Zero;
         static private bool Grabbed;
+        static public int Frustrum=45;
+        static public float RenderingDistance = 100f;
 
         static Camera()
         {

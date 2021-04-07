@@ -56,15 +56,15 @@ namespace YEET
             VBO = GL.GenBuffer();
         }
 
-        public void Draw(Matrix4 view, Matrix4 projection)
+        public void Draw()
         {
             UpdateVertices();
             Loader.UseShader();
             GL.BindVertexArray(VAO);
             GL.LineWidth(2.0f);
             GL.DrawArrays(PrimitiveType.Lines, 0, _vertices.Count * 3);
-            Loader.SetUniformMatrix4F("view", ref view);
-            Loader.SetUniformMatrix4F("projection", ref projection);
+            Loader.SetUniformMatrix4F("view", ref Camera.View);
+            Loader.SetUniformMatrix4F("projection", ref Camera.Projection);
             GL.BindVertexArray(0);
         }
 
