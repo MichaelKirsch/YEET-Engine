@@ -23,6 +23,7 @@ namespace YEET
             MovementSpeed = 2.5f;
             MouseSensitivity = 0.1f;
             Zoom = 90.0f;
+            Frustrum = Convert.ToInt32(Zoom+10);
         }
 
         public static void Start()

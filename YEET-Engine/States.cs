@@ -25,6 +25,7 @@ namespace YEET
         private LineDrawer.Line cameraPlayer, treeCamera, TreeLight, FrustrumRight, FrustrumLeft;
         private List<Entity> _entities;
         private Vector3 corner1 = (0, 0, 0), corner2 = (0, 0, 100), corner3 = (100, 0, 100), corner4 = (100, 0, 0);
+        private PointCloudTest _pointCloudTest;
 
         public RenderingTest()
         {
@@ -38,7 +39,7 @@ namespace YEET
             Camera.Start();
             Camera.Position = (50, 50, 50);
             Camera.GrabCursor(false);
-
+            
             _entities = new List<Entity>();
             var rand = new Random();
             for (int x = 0; x < 100; x++)
@@ -60,6 +61,9 @@ namespace YEET
                 ref _staticObjModelTest.GetComponent<Transform>()._position, new Vector3(1, 0.70f, 0.039f));
             FrustrumRight = _line.AddLine(ref _LightPosition,
                 ref _staticObjModelTest.GetComponent<Transform>()._position, new Vector3(1, 0.70f, 0.039f));
+
+            _pointCloudTest = new PointCloudTest();
+            _pointCloudTest.Generate();
             base.OnStart();
         }
 
@@ -95,6 +99,9 @@ namespace YEET
             //ImGui.ColorPicker3("Color Lines", ref _Grid.rgb_grid, ImGuiColorEditFlags.Float);
             ImGui.Checkbox("Wireframe", ref _WireFrame);
             ImGui.Checkbox("Mouse Lock", ref _MouseLocked);
+            ImGui.SliderFloat("Scale Pointcloud", ref _pointCloudTest.Scale, 0.01f, 0.1f);
+            ImGui.SliderInt("Dimension Pointcloud", ref _pointCloudTest.Dimension, 16, 64);
+            ImGui.SliderFloat("Surface Level", ref _pointCloudTest.SurfaceLevel, 0.1f, 1.0f);
             ImGui.End();
         }
 
@@ -138,7 +145,7 @@ namespace YEET
             _Grid.Draw();
             _line.Draw();
             _staticObjModelTest.OnDraw();
-
+            _pointCloudTest.OnDraw();
             foreach (var entity in _entities)
             {
                 entity.OnDraw();
