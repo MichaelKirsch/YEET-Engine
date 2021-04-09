@@ -35,7 +35,7 @@ namespace YEET
         public override void OnStart()
         {
             Console.WriteLine("State1 onstart");
-            GL.ClearColor(0.1f, 0.0f, 0.2f, 1.0f);
+            GL.ClearColor(0.415f, 0.439f, 0.4f, 1.0f);
             Camera.Start();
             Camera.Position = (50, 50, 50);
             Camera.GrabCursor(false);

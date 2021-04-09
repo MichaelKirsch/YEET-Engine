@@ -4,10 +4,10 @@ namespace YEET
 {
     public static class MarchingCubesTables
     {
-        private static int[] cornerIndexBFromEdge = new int[] {1, 2, 3, 0, 5, 6, 7, 4, 4, 5, 6, 7};
-        private static int[] cornerIndexAFromEdge = new int[] {0, 1, 2, 3, 4, 5, 6, 7, 0, 1, 2, 3};
+        public static int[] cornerIndexBFromEdge = new int[] {1, 2, 3, 0, 5, 6, 7, 4, 4, 5, 6, 7};
+        public static int[] cornerIndexAFromEdge = new int[] {0, 1, 2, 3, 4, 5, 6, 7, 0, 1, 2, 3};
 
-        private static int[] edges = new[]
+        public static int[] edges = new[]
         {
             0x0,
             0x109,
@@ -268,7 +268,7 @@ namespace YEET
         };
 
 
-        private static int[,] triangulation = new int[,]
+        public static int[,] triangulation = new int[,]
         {
             {-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1},
             {0, 8, 3, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1},
