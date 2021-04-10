@@ -25,8 +25,7 @@ namespace YEET
         private LineDrawer.Line cameraPlayer, treeCamera, TreeLight, FrustrumRight, FrustrumLeft;
         private List<Entity> _entities;
         private Vector3 corner1 = (0, 0, 0), corner2 = (0, 0, 100), corner3 = (100, 0, 100), corner4 = (100, 0, 0);
-        private PointCloudTest _pointCloudTest;
-
+        private List<PointCloudTest> terrain;
         public RenderingTest()
         {
             Console.WriteLine("State1 construct");
@@ -34,6 +33,21 @@ namespace YEET
 
         public override void OnStart()
         {
+            terrain = new List<PointCloudTest>();
+            Random rand2 = new Random();
+            var seed = rand2.Next();
+            ShaderLoader loader = new ShaderLoader("Marching", "MarchingCubesVert", "MarchingCubesFrag", true);
+
+            for (int i = 0; i < 3; i++)
+            {
+                for (int j = 0; j < 3; j++)
+                {
+                    terrain.Add(new PointCloudTest(seed, new Vector3i(i*32, 0, j*32),loader));
+                }
+            }
+            
+            
+
             Console.WriteLine("State1 onstart");
             GL.ClearColor(0.415f, 0.439f, 0.4f, 1.0f);
             Camera.Start();
@@ -61,9 +75,7 @@ namespace YEET
                 ref _staticObjModelTest.GetComponent<Transform>()._position, new Vector3(1, 0.70f, 0.039f));
             FrustrumRight = _line.AddLine(ref _LightPosition,
                 ref _staticObjModelTest.GetComponent<Transform>()._position, new Vector3(1, 0.70f, 0.039f));
-
-            _pointCloudTest = new PointCloudTest();
-            _pointCloudTest.Generate();
+            
             base.OnStart();
         }
 
@@ -99,9 +111,6 @@ namespace YEET
             //ImGui.ColorPicker3("Color Lines", ref _Grid.rgb_grid, ImGuiColorEditFlags.Float);
             ImGui.Checkbox("Wireframe", ref _WireFrame);
             ImGui.Checkbox("Mouse Lock", ref _MouseLocked);
-            ImGui.SliderFloat("Scale Pointcloud", ref _pointCloudTest.Scale, 0.01f, 0.1f);
-            ImGui.SliderInt("Dimension Pointcloud", ref _pointCloudTest.Dimension, 16, 64);
-            ImGui.SliderFloat("Surface Level", ref _pointCloudTest.SurfaceLevel, 0.1f, 1.0f);
             ImGui.End();
         }
 
@@ -127,7 +136,10 @@ namespace YEET
             FrustrumLeft.End =st+ new Vector3(new Vector3(Camera.Front.X, 0.0f, Camera.Front.Z) * rot).Normalized()*30f;
             Matrix3.CreateRotationY(MathHelper.DegreesToRadians(-Camera.Frustrum/2f), out rot);
             FrustrumRight.End = st +  new Vector3(new Vector3(Camera.Front.X, 0.0f, Camera.Front.Z) * rot).Normalized()*30f;
-            
+            foreach (var pointCloudTest in terrain)
+            {
+                pointCloudTest.OnUpdate();
+            }
             _staticObjModelTest.OnUpdate();
         }
 
@@ -145,11 +157,16 @@ namespace YEET
             _Grid.Draw();
             _line.Draw();
             _staticObjModelTest.OnDraw();
-            _pointCloudTest.OnDraw();
             foreach (var entity in _entities)
             {
                 entity.OnDraw();
             }
+
+            foreach (var dPointCloudTest in terrain)
+            {
+                dPointCloudTest.OnDraw(_LightPosition);
+            }
+            
         }
 
 

@@ -63,6 +63,7 @@ namespace YEET
             base.OnUpdateFrame(e);
             StateMaschine.Input();
             StateMaschine.Update(e);
+            
             LastFrameUpdateTime = watch.Result();
         }
 
