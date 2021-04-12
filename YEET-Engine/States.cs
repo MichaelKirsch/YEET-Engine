@@ -26,6 +26,8 @@ namespace YEET
         private List<Entity> _entities;
         private Vector3 corner1 = (0, 0, 0), corner2 = (0, 0, 100), corner3 = (100, 0, 100), corner4 = (100, 0, 0);
         private List<PointCloudTest> terrain;
+        private int noise_divider=100;
+        private float pointcloud_scale = 0.3f;
         public RenderingTest()
         {
             Console.WriteLine("State1 construct");
@@ -43,6 +45,8 @@ namespace YEET
                 for (int j = 0; j < 3; j++)
                 {
                     terrain.Add(new PointCloudTest(seed, new Vector3i(i*32, 0, j*32),loader));
+                    terrain.Add(new PointCloudTest(seed, new Vector3i(i*32, 32, j*32),loader));
+                    terrain.Add(new PointCloudTest(seed, new Vector3i(i*32, 64, j*32),loader));
                 }
             }
             
@@ -106,7 +110,10 @@ namespace YEET
             ImGui.SliderFloat("Light X:", ref _LightPosition.X, 0, 100);
             ImGui.SliderFloat("Light Z:", ref _LightPosition.Z, 0, 100);
             ImGui.SliderInt("Frustrum", ref Camera.Frustrum, 45, 90);
+            ImGui.SliderInt("Noise Divider", ref noise_divider, 3, 50);
+            ImGui.SliderFloat("Scale", ref pointcloud_scale, 0.01f, 0.1f);
             ImGui.SliderFloat("Render Distance", ref Camera.RenderingDistance, 20, 150);
+            
             //ImGui.ColorPicker3("Color", ref _Grid.rgb_plane, ImGuiColorEditFlags.Float);
             //ImGui.ColorPicker3("Color Lines", ref _Grid.rgb_grid, ImGuiColorEditFlags.Float);
             ImGui.Checkbox("Wireframe", ref _WireFrame);
@@ -138,6 +145,8 @@ namespace YEET
             FrustrumRight.End = st +  new Vector3(new Vector3(Camera.Front.X, 0.0f, Camera.Front.Z) * rot).Normalized()*30f;
             foreach (var pointCloudTest in terrain)
             {
+                pointCloudTest.Divider = noise_divider;
+                pointCloudTest.Scale = pointcloud_scale;
                 pointCloudTest.OnUpdate();
             }
             _staticObjModelTest.OnUpdate();

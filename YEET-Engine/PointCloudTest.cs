@@ -20,8 +20,9 @@ namespace YEET
         public int Dimension = 32;
         public float SurfaceLevel = 0.319f;
         public Vector3i Offset;
-        private float[,,] pointCloudValues;
         public bool NeedsUpdate = true;
+        public float Divider = 100;
+        private float last_divider =100;
         
         private Vector3[] cubeCornerOffsets =
         {
@@ -48,16 +49,15 @@ namespace YEET
 
         public void Generate()
         {
-            if (lastscale != Scale || lastsurface != SurfaceLevel|| NeedsUpdate)
+            if (lastscale != Scale || lastsurface != SurfaceLevel|| NeedsUpdate || last_divider != Divider)
             {
                 NeedsUpdate = false;
+                last_divider = Divider;
                 lastscale = Scale;
                 lastsurface = SurfaceLevel;
                 Util.StopWatchMilliseconds watch = new Util.StopWatchMilliseconds();
                 FinalTriangleVertices.Clear();
 
-                pointCloudValues = Noise.Calc3D(Dimension, Dimension, Dimension, Scale);
-                
 
                 Parallel.For(0, Dimension,
                     x =>
@@ -111,7 +111,8 @@ namespace YEET
 
         float GenerateFloatPerPoint(Vector3i pos)
         {
-            return Noise.CalcPixel3D((pos+Offset).X,(pos+Offset).Y,(pos+Offset).Z, Scale) / 255.0f;
+            pos = pos + Offset;
+            return -pos.Y + (Noise.CalcPixel3D(pos.X, pos.Y, pos.Z, Scale)/Divider);
         }
 
 
@@ -155,8 +156,8 @@ namespace YEET
 
                 lock (FinalTriangleVertices)
                 {
-                    Vector3 Color = new Vector3((0.01f + CubePosition.X) / Dimension,
-                        (0.01f + CubePosition.Y) / Dimension, (0.01f + CubePosition.Z) / Dimension);
+                    Vector3 Color = new Vector3(0.3f,
+                        (0.01f + CubePosition.Y) / Dimension, 0.5f);
                     Vector3 v1 = ((cubeCornerOffsets[a0] + CubePosition) + (cubeCornerOffsets[b0] + CubePosition)) / 2;
                     Vector3 v2 = ((cubeCornerOffsets[a1] + CubePosition) + (cubeCornerOffsets[b1] + CubePosition)) / 2;
                     Vector3 v3 = ((cubeCornerOffsets[a2] + CubePosition) + (cubeCornerOffsets[b2] + CubePosition)) / 2;
