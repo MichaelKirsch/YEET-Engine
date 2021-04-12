@@ -7,7 +7,6 @@ in vec3 oPos;
 
 uniform vec3 LightPosition;
 
-vec3 lightPos = vec3(100,100,100);
 vec3 lightColor = vec3(1,1,1);
 
 

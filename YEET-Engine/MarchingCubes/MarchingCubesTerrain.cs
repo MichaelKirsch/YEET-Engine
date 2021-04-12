@@ -3,6 +3,7 @@
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using ImGuiNET;
 using OpenTK.Graphics.OpenGL4;
 using OpenTK.Mathematics;
 using SimplexNoise;
@@ -10,18 +11,105 @@ using SimplexNoise;
 
 namespace YEET
 {
-    public class PointCloudTest : Entity
+
+    public class MarchingCubeTerrain : Entity
+    {
+        private List<PointCloudTest> _chunks;
+        public float Scale= 0.019f;
+        public int Divider = 7;
+        public float SurfaceLevel= 0.319f;
+        public Vector3 Dimensions;
+        public int Seed;
+        private ShaderLoader _loader;
+
+        private float lastsurface=0, lastscale=0;
+        private int lastSeed=0, lastDivider=0;
+        
+        public MarchingCubeTerrain(Vector3 _Dimensions)
+        {
+            _chunks = new List<PointCloudTest>();
+            Dimensions = _Dimensions;
+            var rand = new Random();
+            Seed = rand.Next();
+            _loader = new ShaderLoader("MarchingCubes");
+            _chunks.Clear();
+            for (int x = 0; x < Dimensions.X; x++)
+            {
+                for (int y = 0; y < Dimensions.Y; y++)
+                {
+                    for (int z = 0; z < Dimensions.Z; z++)
+                    {
+                        _chunks.Add(new PointCloudTest(Seed,new Vector3i(x*32,y*32,z*32),_loader));
+                    }
+                }
+            }
+            Generate();
+        }
+
+
+        public override void OnUpdate()
+        {
+            base.OnUpdate();
+            Generate();
+        }
+
+        public override void OnRender()
+        {
+            base.OnRender();
+            foreach (var chunk in _chunks)
+            {
+                chunk.OnDraw();
+            }
+        }
+
+
+        public override void OnGui()
+        {
+            ImGui.Begin("Terrain (MC)");
+            ImGui.SetWindowFontScale(1.5f);
+            ImGui.SliderFloat("Scale", ref Scale, 0.001f, 0.1f);
+            ImGui.SliderFloat("Surface Level", ref SurfaceLevel, 0.01f, 1.0f);
+            ImGui.SliderInt("Divider", ref Divider, 1, 30);
+            ImGui.End();
+            base.OnGui();
+        }
+
+        void Generate()
+        {
+            if (lastscale != Scale || lastsurface != SurfaceLevel || lastDivider != Divider || lastSeed != Seed)
+            {
+                var watch = new Util.StopWatchMilliseconds();
+                lastscale = Scale;
+                lastsurface = SurfaceLevel;
+                lastDivider = Divider;
+                lastSeed = Seed;
+                foreach (var chunk in _chunks)
+                {
+                    chunk.Scale = Scale;
+                    chunk.Divider = Divider;
+                    chunk.SurfaceLevel = SurfaceLevel;
+                    chunk.Generate();
+                }
+                
+                Console.WriteLine("Generated "+_chunks.Count + " Chunks.Took: "+watch.Result()+"ms");
+            }
+        }
+    }
+    
+    
+    
+    class PointCloudTest
     {
         private List<Vector3> FinalTriangleVertices;
-        public float Scale = 0.05f;
+        public float Scale =0.019f;
         public ShaderLoader Loader;
         private int VAO, VBO;
         private float lastscale, lastsurface = 0.1f;
         public int Dimension = 32;
-        public float SurfaceLevel = 0.319f;
+        public float SurfaceLevel= 0.319f ;
         public Vector3i Offset;
         public bool NeedsUpdate = true;
-        public float Divider = 100;
+        public float Divider = 7;
         private float last_divider =100;
         
         private Vector3[] cubeCornerOffsets =
@@ -89,32 +177,41 @@ namespace YEET
         }
 
 
-        public override void OnUpdate()
+        public void OnUpdate()
         {
-            base.OnUpdate();
+            
             Generate();
         }
 
-        public void OnDraw(Vector3 lightpos)
+        public void OnDraw()
         {
-            base.OnDraw();
+            
             Loader.UseShader();
             GL.BindVertexArray(VAO);
             Loader.SetUniformMatrix4F("view", ref Camera.View);
             Loader.SetUniformMatrix4F("projection", ref Camera.Projection);
-            Loader.SetUniformVec3("LightPosition", lightpos);
             Loader.SetUniformVec3("offset", Offset);
             GL.DrawArrays(PrimitiveType.Triangles, 0, FinalTriangleVertices.Count * 3);
             
             GL.BindVertexArray(0);
         }
 
-        float GenerateFloatPerPoint(Vector3i pos)
+        public float GenerateFloatPerPoint(Vector3i pos)
         {
             pos = pos + Offset;
             return -pos.Y + (Noise.CalcPixel3D(pos.X, pos.Y, pos.Z, Scale)/Divider);
         }
 
+        public int GetSurface(Vector2i pos)
+        {
+            for (int x = 0; x < Dimension; x++)
+            {
+                if (GenerateFloatPerPoint(new Vector3i(pos.X, x, pos.Y)) < SurfaceLevel)
+                    return x;
+            }
+            return -1;
+        }
+        
 
         private void March(Vector3i CubePosition)
         {
@@ -156,13 +253,14 @@ namespace YEET
 
                 lock (FinalTriangleVertices)
                 {
-                    Vector3 Color = new Vector3(0.3f,
-                        (0.01f + CubePosition.Y) / Dimension, 0.5f);
+                    Vector3 Color = (0, 0.6f, 0.098f);
+                    //Vector3 Color = new Vector3(Noise.CalcPixel1D(CubePosition.X,Scale)/255f,Noise.CalcPixel1D(CubePosition.Y,Scale)/255f,
+                    //    Noise.CalcPixel1D(CubePosition.Z,Scale)/255f);
                     Vector3 v1 = ((cubeCornerOffsets[a0] + CubePosition) + (cubeCornerOffsets[b0] + CubePosition)) / 2;
                     Vector3 v2 = ((cubeCornerOffsets[a1] + CubePosition) + (cubeCornerOffsets[b1] + CubePosition)) / 2;
                     Vector3 v3 = ((cubeCornerOffsets[a2] + CubePosition) + (cubeCornerOffsets[b2] + CubePosition)) / 2;
                     var dir = Vector3.Cross(v2 - v1, v3 - v1);
-                    Vector3 norm = Vector3.Normalize(dir);
+                    Vector3 norm = -Vector3.Normalize(dir);
                     lock (FinalTriangleVertices)
                     {
                         FinalTriangleVertices.AddRange(new List<Vector3>()

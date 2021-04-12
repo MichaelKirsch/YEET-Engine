@@ -68,6 +68,27 @@ namespace YEET
             }
             Program = CreateProgram(name, Files);
         }
+
+        public ShaderLoader(string name)
+        {
+            string VertexShaderSource;
+                using (StreamReader reader = new StreamReader("Shaders/" + name+"Vert.glsl", Encoding.UTF8))
+                {
+                    VertexShaderSource = reader.ReadToEnd();
+                }
+
+                string FragmentShaderSource;
+
+                using (StreamReader reader = new StreamReader("Shaders/" +name+"Frag.glsl", Encoding.UTF8))
+                {
+                    FragmentShaderSource = reader.ReadToEnd();
+                }
+                Files = new[]{
+                    (ShaderType.VertexShader, VertexShaderSource),
+                    (ShaderType.FragmentShader, FragmentShaderSource),
+                };
+                Program = CreateProgram(name, Files);
+        }
         
         
         public void UseShader()

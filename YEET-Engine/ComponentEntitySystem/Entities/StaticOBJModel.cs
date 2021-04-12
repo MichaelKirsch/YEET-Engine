@@ -19,9 +19,9 @@ namespace YEET.ComponentEntitySystem.Entities
             base.OnStart();
         }
 
-        public override void OnDraw()
+        public override void OnRender()
         {
-            base.OnDraw();
+            base.OnRender();
             Vector3 pos2 = GetComponent<Transform>().GetPosition();
             Vector3 camerapos2 = Camera.Position;
             Vector3 dire = new Vector3(pos2 - camerapos2);

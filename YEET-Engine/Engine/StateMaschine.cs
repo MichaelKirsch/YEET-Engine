@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Diagnostics;
 using System.Runtime.InteropServices;
 using System.Timers;
 using OpenTK.Windowing.Common;
@@ -27,6 +29,11 @@ namespace YEET
             }
 
             private State _startState;
+        }
+
+        public static double GetElapsedTime()
+        {
+            return (DateTime.Now - Process.GetCurrentProcess().StartTime).Milliseconds;
         }
         
         
@@ -76,22 +83,46 @@ namespace YEET
 
     public class State
     {
-        public State()
+
+        private Dictionary<Guid, Entity> Entities;
+
+
+        public Guid AddEntity(Entity toadd)
         {
-            
+            var x = Guid.NewGuid();
+            Entities.Add(x,toadd);
+            return x;
         }
         
+        public T GetEntity<T>(Guid tofind) where T: Entity 
+        {
+            foreach (var item in Entities)
+            {
+                if (item.Key == tofind)
+                    return (T) item.Value;
+            }
+            return null;
+        }
+        
+        
+        public State()
+        {
+            Entities = new Dictionary<Guid, Entity>();
+        }
         /// <summary>
         /// Gets called after the render call. add all Imgui Code in this block
         /// </summary>
         public virtual void OnGui()
         {
-            
+            foreach (var entity in Entities)
+            {
+                if(entity.Value.ShowGUI)
+                    entity.Value.OnGui();
+            }
         }
 
         public virtual void OnInput()
         {
-            
         }
         
         /// <summary>
@@ -99,26 +130,40 @@ namespace YEET
         /// </summary>
         public virtual void OnUpdate( FrameEventArgs e)
         {
-            
+            foreach (var entity in Entities)
+            {
+                entity.Value.OnUpdate();
+            }
         }
         /// <summary>
         /// all Rendercode should be here or you will run into gl.clear problems
         /// </summary>
         public virtual void OnRender()
         {
-            
+            foreach (var entity in Entities)
+            {
+                entity.Value.OnRender();
+            }
         }
         /// <summary>
         /// gets called once when the state gets loaded
         /// </summary>
         public virtual void OnStart()
         {
+            foreach (var entity in Entities)
+            {
+                entity.Value.OnStart();
+            }
         }
         /// <summary>
         /// gets called once when the state gets switched away by the statemaschine
         /// </summary>
         public virtual void OnLeave()
         {
+            foreach (var entity in Entities)
+            {
+                entity.Value.OnLeave();
+            }
         }
     }
 

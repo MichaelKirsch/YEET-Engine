@@ -51,14 +51,16 @@ namespace YEET
 
         public void Draw()
         {
+            
             Loader.UseShader();
-            GL.BindVertexArray(VAO);
-            GL.DrawArrays(PrimitiveType.Triangles, 0, FinalVertexArray.Count / 3);
-            GL.BindVertexArray(0);
             Matrix4.CreateTranslation(Position,out ModelMatrix);
             Loader.SetUniformMatrix4F("projection",ref Camera.Projection);
             Loader.SetUniformMatrix4F("view",ref Camera.View);
             Loader.SetUniformMatrix4F("model",ref ModelMatrix);
+            GL.BindVertexArray(VAO);
+            GL.DrawArrays(PrimitiveType.Triangles, 0, FinalVertexArray.Count / 3);
+            GL.BindVertexArray(0);
+            
         }
 
         private void SplitFLine(string[] line)

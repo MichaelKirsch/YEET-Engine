@@ -5,8 +5,11 @@ namespace YEET
 {
     public class Entity
     {
+        public string Name = "default";
+
         private List<Component> _components;
         public Guid ID { get; }
+        public bool ShowGUI = true;
         public Entity()
         {
             _components = new List<Component>();
@@ -26,7 +29,7 @@ namespace YEET
         {
         }
 
-        public virtual void OnDraw()
+        public virtual void OnRender()
         {
         }
 
@@ -34,6 +37,16 @@ namespace YEET
         {
         }
 
+        public virtual void OnGui()
+        {
+            
+        }
+
+        public virtual void OnLeave()
+        {
+            
+        }
+        
         public void AddComponent(Component toadd)
         {
            _components.Add(toadd); 

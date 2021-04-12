@@ -22,6 +22,17 @@ namespace YEET
             //GL.CullFace(CullFaceMode.Back);
         }
         
+        public void WireMode(bool status)
+        {
+            if (status)
+                GL.PolygonMode(MaterialFace.FrontAndBack, PolygonMode.Line);
+            else
+            {
+                GL.PolygonMode(MaterialFace.FrontAndBack, PolygonMode.Fill);
+            }
+        }
+        
+        
         protected override void OnLoad()
         {
             base.OnLoad();

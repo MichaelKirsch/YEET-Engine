@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using ImGuiNET;
 using OpenTK.Graphics.ES11;
 using OpenTK.Mathematics;
 using OpenTK.Graphics.OpenGL4;
@@ -9,18 +10,19 @@ using VertexAttribPointerType = OpenTK.Graphics.OpenGL4.VertexAttribPointerType;
 
 namespace YEET
 {
-    public class Grid
+    public class Grid : Entity
     {
         public ShaderLoader _loader;
         List<Vector3> FinalVertices = new List<Vector3>();
         private List<Vector3> PlaneVertices = new List<Vector3>();
         private int _VAO, VAO_Plane;
         public System.Numerics.Vector3 rgb_grid, rgb_plane;
+        private float offsetx, offsety, offsetz;
 
-        public Grid(ShaderLoader i_loader, Vector2i _dimensions, float _line_thickness)
+        public Grid(Vector2i _dimensions, float _line_thickness=0.2f)
         {
-            _loader = i_loader;
-
+            _loader = new ShaderLoader("Grid");
+            Name = "Grid";
             rgb_grid = new System.Numerics.Vector3(0.072f, 0.293f, 0.294f);
             rgb_plane = new System.Numerics.Vector3(0.158f, 0.158f, 0.158f);
             for (int x = 0; x <= _dimensions.X; x++)
@@ -93,21 +95,41 @@ namespace YEET
             GL.BindVertexArray(0);
         }
 
+        public override void OnGui()
+        {
+            ImGui.Begin("Grid");
+            ImGui.SetWindowFontScale(1.5f);
+            ImGui.SliderFloat("Offset X", ref offsetx, -100, 100);
+            ImGui.SliderFloat("Offset Y", ref offsety, -100, 100);
+            ImGui.SliderFloat("Offset Z", ref offsetz, -100, 100);
+            ImGui.BeginChild("Colors");
+            ImGui.ColorPicker3("Grid Color", ref rgb_grid);
+            ImGui.ColorPicker3("Plane Color", ref rgb_plane);
+            ImGui.EndChild();
+            ImGui.End();
+            
+            GetComponent<Transform>().SetPosition(new Vector3(offsetx,offsety,offsetz));
+            base.OnGui();
+            
+        }
 
-        public void Draw()
+
+        public override void OnRender()
         {
             _loader.UseShader();
             GL.BindVertexArray(_VAO);
-            GL.DrawArrays(PrimitiveType.Triangles, 0, FinalVertices.Count * 3);
             _loader.SetUniformVec3("rgb", rgb_plane.X, rgb_plane.Y, rgb_plane.Z);
             _loader.SetUniformMatrix4F("view", ref Camera.View);
+            _loader.SetUniformVec3("offset", GetComponent<Transform>().GetPosition());
             _loader.SetUniformMatrix4F("projection",ref Camera.Projection);
+            GL.DrawArrays(PrimitiveType.Triangles, 0, FinalVertices.Count * 3);
+            
             GL.BindVertexArray(VAO_Plane);
-            GL.DrawArrays(PrimitiveType.Triangles, 0, PlaneVertices.Count * 3);
             _loader.SetUniformVec3("rgb", rgb_grid.X, rgb_grid.Y, rgb_grid.Z);
+            _loader.SetUniformVec3("offset", GetComponent<Transform>().GetPosition());
             _loader.SetUniformMatrix4F("view", ref Camera.View);
             _loader.SetUniformMatrix4F("projection",ref Camera.Projection);
-            
+            GL.DrawArrays(PrimitiveType.Triangles, 0, PlaneVertices.Count * 3);
         }
 
         List<Vector3> MakeQuad(Vector3 a, Vector3 b, Vector3 c, Vector3 d)
