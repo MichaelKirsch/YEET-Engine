@@ -1,4 +1,5 @@
 ﻿using System;
+using ImGuiNET;
 using OpenTK.Mathematics;
 using OpenTK.Windowing.GraphicsLibraryFramework;
 
@@ -13,6 +14,8 @@ namespace YEET
         static private bool Grabbed;
         static public int Frustrum=45;
         static public float RenderingDistance = 100f;
+        private static double lasttime;
+        static public bool ShowGUI;
 
         static Camera()
         {
@@ -83,9 +86,14 @@ namespace YEET
             }
         }
 
+        
+        
+        
+        
         public static void ProcessKeyboard()
         {
-            float velocity = 1.01f * Convert.ToSingle(StateMaschine.Context.LastFrameRenderTime);
+            float velocity = Math.Abs(.11f * Convert.ToSingle(StateMaschine.GetElapsedTime()-lasttime));
+            lasttime = StateMaschine.GetElapsedTime();
             if (StateMaschine.Context.KeyboardState[Keys.W])
                 Position += Front * velocity;
             if (StateMaschine.Context.KeyboardState[Keys.S])
@@ -95,5 +103,25 @@ namespace YEET
             if (StateMaschine.Context.KeyboardState[Keys.D])
                 Position -= Right * velocity;
         }
+        
+        public static void OnGui()
+        {
+            if (ShowGUI)
+            {
+                ImGui.Begin("Camera");
+                ImGui.DragFloat("PosX", ref Position.X);
+                ImGui.DragFloat("PosY", ref Position.Y);
+                ImGui.DragFloat("PosZ", ref Position.Z);
+                ImGui.DragFloat("Pitch", ref Pitch);
+                ImGui.DragFloat("Yaw", ref Yaw);
+                ImGui.SliderFloat("FOV", ref Zoom, 45f, 110f);
+                ImGui.End();
+            }
+            
+            
+        }
+
     }
+    
+    
 }

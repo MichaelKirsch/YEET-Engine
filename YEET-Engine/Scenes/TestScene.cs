@@ -15,13 +15,14 @@ using Buffer = System.Buffer;
 
 namespace YEET
 {
-    public class RenderingTest : State
+    public class RenderingTest : Scene
     {
         private bool _MouseLocked, _WireFrame;
         private Vector3 _LightPosition;
         private LineDrawer _line;
         private LineDrawer.Line cameraPlayer;
-
+        private bool griddirection;
+        private float gridheight;
         private Guid Grid, Terrain;
 
         public RenderingTest()
@@ -31,11 +32,11 @@ namespace YEET
 
         public override void OnStart()
         {
+            AddEntity(new StaticOBJModel("Well", new Vector3(0, 0, 0),false));
             Grid = AddEntity(new Grid((100, 100), 0.02f));
             Terrain = AddEntity(new MarchingCubeTerrain((5, 3, 5)));
             _LightPosition = new Vector3(100, 100, 0);
             Console.WriteLine("State1 onstart");
-            GL.ClearColor(0.415f, 0.439f, 0.4f, 1.0f);
             Camera.Start();
             Camera.Position = (50, 50, 50);
             Camera.GrabCursor(false);
@@ -47,7 +48,7 @@ namespace YEET
 
         public override void OnGui()
         {
-            base.OnGui();
+            base.OnGui(); // call first for all entities
             ImGui.Begin("Main");
             ImGui.SetWindowFontScale(1.5f);
             if (ImGui.Button("Exit"))
@@ -55,10 +56,17 @@ namespace YEET
                 StateMaschine.Exit();
             }
 
+            ImGui.ColorEdit4("ClearColor", ref ClearColor);
             ImGui.Text("Avg Rendertime:" +
                        StateMaschine.Context.AverageLastFrameRenderTime.ToString("0.000") + "ms");
 
+            if (ImGui.Button("Tree"))
+            {
+                AddEntity(new StaticOBJModel("Well", new Vector3(0, 0, 0),false));
+            }
+            ImGui.Checkbox("Camera Gui", ref Camera.ShowGUI);
             ImGui.Checkbox("Wireframe", ref _WireFrame);
+            StateMaschine.Context.WireMode(_WireFrame);
             ImGui.Checkbox("Mouse Lock", ref _MouseLocked);
             ImGui.End();
         }
@@ -69,6 +77,16 @@ namespace YEET
             var st = new Vector3(Camera.Position.X, 0.5f, Camera.Position.Z);
             cameraPlayer.Start = st;
             cameraPlayer.End = st + new Vector3(Camera.Front.X, 0.0f, Camera.Front.Z).Normalized() * 30f;
+
+            if (gridheight > 20|| gridheight <0)
+                griddirection = !griddirection;
+
+            if (griddirection)
+                gridheight += 0.1f;
+            else
+                gridheight -= 0.1f;
+
+            GetEntity<Grid>(Grid).GetComponent<Transform>().SetY(gridheight);
         }
 
         public override void OnRender()

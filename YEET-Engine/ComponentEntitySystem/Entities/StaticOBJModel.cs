@@ -1,4 +1,5 @@
-﻿using OpenTK.Graphics.OpenGL;
+﻿using ImGuiNET;
+using OpenTK.Graphics.OpenGL;
 using OpenTK.Mathematics;
 
 namespace YEET.ComponentEntitySystem.Entities
@@ -7,16 +8,25 @@ namespace YEET.ComponentEntitySystem.Entities
     {
         private OBJLoader _loader;
         
-        public StaticOBJModel(string path,Vector3 position)
+        public StaticOBJModel(string path,Vector3 position, bool GuiVisible) : base(GuiVisible)
         {
             _loader = new OBJLoader(path, new ShaderLoader("Model", "FlatShadedModelVert",
                 "FlatShadedModelFrag", true));
             GetComponent<Transform>().SetPosition(position);
         }
-
-        public override void OnStart()
+        
+        public override void OnGui()
         {
-            base.OnStart();
+            if (ShowGUI)
+            {
+                ImGui.Begin("OBJ");
+                ImGui.SliderFloat("Offset X", ref GetComponent<Transform>().Position.X, -100, 100);
+                ImGui.SliderFloat("Offset Y", ref GetComponent<Transform>().Position.Y, -100, 100);
+                ImGui.SliderFloat("Offset Z", ref GetComponent<Transform>().Position.Z, -100, 100);
+                ShowGUI = !ImGui.Button("Dont Show");
+                ImGui.End();
+            }
+            ImGui.Checkbox("OBJ " + ID, ref ShowGUI);
         }
 
         public override void OnRender()

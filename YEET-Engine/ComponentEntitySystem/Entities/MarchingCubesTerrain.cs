@@ -11,23 +11,22 @@ using SimplexNoise;
 
 namespace YEET
 {
-
     public class MarchingCubeTerrain : Entity
     {
-        private List<PointCloudTest> _chunks;
-        public float Scale= 0.019f;
+        private List<MarchingCubeChunk> _chunks;
+        public float Scale = 0.019f;
         public int Divider = 7;
-        public float SurfaceLevel= 0.319f;
+        public float SurfaceLevel = 0.319f;
         public Vector3 Dimensions;
         public int Seed;
         private ShaderLoader _loader;
 
-        private float lastsurface=0, lastscale=0;
-        private int lastSeed=0, lastDivider=0;
-        
+        private float lastsurface = 0, lastscale = 0;
+        private int lastSeed = 0, lastDivider = 0;
+
         public MarchingCubeTerrain(Vector3 _Dimensions)
         {
-            _chunks = new List<PointCloudTest>();
+            _chunks = new List<MarchingCubeChunk>();
             Dimensions = _Dimensions;
             var rand = new Random();
             Seed = rand.Next();
@@ -39,10 +38,11 @@ namespace YEET
                 {
                     for (int z = 0; z < Dimensions.Z; z++)
                     {
-                        _chunks.Add(new PointCloudTest(Seed,new Vector3i(x*32,y*32,z*32),_loader));
+                        _chunks.Add(new MarchingCubeChunk(Seed, new Vector3i(x * 32, y * 32, z * 32), _loader));
                     }
                 }
             }
+
             Generate();
         }
 
@@ -65,12 +65,17 @@ namespace YEET
 
         public override void OnGui()
         {
-            ImGui.Begin("Terrain (MC)");
-            ImGui.SetWindowFontScale(1.5f);
-            ImGui.SliderFloat("Scale", ref Scale, 0.001f, 0.1f);
-            ImGui.SliderFloat("Surface Level", ref SurfaceLevel, 0.01f, 1.0f);
-            ImGui.SliderInt("Divider", ref Divider, 1, 30);
-            ImGui.End();
+            if (ShowGUI)
+            {
+                ImGui.Begin("Terrain (MC)");
+                ImGui.SetWindowFontScale(1.5f);
+                ImGui.SliderFloat("Scale", ref Scale, 0.001f, 0.1f);
+                ImGui.SliderFloat("Surface Level", ref SurfaceLevel, 0.01f, 1.0f);
+                ImGui.SliderInt("Divider", ref Divider, 1, 30);
+                ImGui.End();
+            }
+
+            ImGui.Checkbox("Terrain", ref ShowGUI);
             base.OnGui();
         }
 
@@ -90,28 +95,30 @@ namespace YEET
                     chunk.SurfaceLevel = SurfaceLevel;
                     chunk.Generate();
                 }
-                
-                Console.WriteLine("Generated "+_chunks.Count + " Chunks.Took: "+watch.Result()+"ms");
+
+                Console.WriteLine("Generated " + _chunks.Count + " Chunks.Took: " + watch.Result() + "ms");
             }
         }
     }
-    
-    
-    
-    class PointCloudTest
+
+
+    class MarchingCubeChunk
     {
         private List<Vector3> FinalTriangleVertices;
-        public float Scale =0.019f;
+        private List<Vector3> PointsVisualizeCoordinates;
+        public float Scale = 0.019f;
         public ShaderLoader Loader;
         private int VAO, VBO;
         private float lastscale, lastsurface = 0.1f;
         public int Dimension = 32;
-        public float SurfaceLevel= 0.319f ;
+        public float SurfaceLevel = 0.319f;
         public Vector3i Offset;
         public bool NeedsUpdate = true;
         public float Divider = 7;
-        private float last_divider =100;
-        
+        private float last_divider = 100;
+
+        public bool GenerateVisiblePoints=true;
+
         private Vector3[] cubeCornerOffsets =
         {
             new(0, 0, 0),
@@ -124,20 +131,21 @@ namespace YEET
             new(0, 1, 1),
         };
 
-        public PointCloudTest(int noise_seed, Vector3i offset, ShaderLoader loader)
+        public MarchingCubeChunk(int noise_seed, Vector3i offset, ShaderLoader loader)
         {
             FinalTriangleVertices = new List<Vector3>();
+            PointsVisualizeCoordinates = new List<Vector3>();
             Loader = loader;
             VAO = GL.GenVertexArray();
             VBO = GL.GenBuffer();
-            
+
             Offset = offset;
             Noise.Seed = noise_seed;
         }
 
         public void Generate()
         {
-            if (lastscale != Scale || lastsurface != SurfaceLevel|| NeedsUpdate || last_divider != Divider)
+            if (lastscale != Scale || lastsurface != SurfaceLevel || NeedsUpdate || last_divider != Divider)
             {
                 NeedsUpdate = false;
                 last_divider = Divider;
@@ -145,15 +153,17 @@ namespace YEET
                 lastsurface = SurfaceLevel;
                 Util.StopWatchMilliseconds watch = new Util.StopWatchMilliseconds();
                 FinalTriangleVertices.Clear();
-
-
+                
                 Parallel.For(0, Dimension,
                     x =>
                     {
-                        Parallel.For(0, Dimension, y => { Parallel.For(0, Dimension, z =>
+                        Parallel.For(0, Dimension, y =>
                         {
-                            March((x, y, z));
-                        }); });
+                            Parallel.For(0, Dimension, z =>
+                            {
+                                March((x, y, z));
+                            });
+                        });
                     });
 
                 GL.BindVertexArray(VAO);
@@ -171,7 +181,8 @@ namespace YEET
                 GL.EnableVertexAttribArray(2);
                 GL.BindVertexArray(0);
 
-                Console.WriteLine("Generated Marching Cube.Offset:" + Offset + " Dimensions:" + Dimension + "x" + Dimension + "x" +
+                Console.WriteLine("Generated Marching Cube.Offset:" + Offset + " Dimensions:" + Dimension + "x" +
+                                  Dimension + "x" +
                                   Dimension + " Took:" + watch.Result() + "ms");
             }
         }
@@ -179,29 +190,33 @@ namespace YEET
 
         public void OnUpdate()
         {
-            
             Generate();
         }
 
         public void OnDraw()
         {
-            
             Loader.UseShader();
             GL.BindVertexArray(VAO);
             Loader.SetUniformMatrix4F("view", ref Camera.View);
             Loader.SetUniformMatrix4F("projection", ref Camera.Projection);
             Loader.SetUniformVec3("offset", Offset);
             GL.DrawArrays(PrimitiveType.Triangles, 0, FinalTriangleVertices.Count * 3);
-            
+
             GL.BindVertexArray(0);
         }
 
         public float GenerateFloatPerPoint(Vector3i pos)
         {
             pos = pos + Offset;
-            return -pos.Y + (Noise.CalcPixel3D(pos.X, pos.Y, pos.Z, Scale)/Divider);
+            return -pos.Y + (Noise.CalcPixel3D(pos.X, pos.Y, pos.Z, Scale) / Divider);
         }
 
+        public float GenerateFloatPerPointF(Vector3 pos)
+        {
+            pos = pos + Offset;
+            return -pos.Y + (Noise.CalcPixel3D(Convert.ToInt32(pos.X), Convert.ToInt32(pos.Y), Convert.ToInt32(pos.Z), Scale) / Divider);
+        }
+        
         public int GetSurface(Vector2i pos)
         {
             for (int x = 0; x < Dimension; x++)
@@ -209,7 +224,14 @@ namespace YEET
                 if (GenerateFloatPerPoint(new Vector3i(pos.X, x, pos.Y)) < SurfaceLevel)
                     return x;
             }
+
             return -1;
+        }
+
+        
+        Vector3 interpolateVerts(Vector3 v1, Vector3 v2) {
+            float t = (SurfaceLevel - GenerateFloatPerPointF(v1)) / (GenerateFloatPerPointF(v2) - GenerateFloatPerPointF(v1));
+            return v1 + t * (v2-v1);
         }
         
 
@@ -226,7 +248,7 @@ namespace YEET
                 GenerateFloatPerPoint((CubePosition.X + 1, CubePosition.Y + 1, CubePosition.Z + 1)),
                 GenerateFloatPerPoint((CubePosition.X, CubePosition.Y + 1, CubePosition.Z + 1))
             };
-
+            
             int cubeIndex = 0;
             if (cubeCorners[0] < SurfaceLevel) cubeIndex |= 1;
             if (cubeCorners[1] < SurfaceLevel) cubeIndex |= 2;
@@ -256,9 +278,10 @@ namespace YEET
                     Vector3 Color = (0, 0.6f, 0.098f);
                     //Vector3 Color = new Vector3(Noise.CalcPixel1D(CubePosition.X,Scale)/255f,Noise.CalcPixel1D(CubePosition.Y,Scale)/255f,
                     //    Noise.CalcPixel1D(CubePosition.Z,Scale)/255f);
-                    Vector3 v1 = ((cubeCornerOffsets[a0] + CubePosition) + (cubeCornerOffsets[b0] + CubePosition)) / 2;
-                    Vector3 v2 = ((cubeCornerOffsets[a1] + CubePosition) + (cubeCornerOffsets[b1] + CubePosition)) / 2;
-                    Vector3 v3 = ((cubeCornerOffsets[a2] + CubePosition) + (cubeCornerOffsets[b2] + CubePosition)) / 2;
+                    
+                    Vector3 v1 = interpolateVerts((cubeCornerOffsets[a0] + CubePosition), (cubeCornerOffsets[b0] + CubePosition));
+                    Vector3 v2 = interpolateVerts((cubeCornerOffsets[a1] + CubePosition), (cubeCornerOffsets[b1] + CubePosition));
+                    Vector3 v3 = interpolateVerts((cubeCornerOffsets[a2] + CubePosition), (cubeCornerOffsets[b2] + CubePosition));
                     var dir = Vector3.Cross(v2 - v1, v3 - v1);
                     Vector3 norm = -Vector3.Normalize(dir);
                     lock (FinalTriangleVertices)

@@ -10,11 +10,12 @@ namespace YEET
         private List<Component> _components;
         public Guid ID { get; }
         public bool ShowGUI = true;
-        public Entity()
+        public Entity(bool GuiVisible=false)
         {
+            ShowGUI = GuiVisible;
             _components = new List<Component>();
             _components.Add(new Transform(this));
-            ID = new Guid();
+            ID = Guid.NewGuid();
         }
 
         public virtual void OnStart()

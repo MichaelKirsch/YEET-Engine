@@ -1,8 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Numerics;
 using System.Runtime.InteropServices;
 using System.Timers;
+using ImGuiNET;
+using OpenTK.Graphics.ES11;
 using OpenTK.Windowing.Common;
 using OpenTK.Windowing.Desktop;
 
@@ -10,115 +13,120 @@ namespace YEET
 {
     public static class StateMaschine
     {
+        private static Stopwatch _stopwatch;
         static StateMaschine()
         {
             Console.WriteLine("StateMaschine Started");
+            _stopwatch = Stopwatch.StartNew();
+            _stopwatch.Start();
         }
         
-        private class Startupstate : State
+        private class Startupstate : Scene
         {
-            public Startupstate(State new_state)
+            public Startupstate(Scene newScene)
             {
-                _startState = new_state;
+                _startScene = newScene;
             }
             public override void OnUpdate(FrameEventArgs e)
             {
                 Console.WriteLine("Startup created. Will switch to First State now");
                 base.OnUpdate(e);
-                StateMaschine.SwitchState(_startState);
+                StateMaschine.SwitchState(_startScene);
             }
 
-            private State _startState;
+            private Scene _startScene;
         }
 
         public static double GetElapsedTime()
         {
-            return (DateTime.Now - Process.GetCurrentProcess().StartTime).Milliseconds;
+            return _stopwatch.ElapsedMilliseconds;
         }
         
         
-        public static void Run(State start,int updateRate, int frameRate)
+        public static void Run(Scene start,int updateRate, int frameRate)
         {
-            _currentState = new Startupstate(start);
+            _currentScene = new Startupstate(start);
             Context = new MainWindow(updateRate,frameRate);
             Context.Run();
         }
         
         public static void Render()
         {
-            _currentState.OnRender();
-            _currentState.OnGui();
+            _currentScene.OnRender();
+            _currentScene.OnGui();
         }
 
         public static void Input()
         {
-            _currentState.OnInput();
+            _currentScene.OnInput();
         }
         
         public static void Update(FrameEventArgs e)
         {
             
-            _currentState.OnUpdate(e);
+            _currentScene.OnUpdate(e);
         }
         
-        public static void SwitchState(State nextState)
+        public static void SwitchState(Scene nextScene)
         {
-            _currentState.OnLeave();
-            _currentState = nextState;
-            _currentState.OnStart();
+            _currentScene.OnLeave();
+            _currentScene = nextScene;
+            _currentScene.OnStart();
         }
 
         public static void Exit()
         {
-            _currentState.OnLeave();
+            _currentScene.OnLeave();
             Context.Close();
             Context.Dispose();
         }
         
         
 
-        private static State _currentState;
+        private static Scene _currentScene;
         public static MainWindow Context;
     }
 
-    public class State
+    public class Scene
     {
 
-        private Dictionary<Guid, Entity> Entities;
-
+        private List<Entity> Entities;
+        public Vector4 ClearColor= new Vector4(0.415f, 0.439f, 0.4f, 1.0f);
 
         public Guid AddEntity(Entity toadd)
         {
-            var x = Guid.NewGuid();
-            Entities.Add(x,toadd);
-            return x;
+            Entities.Add(toadd);
+            return toadd.ID;
         }
         
         public T GetEntity<T>(Guid tofind) where T: Entity 
         {
             foreach (var item in Entities)
             {
-                if (item.Key == tofind)
-                    return (T) item.Value;
+                if (item.ID == tofind)
+                    return (T) item;
             }
             return null;
         }
         
         
-        public State()
+        public Scene()
         {
-            Entities = new Dictionary<Guid, Entity>();
+            Entities = new List<Entity>();
         }
         /// <summary>
         /// Gets called after the render call. add all Imgui Code in this block
         /// </summary>
         public virtual void OnGui()
         {
+            ImGui.Begin("Entities");
+            ImGui.SetWindowFontScale(1.5f);
             foreach (var entity in Entities)
             {
-                if(entity.Value.ShowGUI)
-                    entity.Value.OnGui();
+                entity.OnGui();
             }
+            ImGui.End();
+            Camera.OnGui();
         }
 
         public virtual void OnInput()
@@ -130,9 +138,10 @@ namespace YEET
         /// </summary>
         public virtual void OnUpdate( FrameEventArgs e)
         {
+            GL.ClearColor(ClearColor.X,ClearColor.Y,ClearColor.Z,ClearColor.W);
             foreach (var entity in Entities)
             {
-                entity.Value.OnUpdate();
+                entity.OnUpdate();
             }
         }
         /// <summary>
@@ -142,7 +151,7 @@ namespace YEET
         {
             foreach (var entity in Entities)
             {
-                entity.Value.OnRender();
+                entity.OnRender();
             }
         }
         /// <summary>
@@ -152,7 +161,7 @@ namespace YEET
         {
             foreach (var entity in Entities)
             {
-                entity.Value.OnStart();
+                entity.OnStart();
             }
         }
         /// <summary>
@@ -162,7 +171,7 @@ namespace YEET
         {
             foreach (var entity in Entities)
             {
-                entity.Value.OnLeave();
+                entity.OnLeave();
             }
         }
     }

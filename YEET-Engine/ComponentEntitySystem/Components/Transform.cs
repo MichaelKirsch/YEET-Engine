@@ -8,47 +8,63 @@ namespace YEET
     {
         public Transform(Entity owner) : base(owner)
         {
-            _position = new Vector3();
+            Position = new Vector3();
             Console.WriteLine("Transform added");
         }
 
         public void SetPosition(Vector3 newpos)
         {
-            _position = newpos;
+            Position = newpos;
         }
 
         public Vector3 GetPosition()
         {
-            return _position;
+            return Position;
         }
 
         public void SetX(float x)
         {
-            _position.X = x;
+            Position.X = x;
         }
         public void SetX(double x)
         {
-            _position.X = Convert.ToSingle(x);
+            Position.X = Convert.ToSingle(x);
         }
         
         public void SetY(float y)
         {
-            _position.Y = y;
+            Position.Y = y;
         }
         public void SetY(double y)
         {
-            _position.Y = Convert.ToSingle(y);
+            Position.Y = Convert.ToSingle(y);
         }
         
         public void SetZ(float z)
         {
-            _position.Z = z;
+            Position.Z = z;
         }
         public void SetZ(double z)
         {
-            _position.Z = Convert.ToSingle(z);
+            Position.Z = Convert.ToSingle(z);
+        }
+
+        public float GetZ()
+        {
+            return Position.Z;
         }
         
-        public Vector3 _position;
+        public float GetX()
+        {
+            return Position.X;
+        }
+        
+        public float GetY()
+        {
+            return Position.Y;
+        }
+        
+        
+        public Vector3 Position;
     }
 }
