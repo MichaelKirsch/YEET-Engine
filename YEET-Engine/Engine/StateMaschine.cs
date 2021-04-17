@@ -141,7 +141,8 @@ namespace YEET
             GL.ClearColor(ClearColor.X,ClearColor.Y,ClearColor.Z,ClearColor.W);
             foreach (var entity in Entities)
             {
-                entity.OnUpdate();
+                if(entity.Active)
+                    entity.OnUpdate();
             }
         }
         /// <summary>
@@ -151,7 +152,8 @@ namespace YEET
         {
             foreach (var entity in Entities)
             {
-                entity.OnRender();
+                if(entity.Active)
+                    entity.OnRender();
             }
         }
         /// <summary>

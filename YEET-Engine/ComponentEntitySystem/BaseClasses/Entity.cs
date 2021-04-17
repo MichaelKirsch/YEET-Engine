@@ -9,6 +9,7 @@ namespace YEET
 
         private List<Component> _components;
         public Guid ID { get; }
+        public bool Active = true;
         public bool ShowGUI = true;
         public Entity(bool GuiVisible=false)
         {
@@ -40,7 +41,11 @@ namespace YEET
 
         public virtual void OnGui()
         {
-            
+            if(ShowGUI)
+                foreach (var component in _components)
+                {
+                    component.OnGUI();
+                }
         }
 
         public virtual void OnLeave()

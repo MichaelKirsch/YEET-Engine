@@ -1,5 +1,6 @@
 
 using System;
+using ImGuiNET;
 using OpenTK.Mathematics;
 
 namespace YEET
@@ -63,8 +64,17 @@ namespace YEET
         {
             return Position.Y;
         }
-        
-        
+
+        public override void OnGUI()
+        {
+            
+            ImGui.Text("Transform");
+            ImGui.DragFloat("Pos X", ref Position.X);
+            ImGui.DragFloat("Pos Y", ref Position.Y);
+            ImGui.DragFloat("Pos Z", ref Position.Z);
+        }
+
+
         public Vector3 Position;
     }
 }

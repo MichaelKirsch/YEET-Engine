@@ -30,7 +30,11 @@
         public virtual void OnUpdateAfterDraw()
         {
         }
-        
+
+        public virtual void OnGUI()
+        {
+            
+        }
         
     }
 }

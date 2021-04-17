@@ -17,7 +17,6 @@ namespace YEET
         private List<Vector3> PlaneVertices = new List<Vector3>();
         private int _VAO, VAO_Plane;
         public System.Numerics.Vector3 rgb_grid, rgb_plane;
-        private float offsetx, offsety, offsetz;
 
         public Grid(Vector2i _dimensions, float _line_thickness=0.2f, bool drawGui=false) : base(drawGui)
         {
@@ -101,16 +100,14 @@ namespace YEET
             {
                 ImGui.Begin("Grid "+ID);
                 ImGui.SetWindowFontScale(1.5f);
-                ImGui.SliderFloat("Offset X", ref offsetx, -100, 100);
-                ImGui.SliderFloat("Offset Y", ref offsety, -100, 100);
-                ImGui.SliderFloat("Offset Z", ref offsetz, -100, 100);
+                base.OnGui();
+                ImGui.Checkbox("Active", ref Active);
                 ImGui.BeginChild("Colors");
                 ImGui.ColorEdit3("Grid Color", ref rgb_grid);
                 ImGui.ColorEdit3("Plane Color", ref rgb_plane);
                 ImGui.EndChild();
                 ShowGUI = !ImGui.Button("Remove Grid-Gui");
                 ImGui.End();
-                GetComponent<Transform>().SetPosition(new Vector3(offsetx,offsety,offsetz));
             }
 
             ImGui.Checkbox("Grid " + ID, ref ShowGUI);

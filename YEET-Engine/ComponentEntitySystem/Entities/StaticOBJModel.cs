@@ -19,10 +19,10 @@ namespace YEET.ComponentEntitySystem.Entities
         {
             if (ShowGUI)
             {
-                ImGui.Begin("OBJ");
-                ImGui.SliderFloat("Offset X", ref GetComponent<Transform>().Position.X, -100, 100);
-                ImGui.SliderFloat("Offset Y", ref GetComponent<Transform>().Position.Y, -100, 100);
-                ImGui.SliderFloat("Offset Z", ref GetComponent<Transform>().Position.Z, -100, 100);
+                ImGui.Begin("OBJ"+ ID);
+                ImGui.SetWindowFontScale(1.5f);
+                ImGui.Checkbox("Active", ref Active);
+                base.OnGui();
                 ShowGUI = !ImGui.Button("Dont Show");
                 ImGui.End();
             }

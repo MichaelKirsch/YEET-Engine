@@ -69,6 +69,8 @@ namespace YEET
             {
                 ImGui.Begin("Terrain (MC)");
                 ImGui.SetWindowFontScale(1.5f);
+                base.OnGui();
+                ImGui.Checkbox("Active", ref Active);
                 ImGui.SliderFloat("Scale", ref Scale, 0.001f, 0.1f);
                 ImGui.SliderFloat("Surface Level", ref SurfaceLevel, 0.01f, 1.0f);
                 ImGui.SliderInt("Divider", ref Divider, 1, 30);
@@ -76,7 +78,7 @@ namespace YEET
             }
 
             ImGui.Checkbox("Terrain", ref ShowGUI);
-            base.OnGui();
+            
         }
 
         void Generate()
