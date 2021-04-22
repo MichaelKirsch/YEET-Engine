@@ -64,7 +64,7 @@ namespace YEET
             StateMaschine.Render();
             _controller.Render();
             SwapBuffers();
-            LastFrameRenderTime = watch.Result();
+            LastFrameRenderTime = Convert.ToSingle(watch.Result());
             GenerateAverageFrameRenderTime();
         }
 
@@ -75,7 +75,7 @@ namespace YEET
             StateMaschine.Input();
             StateMaschine.Update(e);
             
-            LastFrameUpdateTime = watch.Result();
+            LastFrameUpdateTime = Convert.ToSingle(watch.Result());
         }
 
 
@@ -112,11 +112,11 @@ namespace YEET
             AverageLastFrameRenderTime = ListLastFrameTimes.Average();
         }
         
-        public double LastFrameRenderTime;
-        public double AverageLastFrameRenderTime;
-        public double LastFrameUpdateTime;
-        public ImGuiController _controller;
-        private Queue<double> ListLastFrameTimes = new Queue<double>();
+        public float LastFrameRenderTime;
+        public float AverageLastFrameRenderTime;
+        public float LastFrameUpdateTime;
+        public ImGuiController _controller; 
+        public Queue<float> ListLastFrameTimes = new Queue<float>();
     }
     
     

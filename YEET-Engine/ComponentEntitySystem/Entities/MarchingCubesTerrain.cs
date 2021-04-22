@@ -119,7 +119,7 @@ namespace YEET
         public float Divider = 7;
         private float last_divider = 100;
 
-        public bool GenerateVisiblePoints=true;
+        
 
         private Vector3[] cubeCornerOffsets =
         {
@@ -188,12 +188,7 @@ namespace YEET
                                   Dimension + " Took:" + watch.Result() + "ms");
             }
         }
-
-
-        public void OnUpdate()
-        {
-            Generate();
-        }
+        
 
         public void OnDraw()
         {

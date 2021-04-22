@@ -25,7 +25,7 @@ namespace YEET
             Pitch = 0.0f;
             MovementSpeed = 2.5f;
             MouseSensitivity = 0.1f;
-            Zoom = 90.0f;
+            Zoom = 70.0f;
             Frustrum = Convert.ToInt32(Zoom+10);
         }
 
@@ -81,7 +81,7 @@ namespace YEET
                 Front = Vector3.Normalize(Front);
                 Right = Vector3.Normalize(Vector3.Cross(Up, Front));
                 Projection = Matrix4.CreatePerspectiveFieldOfView(MathHelper.DegreesToRadians(Zoom),
-                    StateMaschine.Context.Size.X / StateMaschine.Context.Size.Y, 1.01f, 1000f);
+                    Convert.ToSingle(StateMaschine.Context.Size.X) / Convert.ToSingle(StateMaschine.Context.Size.Y), 1.01f, 1000f);
                 View = Matrix4.LookAt(Position, Position + Front, Up);
             }
         }
@@ -115,6 +115,7 @@ namespace YEET
                 ImGui.DragFloat("PosZ", ref Position.Z);
                 ImGui.DragFloat("Pitch", ref Pitch);
                 ImGui.DragFloat("Yaw", ref Yaw);
+                ImGui.DragFloat("View Distance", ref RenderingDistance);
                 ImGui.SliderFloat("FOV", ref Zoom, 45f, 110f);
                 ImGui.End();
             }

@@ -124,6 +124,14 @@
       <Content Include="Shaders\MarchingCubesVert.glsl">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </Content>
+      <None Remove="Models\CITY.obj" />
+      <Content Include="Models\CITY.obj">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </Content>
+      <None Remove="Models\CITY.mtl" />
+      <Content Include="Models\CITY.mtl">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </Content>
     </ItemGroup>
 
     <ItemGroup>

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using ImGuiNET;
 using OpenTK.Graphics.OpenGL4;
@@ -19,12 +20,8 @@ namespace YEET
     {
         private bool _MouseLocked, _WireFrame;
         private Vector3 _LightPosition;
-        private LineDrawer _line;
-        private LineDrawer.Line cameraPlayer;
-        private bool griddirection;
-        private float gridheight;
         private Guid Grid, Terrain;
-
+        public bool ShowImGUIDemoWindow=false;
         public RenderingTest()
         {
             Console.WriteLine("State1 construct");
@@ -40,9 +37,10 @@ namespace YEET
             Camera.Start();
             Camera.Position = (50, 50, 50);
             Camera.GrabCursor(false);
-            _line = new LineDrawer(Vector3.One);
-            cameraPlayer = _line.AddLine(ref Camera.Position, ref _LightPosition, Colors.Red);
-            
+            LightManager.OnStart();
+            LineBlob lineBlob = new LineBlob();
+            lineBlob.AddAxisAllignedCube(Vector3.Zero, 100, Colors.Red);
+            LineDrawer.AddBlob(lineBlob);
             base.OnStart();
         }
 
@@ -62,38 +60,33 @@ namespace YEET
 
             if (ImGui.Button("Tree"))
             {
-                AddEntity(new StaticOBJModel("Well", new Vector3(0, 0, 0),false));
+                AddEntity(new StaticOBJModel("CITY", new Vector3(0, 0, 0),false));
             }
             ImGui.Checkbox("Camera Gui", ref Camera.ShowGUI);
             ImGui.Checkbox("Wireframe", ref _WireFrame);
             StateMaschine.Context.WireMode(_WireFrame);
             ImGui.Checkbox("Mouse Lock", ref _MouseLocked);
+            ImGui.Checkbox("Gui Demo Window", ref ShowImGUIDemoWindow);
+            ImGui.Text($"Current Chunk {SpatialManager.GetCurrentChunkOfCamera()}");
+            ImGui.Text($"Current Chunk (W) {SpatialManager.ConvertChunkToWorldCoordinates(SpatialManager.GetCurrentChunkOfCamera())}");
+            float[] x = StateMaschine.Context.ListLastFrameTimes.ToArray();
+            if (ShowImGUIDemoWindow)
+            {
+                ImGui.ShowDemoWindow();
+            }
             ImGui.End();
         }
 
         public override void OnUpdate(FrameEventArgs e)
         {
             base.OnUpdate(e);
-            var st = new Vector3(Camera.Position.X, 0.5f, Camera.Position.Z);
-            cameraPlayer.Start = st;
-            cameraPlayer.End = st + new Vector3(Camera.Front.X, 0.0f, Camera.Front.Z).Normalized() * 30f;
 
-            if (gridheight > 20|| gridheight <0)
-                griddirection = !griddirection;
-
-            if (griddirection)
-                gridheight += 0.1f;
-            else
-                gridheight -= 0.1f;
-
-            GetEntity<Grid>(Grid).GetComponent<Transform>().SetY(gridheight);
         }
 
         public override void OnRender()
         {
             base.OnRender();
-
-            _line.Draw();
+            
         }
         
 
@@ -107,8 +100,7 @@ namespace YEET
 
             if (StateMaschine.Context.KeyboardState[Keys.K])
                 _WireFrame = !_WireFrame;
-
-
+            
             base.OnInput();
             Camera.ProcessKeyboard();
             Camera.processMouse();
