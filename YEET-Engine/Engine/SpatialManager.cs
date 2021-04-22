@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Threading.Tasks;
 using OpenTK.Mathematics;
 
 
@@ -71,7 +72,6 @@ namespace YEET
             
             if (GetCurrentChunkOfCamera() == LastChunkPositionOfCamera && Convert.ToInt32(LastViewDistance) == Convert.ToInt32(Camera.RenderingDistance))
                 return;
-            int added = 0;
 
             if (Convert.ToInt32(LastViewDistance) != Convert.ToInt32(Camera.RenderingDistance))
             {
@@ -80,45 +80,19 @@ namespace YEET
             }
             
             LastChunkPositionOfCamera = GetCurrentChunkOfCamera();
-
-
-            List<Vector3i> NeededChunks = new List<Vector3i>();
-
-            foreach (var zeroedChunkPosition in _ZeroedChunkPositions)
+            
+            _Chunks.RemoveAll(chunk => !chunk.InViewDistance());
+            
+            Parallel.ForEach(_ZeroedChunkPositions, zeroedChunkPosition =>
             {
-                bool found = false;
-                NeededChunks.Add(zeroedChunkPosition + LastChunkPositionOfCamera);
-                foreach (var chunk in _Chunks)
+                if (!_Chunks.Exists(chunk => chunk.Position == zeroedChunkPosition+LastChunkPositionOfCamera))
                 {
-                    if ((zeroedChunkPosition + LastChunkPositionOfCamera) == chunk.Position)
+                    lock (_Chunks)
                     {
-                        found = true;
+                        _Chunks.Add(new Chunk(zeroedChunkPosition+LastChunkPositionOfCamera));
                     }
                 }
-
-                if (!found)
-                {
-                    _Chunks.Add(new Chunk(zeroedChunkPosition + LastChunkPositionOfCamera));
-                    added += 1;
-                }
-            }
-
-            int removed = 0;
-            Queue<Chunk> toremove = new Queue<Chunk>();
-            foreach (var chunk in _Chunks)
-            {
-                bool found = NeededChunks.Contains(chunk.Position);
-                if (!found)
-                {
-                    toremove.Enqueue(chunk);
-                    removed++;
-                }
-            }
-
-            while (toremove.Count>0)
-            {
-                _Chunks.Remove(toremove.Dequeue());
-            }
+            });
             
             lines.Clear();
             foreach (var chunk in _Chunks)
@@ -126,7 +100,6 @@ namespace YEET
                 lines.AddAxisAllignedCube(chunk.Position*32,ChunkSize,Colors.Green);
             }
             LineDrawer.AddBlob(lines);
-            Console.WriteLine($"Added {added} chunks, {removed} deleted, Total {_Chunks.Count}");
         }
     }
 }

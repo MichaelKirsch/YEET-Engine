@@ -31,7 +31,7 @@ namespace YEET
 
         public bool InViewDistance()
         {
-            return Math.Abs((Position - Camera.Position).Length) <= Camera.RenderingDistance;
+            return Math.Abs((Position*32 - Camera.Position).Length) <= Camera.RenderingDistance;
         }
     }
 }
