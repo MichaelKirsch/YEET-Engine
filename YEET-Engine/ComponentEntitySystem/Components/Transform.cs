@@ -11,6 +11,7 @@ namespace YEET
         {
             Position = new Vector3();
             Console.WriteLine("Transform added");
+            Matrix4.CreateTranslation(0, 0, 0,out ModelMatrix);
         }
 
         public void SetPosition(Vector3 newpos)
@@ -65,6 +66,18 @@ namespace YEET
             return Position.Y;
         }
 
+        public void RotX(float to)
+        {
+            Matrix4.CreateRotationY(to, out ModelMatrix);
+        }
+        public void RotY(float to)
+        {
+            Matrix4.CreateRotationY(to, out ModelMatrix);
+        }
+        public void RotZ(float to)
+        {
+            Matrix4.CreateRotationY(to, out ModelMatrix);
+        }
         public override void OnGUI()
         {
             
@@ -72,9 +85,21 @@ namespace YEET
             ImGui.DragFloat("Pos X", ref Position.X);
             ImGui.DragFloat("Pos Y", ref Position.Y);
             ImGui.DragFloat("Pos Z", ref Position.Z);
+            ImGui.DragFloat("Rot X", ref Rotation.X);
+            ImGui.DragFloat("Rot Y", ref Rotation.Y);
+            ImGui.DragFloat("Rot Z", ref Rotation.Z);
         }
 
-
+        public override void OnUpdate()
+        {
+            base.OnUpdate();
+            //Matrix4.CreateFromAxisAngle(Rotation,1,out ModelMatrix);
+            var TRans = Matrix4.CreateTranslation(Position);
+            ModelMatrix = TRans;
+        }
+        
+        private Vector3 Rotation;
         public Vector3 Position;
+        public Matrix4 ModelMatrix;
     }
 }

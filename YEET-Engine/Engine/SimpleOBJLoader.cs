@@ -15,8 +15,7 @@ namespace YEET
     {
         private int VAO, VBO;
         private string current_material;
-
-        public Matrix4 ModelMatrix=new Matrix4();
+        
         
         private List<Vector3> Vertices,Normals,ColorPerIndex,FinalVertexArray;
         private List<int> Indices, NormalIndices;
@@ -25,7 +24,10 @@ namespace YEET
         private Dictionary<string,int> MaterialsIndices;
         public Vector3 Position;
         public ShaderLoader Loader;
-        
+
+        public float MaxX, MinX, MaxY, MinY, MaxZ, MinZ;
+
+        public Vector3 ExtremeMin,ExtremeMax;
         
         /// <summary>
         /// </summary>
@@ -41,7 +43,6 @@ namespace YEET
             MaterialsIndices = new Dictionary<string, int>();
             Materials = new Dictionary<string, Vector3>();
             Loader = loader;
-            Matrix4.CreateTranslation(0, 0, 0,out ModelMatrix);
             ReadMaterials(path);
             ReadOBJ(path);
             GenerateFinalVertexArray();
@@ -49,14 +50,12 @@ namespace YEET
             Console.WriteLine("Model "+path+ " constructed. Vertices:" + FinalVertexArray.Count+" Time:"+watch.Result()+" ms");
         }
 
-        public void Draw()
+        public void Draw(Matrix4 Model)
         {
-            
             Loader.UseShader();
-            Matrix4.CreateTranslation(Position,out ModelMatrix);
-            Loader.SetUniformMatrix4F("projection",ref Camera.Projection);
-            Loader.SetUniformMatrix4F("view",ref Camera.View);
-            Loader.SetUniformMatrix4F("model",ref ModelMatrix);
+            Loader.SetUniformMatrix4F("projection", Camera.Projection);
+            Loader.SetUniformMatrix4F("view", Camera.View);
+            Loader.SetUniformMatrix4F("model", Model);
             GL.BindVertexArray(VAO);
             GL.DrawArrays(PrimitiveType.Triangles, 0, FinalVertexArray.Count / 3);
             GL.BindVertexArray(0);
@@ -76,27 +75,12 @@ namespace YEET
 
         public void SetPosition(float x=0f, float y=0f, float z=0f)
         {
-            Matrix4.CreateTranslation(x, y, z,out ModelMatrix);
             Position = new Vector3(x, y, z);
         }
 
         public void SetPosition(Vector3 pos)
         {
             Position = pos;
-        }
-        
-        public void SetRotation(Vector3 rot, float z=0f)
-        {
-            Matrix4.CreateRotationX(rot.X, out ModelMatrix);
-            Matrix4.CreateRotationY(rot.Y, out ModelMatrix);
-            Matrix4.CreateRotationZ(rot.Z, out ModelMatrix);
-        }
-        
-        public void SetRotation(float x=0f, float y=0f, float z=0f)
-        {
-            Matrix4.CreateRotationX(x, out ModelMatrix);
-            Matrix4.CreateRotationY(y, out ModelMatrix);
-            Matrix4.CreateRotationZ(z, out ModelMatrix);
         }
         
         private void GenerateFinalVertexArray()
@@ -157,9 +141,23 @@ namespace YEET
                 switch (substrings[0])
                 {
                     case "v":
-                        Vertices.Add((Convert.ToSingle(substrings[1], CultureInfo.InvariantCulture),
-                            Convert.ToSingle(substrings[2], CultureInfo.InvariantCulture),
-                            Convert.ToSingle(substrings[3], CultureInfo.InvariantCulture)));
+
+                        var XPos = Convert.ToSingle(substrings[1], CultureInfo.InvariantCulture);
+                        var YPos = Convert.ToSingle(substrings[2], CultureInfo.InvariantCulture);
+                        var ZPos = Convert.ToSingle(substrings[3], CultureInfo.InvariantCulture);
+                        if (XPos > MaxX)
+                            MaxX = XPos;
+                        if (XPos < MinX)
+                            MinX = XPos;
+                        if (YPos > MaxY)
+                            MaxY = YPos;
+                        if (YPos < MinY)
+                            MinY = YPos;
+                        if (ZPos > MaxZ)
+                            MaxZ = ZPos;
+                        if (ZPos < MinZ)
+                            MinZ = ZPos;
+                        Vertices.Add((XPos,YPos,ZPos));
                         break;
                     case "vt":
                         //TextureCoordinates.Add((Convert.ToSingle(substrings[1], CultureInfo.InvariantCulture),
@@ -178,6 +176,9 @@ namespace YEET
                         break;
                 }
             }
+
+            ExtremeMin = (MinX, MinY, MinZ);
+            ExtremeMax = (MaxX, MaxY, MaxZ);
         }
         
     }

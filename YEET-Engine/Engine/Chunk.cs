@@ -1,6 +1,5 @@
 ﻿using System;
 using OpenTK.Mathematics;
-using Vector3 = System.Numerics.Vector3;
 
 namespace YEET
 {

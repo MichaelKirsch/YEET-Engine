@@ -195,7 +195,7 @@ namespace YEET
             return Shader;
         }
 
-        public void SetUniformMatrix4F(string name, ref Matrix4 to_set)
+        public void SetUniformMatrix4F(string name, Matrix4 to_set)
         {
             GL.UniformMatrix4(GetUniformLocation(name),false,ref to_set);
         }

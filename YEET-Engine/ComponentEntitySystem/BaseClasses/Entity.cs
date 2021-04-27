@@ -8,15 +8,15 @@ namespace YEET
     {
         public string Name = "default";
 
-        private List<Component> _components;
+        private Dictionary<Guid,Component> _components;
         public Guid ID { get; }
         public bool Active = true;
         public bool ShowGUI = true;
         public Entity(bool GuiVisible=false)
         {
             ShowGUI = GuiVisible;
-            _components = new List<Component>();
-            _components.Add(new Transform(this));
+            _components = new Dictionary<Guid,Component>();
+            _components.Add(new Guid(),new Transform(this));
             ID = Guid.NewGuid();
         }
 
@@ -26,6 +26,10 @@ namespace YEET
 
         public virtual void OnUpdate()
         {
+            foreach (var component in _components)
+            {
+                component.Value.OnUpdate();
+            }
         }
 
         public virtual void OnReset()
@@ -45,7 +49,7 @@ namespace YEET
             if(ShowGUI)
                 foreach (var component in _components)
                 {
-                    component.OnGUI();
+                    component.Value.OnGUI();
                 }
         }
 
@@ -54,34 +58,30 @@ namespace YEET
             
         }
         
-        public void AddComponent(Component toadd)
+        public Guid AddComponent(Component toadd)
         {
-           _components.Add(toadd); 
+            var id = Guid.NewGuid();
+            _components.Add(id,toadd); 
+            return id;
         }
         
-        
-        public bool RemoveComponent<T>()
-        {
-            foreach (Component component in _components)
-            {
-                if (component.GetType().Equals(typeof(T)))
-                {
-                    _components.Remove(component);
-                    return true;
-                }
-            }
-            return false;
+        public bool RemoveComponent(Guid to_remove){
+            return _components.Remove(to_remove);
         }
 
         public T GetComponent<T>() where T : Component//get a derivative of Component
         {
-            foreach (var item in _components)
-            {
-                if (item is T)
-                {
-                    return (T)item;
-                }
-            }
+           foreach( var x in _components){
+               if(x.Value is T)
+                    return (T)x.Value;
+           }
+           return null;
+        }
+
+        public T GetComponent<T>(Guid to_find) where T : Component//get a derivative of Component
+        {
+            if(_components.ContainsKey(to_find))
+                return (T)_components[to_find];
             return null;
         }
         

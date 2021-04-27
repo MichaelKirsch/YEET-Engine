@@ -28,6 +28,35 @@ namespace YEET
             _Lines.Clear();
         }
 
+        public void AddCubeTwoPoints(Vector3 extremeMin,Vector3 extremeMax,Vector3 color)
+        {
+            Vector3 p1 = extremeMin;
+            Vector3 p2 = new Vector3(p1.X, p1.Y, p1.Z+extremeMax.Z);
+            Vector3 p3 = new Vector3(p1.X, p1.Y+extremeMax.Y, p1.Z+extremeMax.Z);
+            Vector3 p4 = new Vector3(p1.X, p1.Y+extremeMax.Y, p1.Z);
+                
+            Vector3 p5 = new Vector3(p1.X+extremeMax.X, p1.Y, p1.Z);
+            Vector3 p6 = new Vector3(p1.X+extremeMax.X, p1.Y, p1.Z+extremeMax.Z);
+            Vector3 p7 = new Vector3(p1.X+extremeMax.X, p1.Y+extremeMax.Y, p1.Z+extremeMax.Z);
+            Vector3 p8 = new Vector3(p1.X+extremeMax.X, p1.Y+extremeMax.Y, p1.Z);
+            
+            _Lines.Add(new LineDrawer.Line(p1,p2,color));
+            _Lines.Add(new LineDrawer.Line(p1,p4,color));
+            _Lines.Add(new LineDrawer.Line(p3,p4,color));
+            _Lines.Add(new LineDrawer.Line(p2,p3,color));
+            
+            _Lines.Add(new LineDrawer.Line(p8,p7,color));
+            _Lines.Add(new LineDrawer.Line(p7,p6,color));
+            _Lines.Add(new LineDrawer.Line(p5,p6,color));
+            _Lines.Add(new LineDrawer.Line(p5,p8,color));
+            
+            _Lines.Add(new LineDrawer.Line(p3,p7,color));
+            _Lines.Add(new LineDrawer.Line(p2,p6,color));
+            _Lines.Add(new LineDrawer.Line(p4,p8,color));
+            _Lines.Add(new LineDrawer.Line(p1,p5,color));
+        }
+        
+        
         public void AddAxisAllignedCube(Vector3 zeroPoint, float Dimension, Vector3 color)
         {
             Vector3 p1 = zeroPoint;
@@ -101,8 +130,8 @@ namespace YEET
             GL.BindVertexArray(VAO);
             GL.LineWidth(2.0f);
             GL.DrawArrays(PrimitiveType.Lines, 0, _vertices.Count * 3);
-            Loader.SetUniformMatrix4F("view", ref Camera.View);
-            Loader.SetUniformMatrix4F("projection", ref Camera.Projection);
+            Loader.SetUniformMatrix4F("view", Camera.View);
+            Loader.SetUniformMatrix4F("projection", Camera.Projection);
             GL.BindVertexArray(0);
         }
 

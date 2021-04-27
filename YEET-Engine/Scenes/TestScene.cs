@@ -20,8 +20,9 @@ namespace YEET
     {
         private bool _MouseLocked, _WireFrame;
         private Vector3 _LightPosition;
-        private Guid Grid, Terrain;
+        private Guid Grid, Terrain, wellmodel;
         public bool ShowImGUIDemoWindow=false;
+        private LineBlob lines = new LineBlob();
         public RenderingTest()
         {
             Console.WriteLine("State1 construct");
@@ -29,7 +30,7 @@ namespace YEET
 
         public override void OnStart()
         {
-            AddEntity(new StaticOBJModel("Well", new Vector3(0, 0, 0),false));
+            wellmodel =AddEntity(new StaticOBJModel("Well", new Vector3(0, 0, 0),false));
             Grid = AddEntity(new Grid((100, 100), 0.02f));
             Terrain = AddEntity(new MarchingCubeTerrain((5, 3, 5)));
             _LightPosition = new Vector3(100, 100, 0);
@@ -67,8 +68,11 @@ namespace YEET
             StateMaschine.Context.WireMode(_WireFrame);
             ImGui.Checkbox("Mouse Lock", ref _MouseLocked);
             ImGui.Checkbox("Gui Demo Window", ref ShowImGUIDemoWindow);
+            ImGui.Checkbox("Show Chunk Outlines", ref SpatialManager.ShowChunkOutline);
+            ImGui.Checkbox("Show Chunk Frustrum", ref SpatialManager.ShowChunksInFrustrum);
             ImGui.Text($"Current Chunk {SpatialManager.GetCurrentChunkOfCamera()}");
-            ImGui.Text($"Current Chunk (W) {SpatialManager.ConvertChunkToWorldCoordinates(SpatialManager.GetCurrentChunkOfCamera())}");
+            ImGui.Text($"Chunks {SpatialManager._Chunks.Count}");
+            ImGui.Text($"Visible Chunks {SpatialManager.VisibleChunksAccordFrustum.Count}");
             float[] x = StateMaschine.Context.ListLastFrameTimes.ToArray();
             if (ShowImGUIDemoWindow)
             {
@@ -80,7 +84,17 @@ namespace YEET
         public override void OnUpdate(FrameEventArgs e)
         {
             base.OnUpdate(e);
+            lines.Clear();
+            var well = GetEntity(wellmodel);
 
+
+
+            if (Vector3.Distance(well.GetComponent<Transform>().Position, Camera.Position) < 20)
+            {
+                lines.AddCubeTwoPoints(GetEntity<StaticOBJModel>(wellmodel)._loader.ExtremeMin,
+                    GetEntity<StaticOBJModel>(wellmodel)._loader.ExtremeMax,Colors.Green);
+            }
+            LineDrawer.AddBlob(lines);
         }
 
         public override void OnRender()

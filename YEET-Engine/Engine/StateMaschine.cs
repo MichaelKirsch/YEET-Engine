@@ -116,10 +116,11 @@ namespace YEET
             return null;
         }
 
-       
-
+        public Entity GetEntity(Guid tofind)
+        {
+            return (Entities.Find(item => item.ID == tofind));
+        }
         
-
         /// <summary>
         /// Gets called after the render call. add all Imgui Code in this block
         /// </summary>

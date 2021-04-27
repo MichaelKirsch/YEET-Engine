@@ -1,12 +1,8 @@
 ﻿using System.Collections.Generic;
 using ImGuiNET;
-using OpenTK.Graphics.ES11;
 using OpenTK.Mathematics;
-using OpenTK.Graphics.OpenGL4;
-using YEET;
-using GL = OpenTK.Graphics.OpenGL4.GL;
-using PrimitiveType = OpenTK.Graphics.OpenGL4.PrimitiveType;
-using VertexAttribPointerType = OpenTK.Graphics.OpenGL4.VertexAttribPointerType;
+using System;
+
 
 namespace YEET
 {
@@ -15,12 +11,15 @@ namespace YEET
         public ShaderLoader _loader;
         List<Vector3> FinalVertices = new List<Vector3>();
         private List<Vector3> PlaneVertices = new List<Vector3>();
-        private int _VAO, VAO_Plane;
         public System.Numerics.Vector3 rgb_grid, rgb_plane;
+        Guid mesh;
+        
 
         public Grid(Vector2i _dimensions, float _line_thickness=0.2f, bool drawGui=false) : base(drawGui)
         {
+            
             _loader = new ShaderLoader("Grid");
+            mesh = AddComponent(new Mesh(this,_loader));
             Name = "Grid";
             rgb_grid = new System.Numerics.Vector3(0.072f, 0.293f, 0.294f);
             rgb_plane = new System.Numerics.Vector3(0.158f, 0.158f, 0.158f);
@@ -68,30 +67,7 @@ namespace YEET
                 FinalVertices.AddRange(MakeQuad(b, b2, c2, c)); //left
             }
 
-            int _VBO = GL.GenBuffer();
-            _VAO = GL.GenVertexArray();
-            GL.BindVertexArray(_VAO);
-            GL.BindBuffer(BufferTarget.ArrayBuffer, _VBO);
-            GL.BufferData(BufferTarget.ArrayBuffer, sizeof(float) * 3 * FinalVertices.Count, FinalVertices.ToArray(),
-                BufferUsageHint.StaticDraw);
-            GL.VertexAttribPointer(0, 3, VertexAttribPointerType.Float, false, 3 * sizeof(float), 0);
-            GL.EnableVertexAttribArray(0);
-            GL.BindVertexArray(0);
-
-
-            PlaneVertices.AddRange(MakeQuad((0, 0, 0),
-                (_dimensions.X, 0, 0),
-                (_dimensions.X, 0, _dimensions.Y),
-                (0, 0, _dimensions.Y)));
-            int VBO_plane = GL.GenBuffer();
-            VAO_Plane = GL.GenVertexArray();
-            GL.BindVertexArray(VAO_Plane);
-            GL.BindBuffer(BufferTarget.ArrayBuffer, VBO_plane);
-            GL.BufferData(BufferTarget.ArrayBuffer, sizeof(float) * 3 * PlaneVertices.Count, PlaneVertices.ToArray(),
-                BufferUsageHint.StaticDraw);
-            GL.VertexAttribPointer(0, 3, VertexAttribPointerType.Float, false, 3 * sizeof(float), 0);
-            GL.EnableVertexAttribArray(0);
-            GL.BindVertexArray(0);
+            GetComponent<Mesh>(mesh).SetData(FinalVertices,new List<Mesh.VertexAttribType>(){Mesh.VertexAttribType.V3});
         }
 
         public override void OnGui()
@@ -116,20 +92,8 @@ namespace YEET
 
         public override void OnRender()
         {
-            _loader.UseShader();
-            GL.BindVertexArray(_VAO);
-            _loader.SetUniformVec3("rgb", rgb_plane.X, rgb_plane.Y, rgb_plane.Z);
-            _loader.SetUniformMatrix4F("view", ref Camera.View);
-            _loader.SetUniformVec3("offset", GetComponent<Transform>().GetPosition());
-            _loader.SetUniformMatrix4F("projection",ref Camera.Projection);
-            GL.DrawArrays(PrimitiveType.Triangles, 0, FinalVertices.Count * 3);
-            
-            GL.BindVertexArray(VAO_Plane);
-            _loader.SetUniformVec3("rgb", rgb_grid.X, rgb_grid.Y, rgb_grid.Z);
-            _loader.SetUniformVec3("offset", GetComponent<Transform>().GetPosition());
-            _loader.SetUniformMatrix4F("view", ref Camera.View);
-            _loader.SetUniformMatrix4F("projection",ref Camera.Projection);
-            GL.DrawArrays(PrimitiveType.Triangles, 0, PlaneVertices.Count * 3);
+            GetComponent<Mesh>(mesh).SetUniform("rgb",new Vector3(rgb_grid.X,rgb_grid.Y,rgb_grid.Z));
+            GetComponent<Mesh>(mesh).OnDraw();
         }
 
         List<Vector3> MakeQuad(Vector3 a, Vector3 b, Vector3 c, Vector3 d)

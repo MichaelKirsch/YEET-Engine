@@ -24,6 +24,8 @@ namespace YEET
         private float lastsurface = 0, lastscale = 0;
         private int lastSeed = 0, lastDivider = 0;
 
+        Guid mesh;
+
         public MarchingCubeTerrain(Vector3 _Dimensions)
         {
             _chunks = new List<MarchingCubeChunk>();
@@ -31,6 +33,7 @@ namespace YEET
             var rand = new Random();
             Seed = rand.Next();
             _loader = new ShaderLoader("MarchingCubes");
+            mesh = AddComponent(new Mesh(this,_loader));
             _chunks.Clear();
             for (int x = 0; x < Dimensions.X; x++)
             {
@@ -183,6 +186,8 @@ namespace YEET
                 GL.EnableVertexAttribArray(2);
                 GL.BindVertexArray(0);
 
+                
+            
                 Console.WriteLine("Generated Marching Cube.Offset:" + Offset + " Dimensions:" + Dimension + "x" +
                                   Dimension + "x" +
                                   Dimension + " Took:" + watch.Result() + "ms");
@@ -194,10 +199,10 @@ namespace YEET
         {
             Loader.UseShader();
             GL.BindVertexArray(VAO);
-            Loader.SetUniformMatrix4F("view", ref Camera.View);
-            Loader.SetUniformMatrix4F("projection", ref Camera.Projection);
-            Loader.SetUniformVec3("offset", Offset);
-            GL.DrawArrays(PrimitiveType.Triangles, 0, FinalTriangleVertices.Count * 3);
+            Loader.SetUniformMatrix4F("view", Camera.View);
+            Loader.SetUniformMatrix4F("projection", Camera.Projection);
+            //Loader.SetUniformVec3("offset", Offset);
+            GL.DrawArrays(PrimitiveType.Triangles, 0, FinalTriangleVertices.Count / 3);
 
             GL.BindVertexArray(0);
         }
@@ -284,7 +289,7 @@ namespace YEET
                     lock (FinalTriangleVertices)
                     {
                         FinalTriangleVertices.AddRange(new List<Vector3>()
-                            {v1, Color, norm, v2, Color, norm, v3, Color, norm});
+                            {v1+Offset, Color, norm, v2+Offset, Color, norm, v3+Offset, Color, norm});
                     }
                 }
             }
