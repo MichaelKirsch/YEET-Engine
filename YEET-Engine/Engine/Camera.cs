@@ -102,6 +102,12 @@ namespace YEET
                 Position += Right * velocity;
             if (StateMaschine.Context.KeyboardState[Keys.D])
                 Position -= Right * velocity;
+            if (Position.X < 0)
+                Position.X = 0;
+            if (Position.Y < 0)
+                Position.Y = 0;
+            if (Position.Z < 0)
+                Position.Z = 0;
         }
         
         public static void OnGui()

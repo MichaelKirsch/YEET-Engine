@@ -91,6 +91,8 @@ namespace YEET
     public static class LineDrawer
     {
         private static List<Vector3> _vertices;
+        private static List<Vector3> _staticVertices=new List<Vector3>();
+        private static Queue<Line> _immediateLines = new Queue<Line>();
         public static ShaderLoader Loader;
         private static int VAO, VBO;
         public static Vector3 Color;
@@ -121,11 +123,18 @@ namespace YEET
             _vertices = new List<Vector3>();
             VAO = GL.GenVertexArray();
             VBO = GL.GenBuffer();
+            GL.BindVertexArray(VAO);
+            GL.BindBuffer(BufferTarget.ArrayBuffer, VBO);
+            GL.VertexAttribPointer(0, 3, VertexAttribPointerType.Float, false, 6 * sizeof(float), 0);
+            GL.EnableVertexAttribArray(0);
+            GL.VertexAttribPointer(1, 3, VertexAttribPointerType.Float, false, 6 * sizeof(float), 3 * sizeof(float));
+            GL.EnableVertexAttribArray(1);
+            GL.BindVertexArray(0);
         }
 
         public static void Draw()
         {
-            UpdateVertices();
+            CheckForUpdate();
             Loader.UseShader();
             GL.BindVertexArray(VAO);
             GL.LineWidth(2.0f);
@@ -135,45 +144,77 @@ namespace YEET
             GL.BindVertexArray(0);
         }
 
-        private static void UpdateVertices()
+        private static void UpdateBlobs()
         {
-            _vertices.Clear();
+            _staticVertices.Clear();
             foreach (var blob in Blobs)
             {
                 foreach (var line in blob._Lines)
                 {
-                    _vertices.Add(line.Start);
-                    _vertices.Add(line.Color);
-                    _vertices.Add(line.End);
-                    _vertices.Add(line.Color);
+                    _staticVertices.Add(line.Start);
+                    _staticVertices.Add(line.Color);
+                    _staticVertices.Add(line.End);
+                    _staticVertices.Add(line.Color);
                 }
             }
+        }
+        
+        
+        private static void UpdateVertices()
+        {
+            _vertices.AddRange(_staticVertices);
             GL.BindVertexArray(VAO);
             GL.BindBuffer(BufferTarget.ArrayBuffer, VBO);
             GL.BufferData(BufferTarget.ArrayBuffer, _vertices.Count * 3 * sizeof(float), _vertices.ToArray(),
                 BufferUsageHint.DynamicDraw);
-            GL.VertexAttribPointer(0, 3, VertexAttribPointerType.Float, false, 6 * sizeof(float), 0);
-            GL.EnableVertexAttribArray(0);
-            GL.VertexAttribPointer(1, 3, VertexAttribPointerType.Float, false, 6 * sizeof(float), 3 * sizeof(float));
-            GL.EnableVertexAttribArray(1);
-            GL.BindVertexArray(0);
         }
+
+        private static void CheckForUpdate()
+        {
+            _vertices.Clear();
+            if (ToRemove.Count > 0 || ToAdd.Count > 0  || _immediateLines.Count > 0)
+            {
+                
+                if (ToRemove.Count > 0 || ToAdd.Count > 0)
+                {
+                    while (ToRemove.Count>0)
+                    {
+                        Blobs.Remove(ToRemove.Dequeue());
+                    }
+
+                    while (ToAdd.Count>0)
+                    {
+                        Blobs.Add(ToAdd.Dequeue());
+                    }
+                    UpdateBlobs();
+                }
+
+                if (_immediateLines.Count > 0)
+                {
+                    while (_immediateLines.Count>0)
+                    {
+                        var line = _immediateLines.Dequeue();
+                        _vertices.Add(line.Start);
+                        _vertices.Add(line.Color);
+                        _vertices.Add(line.End);
+                        _vertices.Add(line.Color);
+                    }
+                }
+            }
+            UpdateVertices();
+        }
+        
+        
+        
 
         public static void OnUpdate()
         {
-            if (ToRemove.Count == 0 && ToAdd.Count == 0)
-                return;
-            
-            while (ToRemove.Count>0)
-            {
-                Blobs.Remove(ToRemove.Dequeue());
-            }
+        }
 
-            while (ToAdd.Count>0)
-            {
-                Blobs.Add(ToAdd.Dequeue());
-            }
-            UpdateVertices();
+
+        public static void AddImmediateLine(Line toadd)
+        {
+            _immediateLines.Enqueue(toadd);
         }
         
         public static void AddBlob(LineBlob toadd)

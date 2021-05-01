@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Diagnostics.Contracts;
 using System.Linq;
+using System.Numerics;
 using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
@@ -124,7 +125,6 @@ namespace YEET
             mask0 = mask0 << position;
             return (to_extract_from & mask0)>>position;
         }
-        
         
     }
 }

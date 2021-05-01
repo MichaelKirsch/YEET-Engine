@@ -34,9 +34,7 @@ namespace YEET.ComponentEntitySystem.Entities
             base.OnRender();
             if (Vector3.Distance(Camera.Position,GetComponent<Transform>().Position)>Camera.RenderingDistance)
                 return;
-            //if(MathHelper.RadiansToDegrees(MathHelper.Acos(Vector3.Dot(new Vector3(Camera.Front.X,0,Camera.Front.Z).Normalized(), 
-            //    new Vector3(dire.X,0,dire.Z).Normalized())))> Camera.Frustrum/2f)
-            //    return;
+            
             _loader.Draw(GetComponent<Transform>().ModelMatrix);
         }
     }

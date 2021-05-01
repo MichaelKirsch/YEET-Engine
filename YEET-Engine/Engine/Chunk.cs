@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using OpenTK.Mathematics;
 
 namespace YEET
@@ -6,25 +7,28 @@ namespace YEET
     
     public class Chunk
     {
+
+        private List<Entity> staticEntities = new List<Entity>();
+        
+        public float DistanceToCamera = 0;
+        public bool IsEmpty = true;
+        public bool IsVisible=false;
+
+        public float[,,] LightCloud =
+            new float[SpatialManager.ChunkSize, SpatialManager.ChunkSize, SpatialManager.ChunkSize];
+        //public 3d lighting Texture
+        //public 3d collision Texture
+        
         public Chunk(Vector3i position)
         {
             Position = position;
         }
-        
-        
-        
-        public Int64 ID
+
+        public void SubscribeStaticEntityToChunk(Entity to_add)
         {
-            get
-            {
-                Int16 x_pos = Convert.ToInt16(Position.X/SpatialManager.ChunkSize);
-                Int16 y_pos = Convert.ToInt16(Position.Y/SpatialManager.ChunkSize);
-                Int16 z_pos = Convert.ToInt16(Position.Z/SpatialManager.ChunkSize);
-                Int64 to_return = x_pos;
-                to_return = (to_return << 16) + y_pos;
-                return (to_return << 16) + z_pos;
-            }
+            staticEntities.Add(to_add);
         }
+        
 
         public Vector3i Position;
 
