@@ -84,6 +84,9 @@ namespace YEET
                     Convert.ToSingle(StateMaschine.Context.Size.X) / Convert.ToSingle(StateMaschine.Context.Size.Y), 1.01f, 1000f);
                 View = Matrix4.LookAt(Position, Position + Front, Up);
         }
+        }
+        }
+
 
         
         
