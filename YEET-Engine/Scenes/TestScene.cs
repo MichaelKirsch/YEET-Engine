@@ -85,7 +85,6 @@ namespace YEET
         public override void OnUpdate(FrameEventArgs e)
         {
             base.OnUpdate(e);
-            Console.WriteLine(StateMaschine.Context.MouseState.Scroll);
         }
 
         public override void OnRender()

@@ -161,8 +161,7 @@ namespace YEET
         {
             UpdateFrustrum();
             if (GetCurrentChunkOfCamera() == LastChunkPositionOfCamera &&
-                Convert.ToInt32(LastViewDistance) == Convert.ToInt32(Camera.RenderingDistance) &&
-                _showoutline == ShowChunkOutline)
+                Convert.ToInt32(LastViewDistance) == Convert.ToInt32(Camera.RenderingDistance))
                 return;
 
             if (Convert.ToInt32(LastViewDistance) != Convert.ToInt32(Camera.RenderingDistance))
