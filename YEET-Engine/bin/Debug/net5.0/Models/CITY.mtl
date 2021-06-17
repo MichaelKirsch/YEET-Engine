@@ -1,0 +1,65 @@
+# Created by Kenney (www.kenney.nl)
+
+newmtl Wood_Dark(Clone)
+Kd 0.518 0.42 0.333
+
+newmtl Canvas(Clone)
+Kd 0.804 0.741 0.596
+
+newmtl Stone_Brit_Gray(Clone)
+Kd 0.486 0.424 0.373
+
+newmtl Stone_Brit_Gray_Light(Clone)
+Kd 0.573 0.49 0.428
+
+newmtl Iron_Grey(Clone)
+Kd 0.428 0.42 0.388
+
+newmtl Dirt(Clone)
+Kd 0.769 0.686 0.561
+
+newmtl Stone_Bri_Gray_Lighter(Clone)
+Kd 0.663 0.596 0.545
+
+newmtl Wood_Darker(Clone)
+Kd 0.384 0.314 0.251
+
+newmtl Wood_Medium(Clone)
+Kd 0.628 0.526 0.396
+
+newmtl Burlap(Clone)
+Kd 0.726 0.643 0.522
+
+newmtl Dark_Red_Roof(Clone)
+Kd 0.424 0.18 0.118
+
+newmtl Red_Roof(Clone)
+Kd 0.577 0.267 0.192
+
+newmtl Straw(Clone)
+Kd 0.882 0.784 0.526
+
+newmtl Stucco(Clone)
+Kd 0.937 0.894 0.82
+
+newmtl Window(Clone)
+Kd 0.659 0.706 0.777
+
+newmtl Wood_Light(Clone)
+Kd 0.737 0.631 0.463
+
+newmtl hay(Clone)
+Kd 1 0.748 0.514
+
+newmtl _defaultMat(Clone)
+Kd 1 1 1
+
+newmtl Rock(Clone)
+Kd 0.631 0.624 0.612
+
+newmtl Iron_Grey_-_Dark(Clone)
+Kd 0.416 0.4 0.384
+
+newmtl Iron_Grey_-_Light(Clone)
+Kd 0.62 0.604 0.58
+

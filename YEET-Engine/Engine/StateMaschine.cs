@@ -147,7 +147,7 @@ namespace YEET
         public virtual void OnUpdate(FrameEventArgs e)
         {
             //generate ActiveChunks;
-            LineDrawer.OnUpdate();
+            
             SpatialManager.OnUpdate();
             GL.ClearColor(ClearColor.X, ClearColor.Y, ClearColor.Z, ClearColor.W);
             foreach (var entity in Entities)
@@ -162,7 +162,7 @@ namespace YEET
         /// </summary>
         public virtual void OnRender()
         {
-            LineDrawer.Draw();
+            
             foreach (var entity in Entities)
             {
                 if (entity.Active)

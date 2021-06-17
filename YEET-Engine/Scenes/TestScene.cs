@@ -20,9 +20,10 @@ namespace YEET
     {
         private bool _MouseLocked, _WireFrame;
         private Vector3 _LightPosition;
-        private Guid Grid, Terrain, wellmodel;
+        private Guid Grid, wellmodel;
         public bool ShowImGUIDemoWindow=false;
         public bool drawlines = false;
+    
         public RenderingTest()
         {
             Console.WriteLine("State1 construct");
@@ -32,16 +33,11 @@ namespace YEET
         {
             wellmodel =AddEntity(new StaticOBJModel("Well", new Vector3(0, 0, 0),false));
             Grid = AddEntity(new Grid((100, 100), 0.02f));
-            Terrain = AddEntity(new MarchingCubeTerrain((5, 3, 5)));
             _LightPosition = new Vector3(100, 100, 0);
             Console.WriteLine("State1 onstart");
             Camera.Start();
             Camera.Position = (50, 50, 50);
-            Camera.GrabCursor(false);
             LightManager.OnStart();
-            LineBlob lineBlob = new LineBlob();
-            lineBlob.AddAxisAllignedCube(Vector3.Zero, 100, Colors.Red);
-            LineDrawer.AddBlob(lineBlob);
             SpatialManager.GeneratedHeightNeg = 10;
             SpatialManager.GeneratedHeightPos = 20;
 
@@ -77,6 +73,7 @@ namespace YEET
             ImGui.Text($"Current Chunk ID {SpatialManager.GetTupelChunkIDAndInChunkPos(SpatialManager.GetIDfromWorldPos(Camera.Position))}");
             ImGui.Text($"Chunks {SpatialManager._Chunks.Count}");
             ImGui.Text($"Visible Chunks {SpatialManager.VisibleChunksAccordFrustum.Count}");
+            ImGui.Text($"Mouse Delta:{StateMaschine.Context.MouseState.Scroll}");
             float[] x = StateMaschine.Context.ListLastFrameTimes.ToArray();
             if (ShowImGUIDemoWindow)
             {
@@ -88,16 +85,7 @@ namespace YEET
         public override void OnUpdate(FrameEventArgs e)
         {
             base.OnUpdate(e);
-            GetEntity<Grid>(Grid).GetComponent<Transform>().Position =
-                new Vector3(Camera.Position.X-50, 0, Camera.Position.Z-50);
-            if (drawlines)
-            {
-                var x = new Random();
-                for (int i = 0; i < 100; i++)
-                {
-                    LineDrawer.AddImmediateLine(new LineDrawer.Line(GetEntity<Grid>(Grid).GetComponent<Transform>().Position,(x.Next()%100,0,x.Next()%100),new Vector3(x.Next()%100,x.Next()%100,x.Next()%100)/100f));
-                } 
-            }
+            Console.WriteLine(StateMaschine.Context.MouseState.Scroll);
         }
 
         public override void OnRender()
@@ -109,12 +97,13 @@ namespace YEET
 
         public override void OnInput()
         {
-            if (StateMaschine.Context.KeyboardState[Keys.Escape])
+            if (StateMaschine.Context.MouseState.IsButtonDown(MouseButton.Middle))
             {
-                _MouseLocked = !_MouseLocked;
-                Camera.GrabCursor(_MouseLocked);
+                Camera.Grab();
             }
-
+            else{
+                Camera.Release();
+            }
             if (StateMaschine.Context.KeyboardState[Keys.K])
                 _WireFrame = !_WireFrame;
             

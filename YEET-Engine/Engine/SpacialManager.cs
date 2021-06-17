@@ -16,7 +16,6 @@ namespace YEET
         public static List<Chunk> _Chunks = new List<Chunk>();
         private static List<Vector3i> _ZeroedChunkPositions = new List<Vector3i>();
         private static Vector3i LastChunkPositionOfCamera = new Vector3i();
-        private static LineBlob lines = new LineBlob();
         private static float LastViewDistance;
         private static bool _showoutline, _showfrustrum;
         public static bool ShowChunkOutline = false;
@@ -143,11 +142,7 @@ namespace YEET
 
         private static void GenerateOutlines()
         {
-            foreach (var chunk in _Chunks)
-            {
-                lines.AddAxisAllignedCube(chunk.Position * 32, ChunkSize, Colors.Green);
-            }
-            LineDrawer.AddBlob(lines);
+            
         }
 
         public static bool FrustumCheckChunk(Vector3i pos_to_check)
@@ -191,7 +186,7 @@ namespace YEET
                 }
             });
 
-            lines.Clear();
+           
             _showoutline = ShowChunkOutline;
             _showfrustrum = ShowChunksInFrustrum;
             if (_showoutline || _showfrustrum)
