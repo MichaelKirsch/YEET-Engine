@@ -16,12 +16,14 @@ namespace YEET
 {
     public static class StateMaschine
     {
+        private static long _startTime;
         private static Stopwatch _stopwatch;
         static StateMaschine()
         {
             Console.WriteLine("StateMaschine Started");
             _stopwatch = Stopwatch.StartNew();
             _stopwatch.Start();
+            _startTime = DateTime.Now.Ticks / TimeSpan.TicksPerMillisecond;
         }
 
         private class Startupstate : Scene
@@ -43,7 +45,7 @@ namespace YEET
 
         public static double GetElapsedTime()
         {
-            return _stopwatch.ElapsedMilliseconds;
+            return  (DateTime.Now.Ticks / TimeSpan.TicksPerMillisecond)-_startTime;
         }
 
 
@@ -56,18 +58,28 @@ namespace YEET
 
         public static void Render()
         {
+            var ts = new TimeSlot("Main Render");
             _currentScene.OnRender();
+            ts.Stop();
+            var guits = new TimeSlot("Gui Render");
             _currentScene.OnGui();
+            guits.Stop();
+            Profiler.StopFrame();
         }
 
         public static void Input()
         {
+            Profiler.StartFrame();
+            var ts = new TimeSlot("Input");
             _currentScene.OnInput();
+            ts.Stop();
         }
 
         public static void Update(FrameEventArgs e)
         {
+             var ts = new TimeSlot("Update");
             _currentScene.OnUpdate(e);
+            ts.Stop();
         }
 
         public static void SwitchState(Scene nextScene)

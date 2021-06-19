@@ -112,6 +112,7 @@ namespace YEET
 
             private Stopwatch _stopwatch;
         }
+
         
         public static Int64 GetBitValue(ref Int64 to_extract_from, int position, int bitcount)
         {

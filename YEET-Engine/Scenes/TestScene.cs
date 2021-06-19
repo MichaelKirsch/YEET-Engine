@@ -18,7 +18,7 @@ namespace YEET
 {
     public class RenderingTest : Scene
     {
-        private bool _MouseLocked, _WireFrame;
+        private bool  _WireFrame;
         private Vector3 _LightPosition;
         private Guid Grid, wellmodel;
         public bool ShowImGUIDemoWindow=false;
@@ -65,7 +65,7 @@ namespace YEET
             ImGui.Checkbox("Camera Gui", ref Camera.ShowGUI);
             ImGui.Checkbox("Wireframe", ref _WireFrame);
             StateMaschine.Context.WireMode(_WireFrame);
-            ImGui.Checkbox("Mouse Lock", ref _MouseLocked);
+            ImGui.Checkbox("Print Profiler", ref Profiler.DebugPrint);
             ImGui.Checkbox("show random lines", ref drawlines);
             ImGui.Checkbox("Gui Demo Window", ref ShowImGUIDemoWindow);
             ImGui.Checkbox("Show Chunk Outlines", ref SpatialManager.ShowChunkOutline);
