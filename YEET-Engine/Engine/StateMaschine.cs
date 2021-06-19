@@ -16,7 +16,7 @@ namespace YEET
 {
     public static class StateMaschine
     {
-        private static long _startTime;
+        private static long _startTime,_startTicks;
         private static Stopwatch _stopwatch;
         static StateMaschine()
         {
@@ -24,6 +24,7 @@ namespace YEET
             _stopwatch = Stopwatch.StartNew();
             _stopwatch.Start();
             _startTime = DateTime.Now.Ticks / TimeSpan.TicksPerMillisecond;
+            _startTicks = DateTime.Now.Ticks;
         }
 
         private class Startupstate : Scene
@@ -43,12 +44,15 @@ namespace YEET
             private Scene _startScene;
         }
 
-        public static double GetElapsedTime()
+        public static double GetElapsedTimeTicks()
+        {
+            return  DateTime.Now.Ticks -_startTicks;
+        }
+
+        public static double GetElapsedTime()           
         {
             return  (DateTime.Now.Ticks / TimeSpan.TicksPerMillisecond)-_startTime;
         }
-
-
         public static void Run(Scene start, int updateRate, int frameRate)
         {
             _currentScene = new Startupstate(start);

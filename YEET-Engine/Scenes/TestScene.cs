@@ -12,18 +12,19 @@ using OpenTK.Windowing.Common;
 using SimplexNoise;
 using YEET.ComponentEntitySystem.Entities;
 using Buffer = System.Buffer;
+using System.IO;
 
 
 namespace YEET
 {
     public class RenderingTest : Scene
     {
-        private bool  _WireFrame;
+        private bool _WireFrame;
         private Vector3 _LightPosition;
         private Guid Grid, wellmodel;
-        public bool ShowImGUIDemoWindow=false;
+        public bool ShowImGUIDemoWindow = false;
         public bool drawlines = false;
-    
+        private Random rnd = new Random();
         public RenderingTest()
         {
             Console.WriteLine("State1 construct");
@@ -31,7 +32,7 @@ namespace YEET
 
         public override void OnStart()
         {
-            wellmodel =AddEntity(new StaticOBJModel("Well", new Vector3(0, 0, 0),false));
+            wellmodel = AddEntity(new StaticOBJModel("Well", new Vector3(0, 0, 0), false));
             Grid = AddEntity(new Grid((100, 100), 0.02f));
             _LightPosition = new Vector3(100, 100, 0);
             Console.WriteLine("State1 onstart");
@@ -60,7 +61,15 @@ namespace YEET
 
             if (ImGui.Button("Tree"))
             {
-                AddEntity(new StaticOBJModel("CITY", new Vector3(0, 0, 0),false));
+
+                var listof_obj = Directory.GetFiles("Models/", "*.obj");
+                for (int f = 0; f < 100; f++)
+                {
+                    var item = listof_obj[rnd.Next(0, listof_obj.Length - 1)];
+                    var t = AddEntity(new StaticOBJModel(item.Remove(item.Length - 4).Substring(7), new Vector3(0, 0, 0), false));
+                    GetEntity(t).GetComponent<Transform>().SetPosition(new Vector3(rnd.Next(0, 100), 0, rnd.Next(0, 100)));
+                }
+
             }
             ImGui.Checkbox("Camera Gui", ref Camera.ShowGUI);
             ImGui.Checkbox("Wireframe", ref _WireFrame);
@@ -90,9 +99,9 @@ namespace YEET
         public override void OnRender()
         {
             base.OnRender();
-            
+
         }
-        
+
 
         public override void OnInput()
         {
@@ -100,12 +109,13 @@ namespace YEET
             {
                 Camera.Grab();
             }
-            else{
+            else
+            {
                 Camera.Release();
             }
             if (StateMaschine.Context.KeyboardState[Keys.K])
                 _WireFrame = !_WireFrame;
-            
+
             base.OnInput();
             Camera.ProcessKeyboard();
             Camera.processMouse();

@@ -1,8 +1,0 @@
-# Created by Kenney (www.kenney.nl)
-
-newmtl Oak_Leaves(Clone)
-Kd 0.3216 0.5412 0.1569
-
-newmtl Wood_Dark(Clone)
-Kd 0.5176 0.4196 0.3333
-

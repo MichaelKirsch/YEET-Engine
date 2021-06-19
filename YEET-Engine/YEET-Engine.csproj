@@ -22,131 +22,16 @@
     </ItemGroup>
 
     <ItemGroup>
-      <None Remove="Shader\vert.glsl" />
-    </ItemGroup>
-
-    <ItemGroup>
-      <None Remove="Shaders\TriangleFrag.glsl" />
-      <Content Include="Shaders\TriangleFrag.glsl">
-        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      </Content>
-      <None Remove="Shaders\TriangleVert.glsl" />
-      <Content Include="Shaders\TriangleVert.glsl">
-        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      </Content>
-      <None Remove="Models\Palmtree.obj" />
-      <Content Include="Models\Palmtree.obj">
-        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      </Content>
-      <None Remove="Models\Palmtree.mtl" />
-      <Content Include="Models\Palmtree.mtl">
-        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      </Content>
-      <None Remove="Models\cube.mtl" />
-      <Content Include="Models\cube.mtl">
-        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      </Content>
-      <None Remove="Models\cube.obj" />
-      <Content Include="Models\cube.obj">
-        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      </Content>
-      <None Remove="Models\Untitled-1.mtl" />
-      <Content Include="Models\Untitled-1.mtl">
-        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      </Content>
-      <None Remove="Models\Untitled-1.obj" />
-      <Content Include="Models\Untitled-1.obj">
-        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      </Content>
-      <None Remove="Models\ReferenceCube.mtl" />
-      <Content Include="Models\ReferenceCube.mtl">
-        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      </Content>
-      <None Remove="Models\ReferenceCube.obj" />
-      <Content Include="Models\ReferenceCube.obj">
-        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      </Content>
-      <None Remove="Models\Well.obj" />
-      <Content Include="Models\Well.obj">
-        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      </Content>
-      <None Remove="Models\Well.mtl" />
-      <Content Include="Models\Well.mtl">
-        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      </Content>
-      <None Remove="Shaders\FlatShadedModelVert.glsl" />
-      <Content Include="Shaders\FlatShadedModelVert.glsl">
-        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      </Content>
-      <None Remove="Shaders\FlatShadedModelFrag.glsl" />
-      <Content Include="Shaders\FlatShadedModelFrag.glsl">
-        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      </Content>
-      <None Remove="Shaders\GridFrag.glsl" />
-      <Content Include="Shaders\GridFrag.glsl">
-        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      </Content>
-      <None Remove="Shaders\GridVert.glsl" />
-      <Content Include="Shaders\GridVert.glsl">
-        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      </Content>
-      <None Remove="Models\BigTree.mtl" />
-      <Content Include="Models\BigTree.mtl">
-        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      </Content>
-      <None Remove="Models\BigTree.obj" />
-      <Content Include="Models\BigTree.obj">
-        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      </Content>
-      <None Remove="Models\sportsCar.mtl" />
-      <None Remove="Models\sportsCar.obj" />
-      <None Remove="Shaders\LinesVert.glsl" />
-      <Content Include="Shaders\LinesVert.glsl">
-        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      </Content>
-      <None Remove="Shaders\LinesFrag.glsl" />
-      <Content Include="Shaders\LinesFrag.glsl">
-        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      </Content>
-      <None Remove="Models\PointLight.obj" />
-      <Content Include="Models\PointLight.obj">
-        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      </Content>
-      <None Remove="Models\PointLight.mtl" />
-      <Content Include="Models\PointLight.mtl">
-        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      </Content>
-      <None Remove="Shaders\MarchingCubesFrag.glsl" />
-      <Content Include="Shaders\MarchingCubesFrag.glsl">
-        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      </Content>
-      <None Remove="Shaders\MarchingCubesVert.glsl" />
-      <Content Include="Shaders\MarchingCubesVert.glsl">
-        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      </Content>
-      <None Remove="Models\CITY.obj" />
-      <Content Include="Models\CITY.obj">
-        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      </Content>
-      <None Remove="Models\CITY.mtl" />
-      <Content Include="Models\CITY.mtl">
+      <Content Include="Models\*">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </Content>
     </ItemGroup>
 
     <ItemGroup>
-      <Folder Include="Models" />
-    </ItemGroup>
-
-    <ItemGroup>
-      <None Remove="Models\ForrestTile.mtl" />
-      <Content Include="Models\ForrestTile.mtl">
-        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      </Content>
-      <None Remove="Models\ForrestTile.obj" />
-      <Content Include="Models\ForrestTile.obj">
+      <Content Include="Shaders\*">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </Content>
     </ItemGroup>
+  
 
 </Project>

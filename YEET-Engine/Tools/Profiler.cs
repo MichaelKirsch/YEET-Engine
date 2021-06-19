@@ -3,22 +3,23 @@ using System;
 using System.Diagnostics;
 using System.Collections.Generic;
 using ImGuiNET;
+using System.Linq;
 namespace YEET{
 
     public class TimeSlot{
         public string Name;
         public bool Active=true;
-        public double Duration;
+        public float  Duration;
         public double StartTime;
         public double EndTime;
         public TimeSlot(string name){
-            StartTime = StateMaschine.GetElapsedTime();
+            StartTime = StateMaschine.GetElapsedTimeTicks();
             Name = name;
             Profiler.AddTimeSlot(this);
         }
         public void Stop(){
-            EndTime = StateMaschine.GetElapsedTime();
-            Duration = EndTime-StartTime;
+            EndTime = StateMaschine.GetElapsedTimeTicks();
+            Duration = Convert.ToSingle(EndTime-StartTime);
             Active = false;
         }
     }
@@ -38,13 +39,13 @@ namespace YEET{
             {
                 _frameIsStarted = true;
                 _timeSlots.Clear();
-                _startTime = StateMaschine.GetElapsedTime();
+                _startTime = StateMaschine.GetElapsedTimeTicks();
             }
         }
         public static void StopFrame(){
             if(_frameIsStarted){
                 _frameIsStarted = false;
-                _endTime = StateMaschine.GetElapsedTime();
+                _endTime = StateMaschine.GetElapsedTimeTicks();
                 _duration = _endTime-_startTime;
                 if(DebugPrint){
                     Console.WriteLine($"Frametime:{_duration}ms");
@@ -60,9 +61,13 @@ namespace YEET{
         public static void RenderProfilerWindow(){
             if(RenderProfiler){
             ImGui.Begin("Profiler");
+            float[] y =_timeSlots.Select(x=>x.Duration).ToArray();
+            ImGui.PlotHistogram("Measured Times",ref y[0],y.Length);
+            float[] past_rendertimes = StateMaschine.Context.ListLastFrameTimes.ToArray();
+            ImGui.PlotHistogram("Last 50 RenderTimes",ref past_rendertimes[0],past_rendertimes.Length);
             foreach (var slot in _timeSlots)
             {
-                ImGui.Text($"{slot.Name}:{slot.Duration}ms");
+                ImGui.Text($"{slot.Name}:{slot.Duration} ticks");
             }
             ImGui.End();        
             }
