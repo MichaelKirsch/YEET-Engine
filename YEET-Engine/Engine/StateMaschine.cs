@@ -65,6 +65,7 @@ namespace YEET
             _currentScene.OnGui();
             guits.Stop();
             Profiler.StopFrame();
+            Profiler.RenderProfilerWindow();
         }
 
         public static void Input()

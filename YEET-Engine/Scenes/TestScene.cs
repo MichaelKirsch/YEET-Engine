@@ -69,7 +69,7 @@ namespace YEET
             ImGui.Checkbox("show random lines", ref drawlines);
             ImGui.Checkbox("Gui Demo Window", ref ShowImGUIDemoWindow);
             ImGui.Checkbox("Show Chunk Outlines", ref SpatialManager.ShowChunkOutline);
-            ImGui.Checkbox("Show Chunk Frustrum", ref SpatialManager.ShowChunksInFrustrum);
+            ImGui.Checkbox("Show Profiler Window", ref Profiler.RenderProfiler);
             ImGui.Text($"Current Chunk ID {SpatialManager.GetTupelChunkIDAndInChunkPos(SpatialManager.GetIDfromWorldPos(Camera.Position))}");
             ImGui.Text($"Chunks {SpatialManager._Chunks.Count}");
             ImGui.Text($"Visible Chunks {SpatialManager.VisibleChunksAccordFrustum.Count}");

@@ -2,7 +2,7 @@
 using System;
 using System.Diagnostics;
 using System.Collections.Generic;
-
+using ImGuiNET;
 namespace YEET{
 
     public class TimeSlot{
@@ -29,6 +29,8 @@ namespace YEET{
         private static double _startTime,_endTime,_duration;
 
         public static bool DebugPrint = false;
+
+        public static bool RenderProfiler = false;
         private static List<TimeSlot> _timeSlots = new List<TimeSlot>();
 
         public static void StartFrame(){
@@ -39,7 +41,6 @@ namespace YEET{
                 _startTime = StateMaschine.GetElapsedTime();
             }
         }
-
         public static void StopFrame(){
             if(_frameIsStarted){
                 _frameIsStarted = false;
@@ -53,6 +54,17 @@ namespace YEET{
                     }
                     Console.WriteLine("******************************");
                 }
+            }
+        }
+        
+        public static void RenderProfilerWindow(){
+            if(RenderProfiler){
+            ImGui.Begin("Profiler");
+            foreach (var slot in _timeSlots)
+            {
+                ImGui.Text($"{slot.Name}:{slot.Duration}ms");
+            }
+            ImGui.End();        
             }
         }
 
