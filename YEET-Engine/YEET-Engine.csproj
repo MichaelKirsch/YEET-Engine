@@ -11,7 +11,6 @@
     <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
       <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
     </PropertyGroup>
-
     <ItemGroup>
       <PackageReference Include="AssimpNet" Version="4.1.0" />
       <PackageReference Include="ImGui.NET" Version="1.78.0" />
@@ -21,7 +20,7 @@
 	  <PackageReference Include="System.Drawing.Common" Version="5.0.0" />
     </ItemGroup>
 
-    <ItemGroup>
+  <ItemGroup>
       <Content Include="Models\*">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </Content>

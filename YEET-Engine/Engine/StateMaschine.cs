@@ -26,7 +26,9 @@ namespace YEET
             _startTime = DateTime.Now.Ticks / TimeSpan.TicksPerMillisecond;
             _startTicks = DateTime.Now.Ticks;
         }
-
+        /// <summary>
+        /// 
+        /// </summary>
         private class Startupstate : Scene
         {
             public Startupstate(Scene newScene)
@@ -144,7 +146,6 @@ namespace YEET
         public virtual void OnGui()
         {
             ImGui.Begin("Entities");
-            ImGui.SetWindowFontScale(1.5f);
             foreach (var entity in Entities)
             {
                 entity.OnGui();

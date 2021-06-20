@@ -49,7 +49,6 @@ namespace YEET
         {
             base.OnGui(); // call first for all entities
             ImGui.Begin("Main");
-            ImGui.SetWindowFontScale(1.5f);
             if (ImGui.Button("Exit"))
             {
                 StateMaschine.Exit();
@@ -63,7 +62,7 @@ namespace YEET
             {
 
                 var listof_obj = Directory.GetFiles("Models/", "*.obj");
-                for (int f = 0; f < 100; f++)
+                for (int f = 0; f < 1000; f++)
                 {
                     var item = listof_obj[rnd.Next(0, listof_obj.Length - 1)];
                     var t = AddEntity(new StaticOBJModel(item.Remove(item.Length - 4).Substring(7), new Vector3(0, 0, 0), false));
