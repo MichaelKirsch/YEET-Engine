@@ -19,12 +19,14 @@ namespace YEET
 {
     public class RenderingTest : Scene
     {
-        private bool _WireFrame;
+        private bool _WireFrame,wasdown;
         private Vector3 _LightPosition;
         private Guid Grid, wellmodel;
         public bool ShowImGUIDemoWindow = false;
         public bool drawlines = false;
         private Random rnd = new Random();
+        
+        private MousePicker picker = new MousePicker();
         public RenderingTest()
         {
             Console.WriteLine("State1 construct");
@@ -32,7 +34,7 @@ namespace YEET
 
         public override void OnStart()
         {
-            wellmodel = AddEntity(new StaticOBJModel("Well", new Vector3(0, 0, 0), false));
+            wellmodel = AddEntity(new StaticOBJModel("house_type01", new Vector3(0, 0, 0), false));
             Grid = AddEntity(new Grid((100, 100), 0.02f));
             _LightPosition = new Vector3(100, 100, 0);
             Console.WriteLine("State1 onstart");
@@ -81,7 +83,7 @@ namespace YEET
             ImGui.Text($"Current Chunk ID {SpatialManager.GetTupelChunkIDAndInChunkPos(SpatialManager.GetIDfromWorldPos(Camera.Position))}");
             ImGui.Text($"Chunks {SpatialManager._Chunks.Count}");
             ImGui.Text($"Visible Chunks {SpatialManager.VisibleChunksAccordFrustum.Count}");
-            ImGui.Text($"Mouse Delta:{StateMaschine.Context.MouseState.Scroll}");
+            ImGui.Text($"Mouse Delta:{picker.getIntersectionGround()}");
             float[] x = StateMaschine.Context.ListLastFrameTimes.ToArray();
             if (ShowImGUIDemoWindow)
             {
@@ -118,6 +120,26 @@ namespace YEET
             base.OnInput();
             Camera.ProcessKeyboard();
             Camera.processMouse();
+            for(int x=0;x<100;x++){
+                var ray = picker.getIntersectionGround();
+                Vector3 pos = ray.Normalized()*x+Camera.Position;
+                if(pos.Y<0)
+                {
+                    if(StateMaschine.Context.MouseState.IsButtonDown(MouseButton.Left)){
+                        
+                        if(!wasdown)
+                        {
+                            var t = AddEntity(new StaticOBJModel("house_type01",new Vector3(Convert.ToInt16(pos.X),0,Convert.ToInt16(pos.Z)),false));
+                        }
+                        wasdown=true;   
+                    }
+                    else{
+                        wasdown=false;
+                    }
+                    GetEntity(wellmodel).GetComponent<Transform>().SetPosition(new Vector3(Convert.ToInt16(pos.X),0,Convert.ToInt16(pos.Z)));
+                    break;
+                }
+            }
         }
     }
 }

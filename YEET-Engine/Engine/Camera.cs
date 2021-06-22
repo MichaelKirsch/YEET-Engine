@@ -87,14 +87,14 @@ namespace YEET
            
              Front.X = (float)Math.Cos(MathHelper.DegreesToRadians(Pitch)) *
                             (float)Math.Cos(MathHelper.DegreesToRadians(Yaw));
-                Front.Y = (float)Math.Sin(MathHelper.DegreesToRadians(Pitch));
-                Front.Z = (float)Math.Cos(MathHelper.DegreesToRadians(Pitch)) *
-                            (float)Math.Sin(MathHelper.DegreesToRadians(Yaw));
-                Front = Vector3.Normalize(Front);
-                Right = Vector3.Normalize(Vector3.Cross(Up, Front));
+            Front.Y = (float)Math.Sin(MathHelper.DegreesToRadians(Pitch));
+            Front.Z = (float)Math.Cos(MathHelper.DegreesToRadians(Pitch)) *
+                        (float)Math.Sin(MathHelper.DegreesToRadians(Yaw));
+            Front = Vector3.Normalize(Front);
+            Right = Vector3.Normalize(Vector3.Cross(Up, Front));
             Projection = Matrix4.CreatePerspectiveFieldOfView(MathHelper.DegreesToRadians(Zoom),
-                Convert.ToSingle(StateMaschine.Context.Size.X) / Convert.ToSingle(StateMaschine.Context.Size.Y),
-                1.01f, 1000f);
+            Convert.ToSingle(StateMaschine.Context.Size.X) / Convert.ToSingle(StateMaschine.Context.Size.Y),
+            1.01f, 1000f);
             View = Matrix4.LookAt(Position, Position + Front, Up);
         }
 
