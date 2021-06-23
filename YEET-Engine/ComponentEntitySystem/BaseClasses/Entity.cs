@@ -9,6 +9,7 @@ namespace YEET
         public string Name = "default";
 
         private Dictionary<Guid,Component> _components;
+        private Dictionary<Guid,Entity> _childEntities;
         public Guid ID { get; }
         public bool Active = true;
         public bool ShowGUI = true;
@@ -16,12 +17,17 @@ namespace YEET
         {
             ShowGUI = GuiVisible;
             _components = new Dictionary<Guid,Component>();
+            _childEntities = new Dictionary<Guid, Entity>();
             _components.Add(new Guid(),new Transform(this));
             ID = Guid.NewGuid();
         }
 
         public virtual void OnStart()
         {
+            foreach (var child in _childEntities)
+            {
+                child.Value.OnStart();
+            }
         }
 
         public virtual void OnUpdate()
@@ -29,6 +35,10 @@ namespace YEET
             foreach (var component in _components)
             {
                 component.Value.OnUpdate();
+            }
+            foreach (var child in _childEntities)
+            {
+                child.Value.OnUpdate();
             }
         }
 
@@ -38,10 +48,18 @@ namespace YEET
 
         public virtual void OnRender()
         {
+            foreach (var child in _childEntities)
+            {
+                child.Value.OnRender();
+            }
         }
 
         public virtual void OnUpdateAfterDraw()
         {
+            foreach (var child in _childEntities)
+            {
+                child.Value.OnUpdateAfterDraw();
+            }
         }
 
         public virtual void OnGui()
@@ -51,11 +69,18 @@ namespace YEET
                 {
                     component.Value.OnGUI();
                 }
+            foreach (var child in _childEntities)
+            {
+                child.Value.OnGui();
+            }
         }
 
         public virtual void OnLeave()
         {
-            
+            foreach (var child in _childEntities)
+            {
+                child.Value.OnLeave();
+            }
         }
         
         public Guid AddComponent(Component toadd)
@@ -85,5 +110,19 @@ namespace YEET
             return null;
         }
         
+        public Guid AddChildEntity(Entity toAdd){
+             var id = Guid.NewGuid();
+            _childEntities.Add(id,toAdd); 
+            return id;
+        }
+
+
+        public T GetChildEntity<T>(Guid to_find) where T : Entity//get a derivative of Component
+        {
+            if(_childEntities.ContainsKey(to_find))
+                return (T)_childEntities[to_find];
+            return null;
+        }
+
     }
 }

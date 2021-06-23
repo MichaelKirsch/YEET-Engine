@@ -7,12 +7,14 @@ using OpenTK.Graphics.OpenGL4;
 using OpenTK.Windowing.GraphicsLibraryFramework;
 using OpenTK;
 using OpenTK.Input;
-using OpenTK.Mathematics;
 using OpenTK.Windowing.Common;
 using SimplexNoise;
 using YEET.ComponentEntitySystem.Entities;
 using Buffer = System.Buffer;
 using System.IO;
+using System.Drawing;
+using System.Numerics;
+using Vector3 = OpenTK.Mathematics.Vector3;
 
 
 namespace YEET
@@ -24,7 +26,14 @@ namespace YEET
         private Guid Grid, wellmodel;
         public bool ShowImGUIDemoWindow = false;
         public bool drawlines = false;
+        bool build_mode = false;
         private Random rnd = new Random();
+        private string current_build = "";
+        
+        SimpleTexturedButton house1 = new SimpleTexturedButton();
+        SimpleTexturedButton house2 = new SimpleTexturedButton();
+
+        SimpleTexturedButton street1 = new SimpleTexturedButton();
         
         private MousePicker picker = new MousePicker();
         public RenderingTest()
@@ -43,7 +52,7 @@ namespace YEET
             LightManager.OnStart();
             SpatialManager.GeneratedHeightNeg = 10;
             SpatialManager.GeneratedHeightPos = 20;
-
+            
             base.OnStart();
         }
 
@@ -84,6 +93,23 @@ namespace YEET
             ImGui.Text($"Chunks {SpatialManager._Chunks.Count}");
             ImGui.Text($"Visible Chunks {SpatialManager.VisibleChunksAccordFrustum.Count}");
             ImGui.Text($"Mouse Delta:{picker.getIntersectionGround()}");
+            if(house1.Draw("Models/house_type01.png",new Vector2(100,100))){
+                    build_mode = true;
+                    GetEntity<StaticOBJModel>(wellmodel).ChangeModel("house_type01");
+                    current_build = "house_type01";
+            }
+            if(house2.Draw("Models/house_type02.png",new Vector2(100,100))){
+                    build_mode = true;
+                    GetEntity<StaticOBJModel>(wellmodel).ChangeModel("house_type02");
+                    current_build = "house_type02";
+            }
+
+            if(street1.Draw("Models/road_straight.png",new Vector2(100,100))){        
+                    build_mode = true;
+                    GetEntity<StaticOBJModel>(wellmodel).ChangeModel("road_straight");
+                    current_build = "road_straight";
+            }
+
             float[] x = StateMaschine.Context.ListLastFrameTimes.ToArray();
             if (ShowImGUIDemoWindow)
             {
@@ -120,6 +146,7 @@ namespace YEET
             base.OnInput();
             Camera.ProcessKeyboard();
             Camera.processMouse();
+            if(build_mode){
             for(int x=0;x<100;x++){
                 var ray = picker.getIntersectionGround();
                 Vector3 pos = ray.Normalized()*x+Camera.Position;
@@ -129,16 +156,21 @@ namespace YEET
                         
                         if(!wasdown)
                         {
-                            var t = AddEntity(new StaticOBJModel("house_type01",new Vector3(Convert.ToInt16(pos.X),0,Convert.ToInt16(pos.Z)),false));
+                            if(current_build!=""){
+                                var t = AddEntity(new StaticOBJModel(current_build,new Vector3(Convert.ToInt16(pos.X),0,Convert.ToInt16(pos.Z)),false));
+                                build_mode = false;
+                            }
+                            
                         }
                         wasdown=true;   
                     }
                     else{
                         wasdown=false;
                     }
-                    GetEntity(wellmodel).GetComponent<Transform>().SetPosition(new Vector3(Convert.ToInt16(pos.X),0,Convert.ToInt16(pos.Z)));
+                        GetEntity(wellmodel).GetComponent<Transform>().SetPosition(new Vector3(Convert.ToInt16(pos.X),0,Convert.ToInt16(pos.Z)));
                     break;
                 }
+            }
             }
         }
     }

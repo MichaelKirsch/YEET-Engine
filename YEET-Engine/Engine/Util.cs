@@ -8,7 +8,9 @@ using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 using OpenTK.Graphics.OpenGL4;
-
+using System.Drawing;
+using System.IO;
+using ImGuiNET;
 namespace YEET
 {
     static class Util
@@ -125,7 +127,31 @@ namespace YEET
             }
             mask0 = mask0 << position;
             return (to_extract_from & mask0)>>position;
-        }
-        
+        } 
     }
+
+    public class SimpleTexturedButton{
+        public Vector2 size {get;set;}
+        private Texture _texture;
+        private string _currentpath ="";
+        public SimpleTexturedButton(){
+        }
+
+        public void ChangeTexture(string new_texturepath){
+            Stream image = new FileStream(new_texturepath, FileMode.Open);
+            var bmap = new Bitmap(image);
+            _texture = new Texture("__", bmap, true, false);
+            _currentpath = new_texturepath;
+            image.Close();
+        }
+
+        public bool Draw(string path,Vector2 _size){
+            if(path!=_currentpath){
+                ChangeTexture(path);
+            }
+            size = _size;
+            return ImGui.ImageButton(new IntPtr(_texture.GLTexture),size);
+        }
+    }
+
 }

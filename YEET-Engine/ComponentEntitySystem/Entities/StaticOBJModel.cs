@@ -15,6 +15,11 @@ namespace YEET.ComponentEntitySystem.Entities
             GetComponent<Transform>().SetPosition(position);
         }
         
+        public void ChangeModel(string path){
+            _loader = new OBJLoader(path, new ShaderLoader("Model", "FlatShadedModelVert",
+                "FlatShadedModelFrag", true));
+        }
+
         public override void OnGui()
         {
             if (ShowGUI)
