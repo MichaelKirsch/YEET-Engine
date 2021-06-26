@@ -45,7 +45,6 @@ C:\Users\micha\RiderProjects\YEET-Engine\YEET-Engine\bin\Debug\net5.0\runtimes\w
 C:\Users\micha\RiderProjects\YEET-Engine\YEET-Engine\bin\Debug\net5.0\runtimes\win-x86\native\glfw3.dll
 C:\Users\micha\RiderProjects\YEET-Engine\YEET-Engine\bin\Debug\net5.0\runtimes\unix\lib\netcoreapp3.0\System.Drawing.Common.dll
 C:\Users\micha\RiderProjects\YEET-Engine\YEET-Engine\bin\Debug\net5.0\runtimes\win\lib\netcoreapp3.0\System.Drawing.Common.dll
-C:\Users\micha\RiderProjects\YEET-Engine\YEET-Engine\obj\Debug\net5.0\YEET-Engine.csprojAssemblyReference.cache
 C:\Users\micha\RiderProjects\YEET-Engine\YEET-Engine\obj\Debug\net5.0\YEET-Engine.GeneratedMSBuildEditorConfig.editorconfig
 C:\Users\micha\RiderProjects\YEET-Engine\YEET-Engine\obj\Debug\net5.0\YEET-Engine.AssemblyInfoInputs.cache
 C:\Users\micha\RiderProjects\YEET-Engine\YEET-Engine\obj\Debug\net5.0\YEET-Engine.AssemblyInfo.cs
@@ -263,3 +262,4 @@ C:\Users\micha\RiderProjects\YEET-Engine\YEET-Engine\bin\Debug\net5.0\Models\hou
 C:\Users\micha\RiderProjects\YEET-Engine\YEET-Engine\bin\Debug\net5.0\Models\fence_wide.png
 C:\Users\micha\RiderProjects\YEET-Engine\YEET-Engine\bin\Debug\net5.0\Models\house_type02.png
 C:\Users\micha\RiderProjects\YEET-Engine\YEET-Engine\bin\Debug\net5.0\Models\road_straight.png
+C:\Users\micha\RiderProjects\YEET-Engine\YEET-Engine\obj\Debug\net5.0\YEET-Engine.csproj.AssemblyReference.cache

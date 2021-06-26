@@ -4,6 +4,9 @@ using OpenTK.Mathematics;
 using OpenTK.Graphics;
 using OpenTK.Graphics.OpenGL4;
 using System;
+using System.Globalization;
+using System.IO;
+using System.Text;
 
 namespace YEET
 {
@@ -11,7 +14,8 @@ namespace YEET
     {
         
         public ShaderLoader Loader { get; private set; }
-
+        public float MaxX, MinX, MaxY, MinY, MaxZ, MinZ;
+        private string current_material;
         public enum VertexAttribType
         {
             None = 0, Float = 1, V2 = 2, V3 = 3, V4 = 4
@@ -54,7 +58,20 @@ namespace YEET
             Loader = loader;
         }
 
+        public Mesh(Entity owner,String model_name) :base(owner) 
+        {
+            VAO = 0;
+            VBO =0;
+            Loader = new ShaderLoader();
+            
+        }
 
+        public void GetFromOBJ(string path, string shader_name = "FlatShadedModel")
+        {
+            Loader = new ShaderLoader(shader_name);
+            var _objloader = new OBJLoader(path, Loader);
+            
+        }
 
         public void AddData(List<float> newData)
         {

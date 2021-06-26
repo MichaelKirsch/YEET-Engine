@@ -7,12 +7,12 @@ namespace YEET{
     /// modelname.png   -> previewimage (optional)
     /// modelname.yeet  -> engine specific stuff
     /// </summary>
-    static public class AssetBrowser{
-        static AssetBrowser(){
+    public class AssetBrowser : Entity{
+        public AssetBrowser(){
 
         }
 
-        static public void ReloadAssets(){
+        public void ReloadAssets(){
             
         }
     }
