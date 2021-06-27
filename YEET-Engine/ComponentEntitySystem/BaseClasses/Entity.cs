@@ -110,6 +110,18 @@ namespace YEET
             return null;
         }
         
+        public List<T> GetComponents<T>() where T:Component{
+            List<T> to_ret = new List<T>();
+            foreach (var component in _components)
+            {
+                if(component.Value is T){
+                    to_ret.Add((T)component.Value);
+                } 
+            }
+            return to_ret;
+        }
+
+
         public Guid AddChildEntity(Entity toAdd){
              var id = Guid.NewGuid();
             _childEntities.Add(id,toAdd); 

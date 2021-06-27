@@ -262,4 +262,12 @@ C:\Users\micha\RiderProjects\YEET-Engine\YEET-Engine\bin\Debug\net5.0\Models\hou
 C:\Users\micha\RiderProjects\YEET-Engine\YEET-Engine\bin\Debug\net5.0\Models\fence_wide.png
 C:\Users\micha\RiderProjects\YEET-Engine\YEET-Engine\bin\Debug\net5.0\Models\house_type02.png
 C:\Users\micha\RiderProjects\YEET-Engine\YEET-Engine\bin\Debug\net5.0\Models\road_straight.png
-C:\Users\micha\RiderProjects\YEET-Engine\YEET-Engine\obj\Debug\net5.0\YEET-Engine.csproj.AssemblyReference.cache
+C:\Users\micha\RiderProjects\YEET-Engine\YEET-Engine\obj\Debug\net5.0\YEET-Engine.csprojAssemblyReference.cache
+C:\Users\micha\RiderProjects\YEET-Engine\YEET-Engine\bin\Debug\net5.0\Models\house_01_grass.model
+C:\Users\micha\RiderProjects\YEET-Engine\YEET-Engine\bin\Debug\net5.0\Models\house_01_grass.mtl
+C:\Users\micha\RiderProjects\YEET-Engine\YEET-Engine\bin\Debug\net5.0\Models\house_01_grass.obj
+C:\Users\micha\RiderProjects\YEET-Engine\YEET-Engine\bin\Debug\net5.0\Models\grasspatch_2x2.mtl
+C:\Users\micha\RiderProjects\YEET-Engine\YEET-Engine\bin\Debug\net5.0\Models\grasspatch_2x2.obj
+C:\Users\micha\RiderProjects\YEET-Engine\YEET-Engine\bin\Debug\net5.0\Models\2x2_grass.mtl
+C:\Users\micha\RiderProjects\YEET-Engine\YEET-Engine\bin\Debug\net5.0\Models\2x2_grass.obj
+C:\Users\micha\RiderProjects\YEET-Engine\YEET-Engine\bin\Debug\net5.0\Models\small_house.xml
