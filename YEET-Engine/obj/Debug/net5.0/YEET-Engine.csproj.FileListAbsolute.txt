@@ -263,3 +263,4 @@ C:\Users\micha\RiderProjects\YEET-Engine\YEET-Engine\bin\Debug\net5.0\Models\hou
 C:\Users\micha\RiderProjects\YEET-Engine\YEET-Engine\bin\Debug\net5.0\Models\fence_wide.png
 C:\Users\micha\RiderProjects\YEET-Engine\YEET-Engine\bin\Debug\net5.0\Models\house_type02.png
 C:\Users\micha\RiderProjects\YEET-Engine\YEET-Engine\bin\Debug\net5.0\Models\road_straight.png
+C:\Users\micha\RiderProjects\YEET-Engine\YEET-Engine\bin\Debug\net5.0\Models\bridge_pillar.png

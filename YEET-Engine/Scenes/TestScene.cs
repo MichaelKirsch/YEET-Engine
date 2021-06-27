@@ -32,8 +32,9 @@ namespace YEET
         
         SimpleTexturedButton house1 = new SimpleTexturedButton();
         SimpleTexturedButton house2 = new SimpleTexturedButton();
-
         SimpleTexturedButton street1 = new SimpleTexturedButton();
+
+        SimpleTexturedButton pillar = new SimpleTexturedButton();
         
         private MousePicker picker = new MousePicker();
         public RenderingTest()
@@ -110,6 +111,13 @@ namespace YEET
                     current_build = "road_straight";
             }
 
+            pillar.Draw("Models/bridge_pillar.png",new Vector2(100,100));
+            
+
+            if(build_mode){
+                StateMaschine.Context.CursorVisible = false;
+            }
+
             float[] x = StateMaschine.Context.ListLastFrameTimes.ToArray();
             if (ShowImGUIDemoWindow)
             {
@@ -159,6 +167,7 @@ namespace YEET
                             if(current_build!=""){
                                 var t = AddEntity(new StaticOBJModel(current_build,new Vector3(Convert.ToInt16(pos.X),0,Convert.ToInt16(pos.Z)),false));
                                 build_mode = false;
+                                StateMaschine.Context.CursorVisible = true;
                             }
                             
                         }
