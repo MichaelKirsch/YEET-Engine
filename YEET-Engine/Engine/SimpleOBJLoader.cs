@@ -17,8 +17,8 @@ namespace YEET
         private string current_material;
         
         
-        private List<Vector3> Vertices,Normals,ColorPerIndex,FinalVertexArray;
-        private List<int> Indices, NormalIndices;
+        public List<Vector3> Vertices,Normals,ColorPerIndex,FinalVertexArray;
+        public List<int> Indices, NormalIndices;
         
         private Dictionary<string, Vector3> Materials;
         private Dictionary<string,int> MaterialsIndices;
@@ -59,7 +59,6 @@ namespace YEET
             GL.BindVertexArray(VAO);
             GL.DrawArrays(PrimitiveType.Triangles, 0, FinalVertexArray.Count / 3);
             GL.BindVertexArray(0);
-            
         }
 
         private void SplitFLine(string[] line)
@@ -180,6 +179,5 @@ namespace YEET
             ExtremeMin = (MinX, MinY, MinZ);
             ExtremeMax = (MaxX, MaxY, MaxZ);
         }
-        
     }
 }

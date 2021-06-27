@@ -4,6 +4,9 @@ using OpenTK.Mathematics;
 using OpenTK.Graphics;
 using OpenTK.Graphics.OpenGL4;
 using System;
+using System.Globalization;
+using System.IO;
+using System.Text;
 
 namespace YEET
 {
@@ -11,7 +14,7 @@ namespace YEET
     {
         
         public ShaderLoader Loader { get; private set; }
-
+        public float MaxX, MinX, MaxY, MinY, MaxZ, MinZ;
         public enum VertexAttribType
         {
             None = 0, Float = 1, V2 = 2, V3 = 3, V4 = 4
@@ -28,7 +31,11 @@ namespace YEET
         public Queue<Tuple<string,Vector3>> Vec3Uniforms = new Queue<Tuple<string, Vector3>>();
         public Queue<Tuple<string,Vector4>> Vec4Uniforms = new Queue<Tuple<string, Vector4>>();
         public Queue<Tuple<string,Matrix4>> Mat4Uniforms = new Queue<Tuple<string, Matrix4>>();
-       
+        
+
+
+        bool OBJMesh = false;
+        private OBJLoader _objloader;
 
         public void SetUniform(string name,Vector3 input){
             Vec3Uniforms.Enqueue(new Tuple<string, Vector3>(name,input));
@@ -54,7 +61,20 @@ namespace YEET
             Loader = loader;
         }
 
+        public Mesh(Entity owner,String model_name) :base(owner) 
+        {
+            VAO = 0;
+            VBO =0;
+            Loader = new ShaderLoader();
+            GetFromOBJ(model_name);
+        }
 
+        public void GetFromOBJ(string path, string shader_name = "FlatShadedModel")
+        {
+            Loader = new ShaderLoader(shader_name);
+            _objloader = new OBJLoader(path, Loader);
+            OBJMesh = true;
+        }
 
         public void AddData(List<float> newData)
         {
@@ -117,6 +137,7 @@ namespace YEET
 
         public void GenerateBuffers()
         {
+            OBJMesh = false;
             if (VAO == 0)
                 VAO = GL.GenVertexArray();
             if (VBO == 0)
@@ -152,6 +173,10 @@ namespace YEET
         public override void OnDraw()
         {
             base.OnDraw();
+            if(OBJMesh){
+                _objloader.Draw(Owner.GetComponent<Transform>().ModelMatrix);
+                return;
+            }
             if(VertexAttribStructure.Count == 0)
                 throw new ArgumentException("Mesh loaded without structure");
             Loader.UseShader();

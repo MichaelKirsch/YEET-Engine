@@ -45,6 +45,10 @@ namespace YEET
         public override void OnStart()
         {
             wellmodel = AddEntity(new StaticOBJModel("house_type01", new Vector3(0, 0, 0), false));
+
+            var t = AddEntity(new House());
+            GetEntity(t).GetComponent<Transform>().Position = new Vector3(10,0,10);
+
             Grid = AddEntity(new Grid((100, 100), 0.02f));
             _LightPosition = new Vector3(100, 100, 0);
             Console.WriteLine("State1 onstart");
@@ -165,7 +169,8 @@ namespace YEET
                         if(!wasdown)
                         {
                             if(current_build!=""){
-                                var t = AddEntity(new StaticOBJModel(current_build,new Vector3(Convert.ToInt16(pos.X),0,Convert.ToInt16(pos.Z)),false));
+                                //var t = AddEntity(new StaticOBJModel(current_build,new Vector3(Convert.ToInt16(pos.X),0,Convert.ToInt16(pos.Z)),false));
+                                var t = AddEntity(new House("small_house",new Vector3(Convert.ToInt16(pos.X),0,Convert.ToInt16(pos.Z))));
                                 build_mode = false;
                                 StateMaschine.Context.CursorVisible = true;
                             }
