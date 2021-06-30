@@ -271,3 +271,4 @@ C:\Users\micha\RiderProjects\YEET-Engine\YEET-Engine\bin\Debug\net5.0\Models\gra
 C:\Users\micha\RiderProjects\YEET-Engine\YEET-Engine\bin\Debug\net5.0\Models\2x2_grass.mtl
 C:\Users\micha\RiderProjects\YEET-Engine\YEET-Engine\bin\Debug\net5.0\Models\2x2_grass.obj
 C:\Users\micha\RiderProjects\YEET-Engine\YEET-Engine\bin\Debug\net5.0\Models\small_house.xml
+C:\Users\micha\RiderProjects\YEET-Engine\YEET-Engine\bin\Debug\net5.0\Models\bridge_pillar.png

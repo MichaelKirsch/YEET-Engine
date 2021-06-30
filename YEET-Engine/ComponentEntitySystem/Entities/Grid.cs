@@ -12,6 +12,8 @@ namespace YEET
         List<Vector3> FinalVertices = new List<Vector3>();
         private List<Vector3> PlaneVertices = new List<Vector3>();
         public System.Numerics.Vector3 rgb_grid, rgb_plane;
+
+        public bool show_plane = false;
         Guid mesh,plane;
         
 
@@ -21,6 +23,7 @@ namespace YEET
             _loader = new ShaderLoader("Grid");
             mesh = AddComponent(new Mesh(this,_loader));
             plane = AddComponent(new Mesh(this,_loader));
+            AddComponent(new CameraJumpTo(this));
             Name = "Grid";
             rgb_grid = new System.Numerics.Vector3(0.072f, 0.293f, 0.294f);
             rgb_plane = new System.Numerics.Vector3(0.158f, 0.158f, 0.158f);
@@ -84,6 +87,7 @@ namespace YEET
                 ImGui.BeginChild("Colors");
                 ImGui.ColorEdit3("Grid Color", ref rgb_grid);
                 ImGui.ColorEdit3("Plane Color", ref rgb_plane);
+                ImGui.Checkbox("Show Plane",ref show_plane);
                 ImGui.EndChild();
                 ShowGUI = !ImGui.Button("Remove Grid-Gui");
                 ImGui.End();
@@ -97,8 +101,11 @@ namespace YEET
         {
             GetComponent<Mesh>(mesh).SetUniform("rgb",new Vector3(rgb_grid.X,rgb_grid.Y,rgb_grid.Z));
             GetComponent<Mesh>(mesh).OnDraw();
-            GetComponent<Mesh>(plane).SetUniform("rgb",new Vector3(rgb_plane.X,rgb_plane.Y,rgb_plane.Z));
-            GetComponent<Mesh>(plane).OnDraw();
+            if(show_plane){
+                GetComponent<Mesh>(plane).SetUniform("rgb",new Vector3(rgb_plane.X,rgb_plane.Y,rgb_plane.Z));
+                GetComponent<Mesh>(plane).OnDraw();
+            }
+            
         }
 
         List<Vector3> MakeQuad(Vector3 a, Vector3 b, Vector3 c, Vector3 d)

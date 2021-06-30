@@ -3,8 +3,8 @@
 <models>  
   <model>2x2_grass</model>
   <model>Well</model>
-  <model>house_type13</model>
-  <model>house_type16</model>
+  <model>house_type06</model>
+  <model>house_type04</model>
 </models>
 <stats>
     <inhabitants>4</inhabitants>
