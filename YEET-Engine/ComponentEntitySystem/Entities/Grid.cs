@@ -23,7 +23,7 @@ namespace YEET
             _loader = new ShaderLoader("Grid");
             mesh = AddComponent(new Mesh(this,_loader));
             plane = AddComponent(new Mesh(this,_loader));
-            AddComponent(new CameraJumpTo(this));
+            AddComponent(new RotateToObject(this));
             Name = "Grid";
             rgb_grid = new System.Numerics.Vector3(0.072f, 0.293f, 0.294f);
             rgb_plane = new System.Numerics.Vector3(0.158f, 0.158f, 0.158f);
@@ -71,7 +71,7 @@ namespace YEET
                 FinalVertices.AddRange(MakeQuad(b, b2, c2, c)); //left
             }
 
-            GetComponent<Mesh>(plane).SetData(MakeQuad(new Vector3(0,0,0),new Vector3(100,0,0),new Vector3(100,0,100),new Vector3(0,0,100)),new List<Mesh.VertexAttribType>(){Mesh.VertexAttribType.V3});
+            GetComponent<Mesh>(plane).SetData(MakeQuad(new Vector3(0,-0.01f,0),new Vector3(100,-0.01f,0),new Vector3(100,-0.01f,100),new Vector3(0,-0.01f,100)),new List<Mesh.VertexAttribType>(){Mesh.VertexAttribType.V3});
 
             GetComponent<Mesh>(mesh).SetData(FinalVertices,new List<Mesh.VertexAttribType>(){Mesh.VertexAttribType.V3});
         }

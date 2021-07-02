@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-
+using ImGuiNET;
 namespace YEET
 {
     public class Entity
@@ -65,6 +65,9 @@ namespace YEET
         public virtual void OnGui()
         {
             if(ShowGUI)
+                if(ImGui.Button("Remove")){
+                    StateMaschine.GetCurrentScene().AddToRemoveList(this.ID);
+                }
                 foreach (var component in _components)
                 {
                     component.Value.OnGUI();
@@ -80,7 +83,9 @@ namespace YEET
             foreach (var child in _childEntities)
             {
                 child.Value.OnLeave();
+                
             }
+
         }
         
         public Guid AddComponent(Component toadd)

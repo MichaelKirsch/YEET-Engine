@@ -15,20 +15,15 @@ namespace YEET
     {
         private int VAO, VBO;
         private string current_material;
-        
-        
         public List<Vector3> Vertices,Normals,ColorPerIndex,FinalVertexArray;
         public List<int> Indices, NormalIndices;
-        
         private Dictionary<string, Vector3> Materials;
         private Dictionary<string,int> MaterialsIndices;
         public Vector3 Position;
         public ShaderLoader Loader;
-
+        private int counter;
         public float MaxX, MinX, MaxY, MinY, MaxZ, MinZ;
-
         public Vector3 ExtremeMin,ExtremeMax;
-        
         /// <summary>
         /// </summary>
         /// <param name="path">Path from the Models Directory</param>
@@ -46,8 +41,6 @@ namespace YEET
             ReadMaterials(path);
             ReadOBJ(path);
             GenerateFinalVertexArray();
-            
-            Console.WriteLine("Model "+path+ " constructed. Vertices:" + FinalVertexArray.Count+" Time:"+watch.Result()+" ms");
         }
 
         public void Draw(Matrix4 Model)
@@ -56,8 +49,10 @@ namespace YEET
             Loader.SetUniformMatrix4F("projection", Camera.Projection);
             Loader.SetUniformMatrix4F("view", Camera.View);
             Loader.SetUniformMatrix4F("model", Model);
+            Loader.SetUniformVec3("LightPosition",Sun.getSunPosition());
+            Loader.SetUniformVec3("lightColor",Sun.getColor());
             GL.BindVertexArray(VAO);
-            GL.DrawArrays(PrimitiveType.Triangles, 0, FinalVertexArray.Count / 3);
+            GL.DrawArrays(PrimitiveType.Triangles, 0, counter / 3);
             GL.BindVertexArray(0);
         }
 
@@ -104,6 +99,8 @@ namespace YEET
             GL.VertexAttribPointer(2, 3, VertexAttribPointerType.Float, false, 9 * sizeof(float), 6*sizeof(float));
             GL.EnableVertexAttribArray(2);
             GL.BindVertexArray(0);
+            counter = FinalVertexArray.Count;
+            FinalVertexArray =null;
         }
 
         private void ReadMaterials(string path)

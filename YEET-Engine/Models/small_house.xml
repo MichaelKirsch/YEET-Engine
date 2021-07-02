@@ -1,14 +1,57 @@
-<?xml version="1.0" encoding="utf-8"?>  
+<?xml version="1.0" encoding="utf-8"?>
 <house>
-<models>  
-  <model>2x2_grass</model>
-  <model>Well</model>
-  <model>house_type06</model>
-  <model>house_type04</model>
-</models>
-<stats>
+  <variant>
+    <models>
+      <model>2x2_grass</model>
+      <model>Well</model>
+      <model>house_type05</model>
+    </models>
+  </variant>
+  <variant>
+    <models>
+      <model>2x2_grass</model>
+      <model>Well</model>
+      <model>house_type11</model>
+    </models>
+  </variant>
+  <variant>
+    <models>
+      <model>2x2_grass</model>
+      <model>Well</model>
+      <model>house_type12</model>
+    </models>
+  </variant>
+  <variant>
+    <models>
+      <model>2x2_grass</model>
+      <model>Well</model>
+      <model>house_type13</model>
+    </models>
+  </variant>
+  <variant>
+    <models>
+      <model>2x2_grass</model>
+      <model>Well</model>
+      <model>house_type04</model>
+    </models>
+  </variant>
+  <variant>
+    <models>
+      <model>2x2_grass</model>
+      <model>Well</model>
+      <model>house_type06</model>
+    </models>
+  </variant>
+  <variant>
+    <models>
+      <model>2x2_grass</model>
+      <model>Well</model>
+      <model>house_type07</model>
+    </models>
+  </variant>
+  <stats>
     <inhabitants>4</inhabitants>
     <sizeX>2</sizeX>
     <sizeY>2</sizeY>
-</stats>  
+  </stats>
 </house>

@@ -21,21 +21,23 @@ namespace YEET
 {
     public class RenderingTest : Scene
     {
-        private bool _WireFrame,wasdown;
+        private bool _WireFrame, wasdown;
         private Vector3 _LightPosition;
-        private Guid Grid, wellmodel;
+        private Guid Grid, wellmodel, tmp;
         public bool ShowImGUIDemoWindow = false;
         public bool drawlines = false;
         bool build_mode = false;
+        bool draw_mode = false;
+        private Vector3 last_pos;
         private Random rnd = new Random();
         private string current_build = "";
-        
+
         SimpleTexturedButton house1 = new SimpleTexturedButton();
         SimpleTexturedButton house2 = new SimpleTexturedButton();
         SimpleTexturedButton street1 = new SimpleTexturedButton();
-
+        Vector3 first_click, last_click;
         SimpleTexturedButton pillar = new SimpleTexturedButton();
-        
+
         private MousePicker picker = new MousePicker();
         public RenderingTest()
         {
@@ -47,7 +49,7 @@ namespace YEET
             wellmodel = AddEntity(new StaticOBJModel("house_type01", new Vector3(0, 0, 0), false));
 
             var t = AddEntity(new House());
-            GetEntity(t).GetComponent<Transform>().Position = new Vector3(10,0,10);
+            GetEntity(t).GetComponent<Transform>().Position = new Vector3(10, 0, 10);
 
             Grid = AddEntity(new Grid((100, 100), 0.02f));
             _LightPosition = new Vector3(100, 100, 0);
@@ -57,7 +59,7 @@ namespace YEET
             LightManager.OnStart();
             SpatialManager.GeneratedHeightNeg = 10;
             SpatialManager.GeneratedHeightPos = 20;
-            
+
             base.OnStart();
         }
 
@@ -88,37 +90,30 @@ namespace YEET
             }
             ImGui.Checkbox("Camera Gui", ref Camera.ShowGUI);
             ImGui.Checkbox("Wireframe", ref _WireFrame);
-            StateMaschine.Context.WireMode(_WireFrame);
-            ImGui.Checkbox("Print Profiler", ref Profiler.DebugPrint);
-            ImGui.Checkbox("show random lines", ref drawlines);
+            ImGui.Checkbox("Sun Gui", ref Sun.ShowGUI);
             ImGui.Checkbox("Gui Demo Window", ref ShowImGUIDemoWindow);
-            ImGui.Checkbox("Show Chunk Outlines", ref SpatialManager.ShowChunkOutline);
             ImGui.Checkbox("Show Profiler Window", ref Profiler.RenderProfiler);
             ImGui.Text($"Current Chunk ID {SpatialManager.GetTupelChunkIDAndInChunkPos(SpatialManager.GetIDfromWorldPos(Camera.Position))}");
             ImGui.Text($"Chunks {SpatialManager._Chunks.Count}");
+            ImGui.Text($"Active Entities {EntitiesCount()}");
             ImGui.Text($"Visible Chunks {SpatialManager.VisibleChunksAccordFrustum.Count}");
             ImGui.Text($"Mouse Delta:{picker.getIntersectionGround()}");
-            if(house1.Draw("Models/house_type01.png",new Vector2(100,100))){
-                    build_mode = true;
-                    GetEntity<StaticOBJModel>(wellmodel).ChangeModel("house_type01");
-                    current_build = "house_type01";
+            if (house1.Draw("Models/house_type01.png", new Vector2(100, 100)))
+            {
+                build_mode = true;
+                draw_mode = false;
+                wellmodel = ChangeEntity(wellmodel, new House("small_house", new Vector3(Convert.ToInt16(picker.getIntersectionGround().X), 0, Convert.ToInt16(picker.getIntersectionGround().Z))));
+                current_build = "house_type01";
             }
-            if(house2.Draw("Models/house_type02.png",new Vector2(100,100))){
-                    build_mode = true;
-                    GetEntity<StaticOBJModel>(wellmodel).ChangeModel("house_type02");
-                    current_build = "house_type02";
-            }
-
-            if(street1.Draw("Models/road_straight.png",new Vector2(100,100))){        
-                    build_mode = true;
-                    GetEntity<StaticOBJModel>(wellmodel).ChangeModel("road_straight");
-                    current_build = "road_straight";
+            if (pillar.Draw("Models/bridge_pillar.png", new Vector2(100, 100)))
+            {
+                build_mode = false;
+                draw_mode = true;
             }
 
-            pillar.Draw("Models/bridge_pillar.png",new Vector2(100,100));
-            
-
-            if(build_mode){
+            StateMaschine.Context.WireMode(_WireFrame);
+            if (build_mode)
+            {
                 StateMaschine.Context.CursorVisible = false;
             }
 
@@ -158,34 +153,120 @@ namespace YEET
             base.OnInput();
             Camera.ProcessKeyboard();
             Camera.processMouse();
-            if(build_mode){
-            for(int x=0;x<100;x++){
+
+
+            Vector3 pos = new Vector3();
+            Vector3 pos_raw = new Vector3();
+            for (int x = 0; x < 100; x++)
+            {
                 var ray = picker.getIntersectionGround();
-                Vector3 pos = ray.Normalized()*x+Camera.Position;
-                if(pos.Y<0)
+                pos = ray.Normalized() * x + Camera.Position;
+                pos_raw = pos;
+                if (pos.Y < 0)
                 {
-                    if(StateMaschine.Context.MouseState.IsButtonDown(MouseButton.Left)){
-                        
-                        if(!wasdown)
-                        {
-                            if(current_build!=""){
-                                //var t = AddEntity(new StaticOBJModel(current_build,new Vector3(Convert.ToInt16(pos.X),0,Convert.ToInt16(pos.Z)),false));
-                                var t = AddEntity(new House("small_house",new Vector3(Convert.ToInt16(pos.X),0,Convert.ToInt16(pos.Z))));
-                                build_mode = false;
-                                StateMaschine.Context.CursorVisible = true;
-                            }
-                            
-                        }
-                        wasdown=true;   
-                    }
-                    else{
-                        wasdown=false;
-                    }
-                        GetEntity(wellmodel).GetComponent<Transform>().SetPosition(new Vector3(Convert.ToInt16(pos.X),0,Convert.ToInt16(pos.Z)));
+                    pos.Y = 0;
+                    pos.X = Convert.ToSingle(Math.Floor(pos.X));
+                    pos.Z = Convert.ToSingle(Math.Floor(pos.Z));
                     break;
                 }
             }
+
+            if (!build_mode && !draw_mode)
+            {
+                foreach (var item in GetEntitiesByType<Area>())
+                {
+                    if (item.GetComponent<Collider>().CheckCollision(new Vector3(pos_raw.X, 0.04f, pos_raw.Z)))
+                    {
+                        item.Color = new Vector3(0.231f, 0.231f, 0.231f);
+                        item.GetComponent<Transform>().SetY(+0.02f);
+                        if (StateMaschine.Context.MouseState.IsButtonDown(MouseButton.Left))
+                        {
+                            item.Color = new Vector3(0.478f, 0.752f, 0.207f);
+                            item.ShowGUI = true;
+                        }
+                    }
+                    else
+                    {
+                        item.Color = new Vector3(0.411f, 0.411f, 0.411f);
+                        item.GetComponent<Transform>().SetY(-0.03f);
+                    }
+                }
             }
+
+
+
+
+
+
+
+            if (draw_mode)
+            {
+                if (!wasdown && StateMaschine.Context.MouseState.IsButtonDown(MouseButton.Left))
+                {
+                    first_click = pos;
+                    wasdown = true;
+                    tmp = AddEntity(new Square(first_click, first_click, ColorHelper.ConvertColor(Color.Aqua)));
+                }
+
+                if (wasdown && StateMaschine.Context.MouseState.IsButtonDown(MouseButton.Left))
+                {
+                    if (last_pos != pos)
+                    {
+                        last_pos = pos;
+                        tmp = ChangeEntity(tmp, new Square(first_click, pos, ColorHelper.ConvertColor(Color.Aqua)));
+                    }
+                }
+                if (wasdown && !StateMaschine.Context.MouseState.IsButtonDown(MouseButton.Left))
+                {
+                    last_click = pos;
+                    for (int x = 0; x < (last_pos - first_click).Length; x += 2)
+                    {
+                        var dir = (last_pos - first_click).Normalized();
+                        //AddEntity(new House("small_house",first_click+dir*x));   
+                    }
+
+                    wasdown = false;
+                    draw_mode = false;
+                    Vector3 distance = last_click - first_click;
+                    RemoveEntity(tmp);
+                    AddEntity(new Area(first_click, last_click, ColorHelper.ConvertColor(Color.Aqua)));
+                }
+            }
+
+
+
+
+            if (!build_mode)
+            {
+                GetEntity(wellmodel).Active = false;
+            }
+
+            else
+            {
+                if (StateMaschine.Context.MouseState.IsButtonDown(MouseButton.Left))
+                {
+
+                    if (!wasdown)
+                    {
+                        if (current_build != "")
+                        {
+                            //var t = AddEntity(new StaticOBJModel(current_build,new Vector3(Convert.ToInt16(pos.X),0,Convert.ToInt16(pos.Z)),false));
+                            var t = AddEntity(new House("small_house", new Vector3(Convert.ToInt16(pos.X), 0, Convert.ToInt16(pos.Z))));
+                            build_mode = false;
+                            StateMaschine.Context.CursorVisible = true;
+                        }
+
+                    }
+                    wasdown = true;
+                }
+                else
+                {
+                    wasdown = false;
+                }
+                GetEntity(wellmodel).GetComponent<Transform>().SetPosition(new Vector3(Convert.ToInt16(pos.X), 0, Convert.ToInt16(pos.Z)));
+                GetEntity(wellmodel).Active = true;
+            }
+
         }
     }
 }

@@ -125,7 +125,6 @@ namespace YEET
             if (ShowGUI)
             {
                 ImGui.Begin("Camera");
-                ImGui.SetWindowFontScale(1.5f);
                 ImGui.DragFloat("PosX", ref Position.X);
                 ImGui.DragFloat("PosY", ref Position.Y);
                 ImGui.DragFloat("PosZ", ref Position.Z);

@@ -13,6 +13,7 @@ namespace YEET.ComponentEntitySystem.Entities
             _loader = new OBJLoader(path, new ShaderLoader("Model", "FlatShadedModelVert",
                 "FlatShadedModelFrag", true));
             GetComponent<Transform>().SetPosition(position);
+            AddComponent(new RotateToObject(this));
         }
         
         public void ChangeModel(string path){

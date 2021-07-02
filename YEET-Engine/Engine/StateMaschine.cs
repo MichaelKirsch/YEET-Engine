@@ -69,6 +69,7 @@ namespace YEET
             ts.Stop();
             var guits = new TimeSlot("Gui Render");
             _currentScene.OnGui();
+            Sun.OnGui();
             guits.Stop();
             Profiler.StopFrame();
             Profiler.RenderProfilerWindow();
@@ -103,6 +104,9 @@ namespace YEET
             Context.Dispose();
         }
 
+        public static Scene GetCurrentScene(){
+            return _currentScene;
+        }
 
         private static Scene _currentScene;
         public static MainWindow Context;
@@ -110,13 +114,31 @@ namespace YEET
 
     public class Scene
     {
+        private Queue<Guid> removeList = new Queue<Guid>();
         private List<Entity> Entities = new List<Entity>();
         public Vector4 ClearColor = new Vector4(0.415f, 0.439f, 0.4f, 1.0f);
-
+        public int EntitiesCount(){
+            return Entities.Count;
+        }
         public Scene()
         {
             
         }
+
+        public void AddToRemoveList(Guid to_remove){
+            removeList.Enqueue(to_remove);
+        }
+
+        public void RemoveEntity(Guid id){
+            Entities.Remove(Entities.Find(x=>x.ID == id));
+        }
+
+        public Guid ChangeEntity(Guid id, Entity new_entt){
+            Entities.Remove(Entities.Find(x=>x.ID == id));
+            GC.Collect();
+            return AddEntity(new_entt);
+        }
+
 
         public Guid AddEntity(Entity toadd)
         {
@@ -134,6 +156,18 @@ namespace YEET
 
             return null;
         }
+
+        public List<T> GetEntitiesByType<T>() where T:Entity{
+            List<T> to_ret = new List<T>();
+            foreach (var entity in Entities)
+            {
+                if(entity is T){
+                    to_ret.Add((T)entity);
+                } 
+            }
+            return to_ret;
+        }
+
 
         public Entity GetEntity(Guid tofind)
         {
@@ -165,7 +199,8 @@ namespace YEET
         public virtual void OnUpdate(FrameEventArgs e)
         {
             //generate ActiveChunks;
-            
+            while(removeList.Count>0)
+                RemoveEntity(removeList.Dequeue());
             SpatialManager.OnUpdate();
             GL.ClearColor(ClearColor.X, ClearColor.Y, ClearColor.Z, ClearColor.W);
             foreach (var entity in Entities)
