@@ -10,7 +10,6 @@ namespace YEET
         public Transform(Entity owner) : base(owner)
         {
             Position = new Vector3();
-            Console.WriteLine("Transform added");
             Matrix4.CreateTranslation(0, 0, 0,out ModelMatrix);
         }
 

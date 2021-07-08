@@ -7,6 +7,7 @@ using System;
 using System.Globalization;
 using System.IO;
 using System.Text;
+using  ImGuiNET;
 
 namespace YEET
 {
@@ -20,6 +21,9 @@ namespace YEET
             None = 0, Float = 1, V2 = 2, V3 = 3, V4 = 4
         }
 
+        private bool BatchRendering = false;
+
+        private int VertexCount =0;
         private BufferUsageHint Usage = BufferUsageHint.StaticDraw;
         private bool reloadStructure, reloadData = false;
         public List<float> Data = new List<float>();
@@ -31,15 +35,30 @@ namespace YEET
         public Queue<Tuple<string,Vector3>> Vec3Uniforms = new Queue<Tuple<string, Vector3>>();
         public Queue<Tuple<string,Vector4>> Vec4Uniforms = new Queue<Tuple<string, Vector4>>();
         public Queue<Tuple<string,Matrix4>> Mat4Uniforms = new Queue<Tuple<string, Matrix4>>();
+        public Queue<Tuple<string,bool>> BoolUniforms = new Queue<Tuple<string, bool>>();
         
 
 
         bool OBJMesh = false;
         private OBJLoader _objloader;
 
+        public void EnableBatchRendering(){
+            BatchRendering = true;
+        }
+
+        public void DisableBatchRendering(){
+            BatchRendering = false;
+        }
+
+
         public void SetUniform(string name,Vector3 input){
             Vec3Uniforms.Enqueue(new Tuple<string, Vector3>(name,input));
         }
+
+        public void SetUniform(string name,bool input){
+            BoolUniforms.Enqueue(new Tuple<string,bool>(name,input));
+        }
+
 
         public void SetUniform(string name,Vector4 input){
             Vec4Uniforms.Enqueue(new Tuple<string, Vector4>(name,input));
@@ -144,8 +163,11 @@ namespace YEET
                 VBO = GL.GenBuffer();
             GL.BindVertexArray(VAO);
             GL.BindBuffer(BufferTarget.ArrayBuffer, VBO);
-            if (reloadData)
+            if (reloadData){
+                VertexCount = Data.Count;
                 GL.BufferData(BufferTarget.ArrayBuffer, Data.Count * sizeof(float), Data.ToArray(), Usage);
+            }
+                
             if (reloadStructure)
             {
                 reloadStructure = false;
@@ -165,10 +187,31 @@ namespace YEET
                     }
                 }
                 GL.BindVertexArray(0);
+                
             }
+            //when we dont batchrender we will not need the data anymore
+            if(!BatchRendering){
+                Data = null;
+            }
+
 
         }
 
+
+        public override void OnGUI()
+        {
+            base.OnGUI();
+            ImGui.TextColored(ColorHelper.ConvertColor4(System.Drawing.Color.SeaGreen),$"Shader: {Loader.Name}");
+            if(BatchRendering)
+                ImGui.TextColored(ColorHelper.ConvertColor4(System.Drawing.Color.Red),$"BATCHRENDERED");
+            else{
+                ImGui.TextColored(ColorHelper.ConvertColor4(System.Drawing.Color.Aqua),"Uniforms");
+                foreach (var item in Loader.GetAllUniforms())
+                {
+                    ImGui.Selectable($"{item.Name}| Loc:{item.Location}| Type:{item.Type}");
+                }
+            }
+        }
 
         public override void OnDraw()
         {
@@ -202,22 +245,20 @@ namespace YEET
             Loader.SetUniformMatrix4F("model", Owner.GetComponent<Transform>().ModelMatrix);
             GL.BindVertexArray(VAO);
             if(PrimitiveTypeToRender == PrimitiveType.Triangles){
-                GL.DrawArrays(PrimitiveType.Triangles, 0, Data.Count / 3);
+                GL.DrawArrays(PrimitiveType.Triangles, 0, VertexCount / 3);
             } //standard{
 
             else{
                 switch(PrimitiveTypeToRender){
                     case PrimitiveType.Lines:
-                        GL.DrawArrays(PrimitiveType.Triangles, 0, Data.Count / 2);
+                        GL.DrawArrays(PrimitiveType.Triangles, 0, VertexCount / 2);
                         break;
                     case PrimitiveType.Points:
-                        GL.DrawArrays(PrimitiveType.Triangles, 0, Data.Count);
+                        GL.DrawArrays(PrimitiveType.Triangles, 0, VertexCount);
                         break;
                 }
             }    
             GL.BindVertexArray(0);
-
-    
         }
 
     }

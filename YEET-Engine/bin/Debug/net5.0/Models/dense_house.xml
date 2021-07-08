@@ -4,53 +4,53 @@
     <models>
       <model>2x2_grass</model>
       <model>Well</model>
-      <model>house_type01</model>
+      <model>house_type15</model>
     </models>
   </variant>
   <variant>
     <models>
       <model>2x2_grass</model>
       <model>Well</model>
-      <model>house_type02</model>
+      <model>house_type16</model>
     </models>
   </variant>
   <variant>
     <models>
       <model>2x2_grass</model>
       <model>Well</model>
-      <model>house_type03</model>
+      <model>house_type17</model>
     </models>
   </variant>
   <variant>
     <models>
       <model>2x2_grass</model>
       <model>Well</model>
-      <model>house_type04</model>
+      <model>house_type18</model>
     </models>
   </variant>
   <variant>
     <models>
       <model>2x2_grass</model>
       <model>Well</model>
-      <model>house_type05</model>
+      <model>house_type19</model>
     </models>
   </variant>
   <variant>
     <models>
       <model>2x2_grass</model>
       <model>Well</model>
-      <model>house_type06</model>
+      <model>house_type20</model>
     </models>
   </variant>
   <variant>
     <models>
       <model>2x2_grass</model>
       <model>Well</model>
-      <model>house_type07</model>
+      <model>house_type21</model>
     </models>
   </variant>
   <stats>
-    <inhabitants>4</inhabitants>
+    <inhabitants>12</inhabitants>
     <sizeX>2</sizeX>
     <sizeY>2</sizeY>
   </stats>

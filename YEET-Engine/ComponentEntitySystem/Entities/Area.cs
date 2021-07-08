@@ -14,8 +14,17 @@ namespace YEET.ComponentEntitySystem.Entities
         private int counter =0;
         private List<Vector3> housestoBuild = new List<Vector3>();
 
-        public Area(Vector3 point_one, Vector3 point_two, Vector3 color)
+        public enum AreaType{
+            SmallSuburb,DenseHouses,Industry,Financial,CommercialSmall,CommercialDense,Holiday,Tourist
+        };
+
+
+        public AreaType Areatype = AreaType.SmallSuburb;
+
+        public Area(Vector3 point_one, Vector3 point_two, Vector3 color, AreaType type = AreaType.SmallSuburb)
         {
+            Areatype = type;
+            Name = "Area";
             Point_two = point_two;
             Point_one = point_one;
             var _loader = new ShaderLoader("Grid");
@@ -44,26 +53,16 @@ namespace YEET.ComponentEntitySystem.Entities
                 }
             }
         }
-
-
         public override void OnGui()
         {
-            if (ShowGUI)
-            {
-                ImGui.Begin("Area" + ID);
-                ImGui.Checkbox("Active", ref Active);
-
-                System.Numerics.Vector3 ref_c = new System.Numerics.Vector3(Color.X, Color.Y, Color.Z);
-                ImGui.ColorEdit3("Color", ref ref_c);
-                Color = new Vector3(ref_c.X, ref_c.Y, ref_c.Z);
-                ImGui.Text($"Entities in Queue:{housestoBuild.Count}");
-                base.OnGui();
-                ShowGUI = !ImGui.Button("Dont Show");
-                ImGui.End();
-            }
-            ImGui.Checkbox("Area " + ID, ref ShowGUI);
+            ImGui.Checkbox("Active", ref Active);
+            System.Numerics.Vector3 ref_c = new System.Numerics.Vector3(Color.X, Color.Y, Color.Z);
+            ImGui.ColorEdit3("Color", ref ref_c);
+            Color = new Vector3(ref_c.X, ref_c.Y, ref_c.Z);
+            ImGui.Text($"Entities in Queue:{housestoBuild.Count}");
+            ImGui.Text($"Area Type:{Areatype.ToString()}");
+            base.OnGui();
         }
-
 
         public override void OnRender()
         {
@@ -80,10 +79,19 @@ namespace YEET.ComponentEntitySystem.Entities
             {
                 var which = new_rand.Next(housestoBuild.Count-1);
                 counter++;
-                if (new_rand.Next()%1000<10)
+                if (new_rand.Next()%400<70)
                 {
                     counter =0;
-                    AddChildEntity(new House("small_house", housestoBuild[which]));
+                    //AddChildEntity(new StaticOBJModel("road_drivewaySingle",housestoBuild[which],false));
+                    switch(Areatype){
+                        case AreaType.SmallSuburb:
+                            AddChildEntity(new House("small_house", housestoBuild[which]));
+                        break;
+                        case AreaType.DenseHouses:
+                            AddChildEntity(new House("dense_house", housestoBuild[which]));
+                        break;
+                    }
+                    
                     housestoBuild.RemoveAt(which);
                 }
             }

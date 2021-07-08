@@ -18,6 +18,8 @@ namespace YEET
     {
         private static long _startTime,_startTicks;
         private static Stopwatch _stopwatch;
+
+        
         static StateMaschine()
         {
             Console.WriteLine("StateMaschine Started");
@@ -114,6 +116,7 @@ namespace YEET
 
     public class Scene
     {
+        public Entity selected = new Entity();
         private Queue<Guid> removeList = new Queue<Guid>();
         private List<Entity> Entities = new List<Entity>();
         public Vector4 ClearColor = new Vector4(0.415f, 0.439f, 0.4f, 1.0f);
@@ -179,12 +182,36 @@ namespace YEET
         /// </summary>
         public virtual void OnGui()
         {
+            ImGui.SetNextWindowSize(new System.Numerics.Vector2(800,800));
+            //ImGui.BeginMenuBar();
+            //
+            //ImGui.EndMenuBar();        
+            //foreach (var entity in Entities)
+            //{
+            //    entity.OnMenuGui();
+            //}
+
             ImGui.Begin("Entities");
+           //ImGui.BeginMenuBar();
+           //ImGui.EndMenuBar();
+           
+            ImGui.BeginChild("letft_pane",new System.Numerics.Vector2(150,0),true);
             foreach (var entity in Entities)
             {
-                entity.OnGui();
+                if(ImGui.Selectable(entity.Name)){
+                    selected = entity;  
+                };  
             }
-
+            ImGui.EndChild();
+            ImGui.SameLine();
+                ImGui.BeginGroup();
+                ImGui.BeginChild($"Selected Entity:{selected.ID}",new System.Numerics.Vector2(0,-ImGui.GetFrameHeightWithSpacing()));
+                ImGui.Text($"Type:{selected.Name} ID:{selected.ID}");
+                ImGui.Separator();
+                selected.OnGui();
+                ImGui.EndChild();
+                ImGui.EndGroup();
+                
             ImGui.End();
             Camera.OnGui();
         }

@@ -11,6 +11,7 @@ namespace YEET.ComponentEntitySystem.Entities
         public Vector3 Color;
         public Square(Vector3 point_one,Vector3 point_two,Vector3 color)
         {
+            Name = "Square";
             var _loader = new ShaderLoader("Grid");
             Color = color;
             mesh = AddComponent(new Mesh(this,_loader));

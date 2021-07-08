@@ -10,17 +10,22 @@ namespace YEET.ComponentEntitySystem.Entities
         
         public House()
         {
+            Name = "House";
             grassMesh = AddComponent(new Mesh(this,"2x2_grass"));
             house = AddComponent(new Mesh(this,"house_type12"));
             AddComponent(new RotateToObject(this));
             AddComponent(new Collider(this,new Vector3(0,0,0),new Vector3(2,2,2)));
+            AddComponent(new Gradient(this));
         }
         
         public House(Vector3 position)
         {
+            Name = "House";
             grassMesh = AddComponent(new Mesh(this,"2x2_grass"));
             house = AddComponent(new Mesh(this,"house_type12"));
             GetComponent<Transform>().Position = position;
+            AddComponent(new RotateToObject(this));
+            AddComponent(new Collider(this,new Vector3(0,0,0),new Vector3(2,2,2)));
         }
         /// <summary>
         /// construct a house from a xml file
@@ -29,6 +34,7 @@ namespace YEET.ComponentEntitySystem.Entities
         /// <param name="position"></param>
         public House(String name,Vector3 position)
         {
+            Name = "House";
             XmlDocument doc = new XmlDocument();
             doc.Load($"Models/{name}.xml");
             Random t = new Random();
@@ -41,26 +47,23 @@ namespace YEET.ComponentEntitySystem.Entities
                 AddComponent(new Mesh(this,chosen.ChildNodes[i].InnerText));
             }
             GetComponent<Transform>().Position = position;
+            AddComponent(new RotateToObject(this));
+            AddComponent(new Collider(this,new Vector3(0,0,0),new Vector3(2,2,2)));
         }
 
         public override void OnGui()    
         {
-            if (ShowGUI)
-            {
-                ImGui.Begin("House"+ ID);
-                ImGui.SetWindowFontScale(1.5f);
-                ImGui.Checkbox("Active", ref Active);
-                base.OnGui();
-                ShowGUI = !ImGui.Button("Dont Show");
-                ImGui.End();
-            }
-            ImGui.Checkbox("House " + ID, ref ShowGUI);
+            ImGui.Checkbox("Active", ref Active);
+            base.OnGui();
+            ShowGUI = !ImGui.Button("Dont Show");
+
         }
 
 
         public override void OnRender(){
             foreach (var item in GetComponents<Mesh>())
             {
+                item.SetUniform("UsingOverwriteColor",true);
                 item.OnDraw();
             }
         }

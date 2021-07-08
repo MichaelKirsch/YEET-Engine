@@ -12,7 +12,7 @@ using OpenTK.Mathematics;
 
 namespace YEET
 {
-    struct UniformFieldInfo
+    public struct UniformFieldInfo
     {
         public int Location;
         public string Name;
@@ -71,6 +71,7 @@ namespace YEET
 
         public ShaderLoader(string name)
         {
+            Name = name;
             string VertexShaderSource;
                 using (StreamReader reader = new StreamReader("Shaders/" + name+"Vert.glsl", Encoding.UTF8))
                 {
@@ -93,6 +94,7 @@ namespace YEET
         public ShaderLoader()
         {
             string name = "FlatShadedModel";
+            Name = name;
             string VertexShaderSource;
             using (StreamReader reader = new StreamReader("Shaders/" + name+"Vert.glsl", Encoding.UTF8))
             {
@@ -215,6 +217,17 @@ namespace YEET
             
             return Shader;
         }
+
+        public List<UniformFieldInfo> GetAllUniforms(){
+            var x = GetUniforms();
+            var  r  =new List<UniformFieldInfo>();
+            foreach (var item in x)
+            {
+                r.Add(item);
+            }
+            return r;
+        }
+
 
         public void SetUniformMatrix4F(string name, Matrix4 to_set)
         {

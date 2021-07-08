@@ -54,8 +54,6 @@ C:\Users\micha\RiderProjects\YEET-Engine\YEET-Engine\obj\Debug\net5.0\YEET-Engin
 C:\Users\micha\RiderProjects\YEET-Engine\YEET-Engine\obj\Debug\net5.0\ref\YEET-Engine.dll
 C:\Users\micha\RiderProjects\YEET-Engine\YEET-Engine\obj\Debug\net5.0\YEET-Engine.pdb
 C:\Users\micha\RiderProjects\YEET-Engine\YEET-Engine\obj\Debug\net5.0\YEET-Engine.genruntimeconfig.cache
-C:\Users\micha\RiderProjects\YEET-Engine\YEET-Engine\bin\Debug\net5.0\Shaders\PointsFrag.glsl
-C:\Users\micha\RiderProjects\YEET-Engine\YEET-Engine\bin\Debug\net5.0\Shaders\PointsVert.glsl
 C:\Users\micha\RiderProjects\YEET-Engine\YEET-Engine\bin\Debug\net5.0\Models\driveway_long.mtl
 C:\Users\micha\RiderProjects\YEET-Engine\YEET-Engine\bin\Debug\net5.0\Models\driveway_long.obj
 C:\Users\micha\RiderProjects\YEET-Engine\YEET-Engine\bin\Debug\net5.0\Models\driveway_short.mtl
@@ -272,3 +270,8 @@ C:\Users\micha\RiderProjects\YEET-Engine\YEET-Engine\bin\Debug\net5.0\Models\2x2
 C:\Users\micha\RiderProjects\YEET-Engine\YEET-Engine\bin\Debug\net5.0\Models\2x2_grass.obj
 C:\Users\micha\RiderProjects\YEET-Engine\YEET-Engine\bin\Debug\net5.0\Models\small_house.xml
 C:\Users\micha\RiderProjects\YEET-Engine\YEET-Engine\bin\Debug\net5.0\Models\bridge_pillar.png
+C:\Users\micha\RiderProjects\YEET-Engine\YEET-Engine\bin\Debug\net5.0\Models\dense_house.xml
+C:\Users\micha\RiderProjects\YEET-Engine\YEET-Engine\bin\Debug\net5.0\Shaders\SkyboxFrag.glsl
+C:\Users\micha\RiderProjects\YEET-Engine\YEET-Engine\bin\Debug\net5.0\Shaders\SkyboxVert.glsl
+C:\Users\micha\RiderProjects\YEET-Engine\YEET-Engine\bin\Debug\net5.0\Shaders\GradientFrag.glsl
+C:\Users\micha\RiderProjects\YEET-Engine\YEET-Engine\bin\Debug\net5.0\Shaders\GradientVert.glsl

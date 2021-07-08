@@ -10,6 +10,7 @@ namespace YEET.ComponentEntitySystem.Entities
         
         public StaticOBJModel(string path,Vector3 position, bool GuiVisible) : base(GuiVisible)
         {
+            Name ="OBJ";
             _loader = new OBJLoader(path, new ShaderLoader("Model", "FlatShadedModelVert",
                 "FlatShadedModelFrag", true));
             GetComponent<Transform>().SetPosition(position);
@@ -23,16 +24,9 @@ namespace YEET.ComponentEntitySystem.Entities
 
         public override void OnGui()
         {
-            if (ShowGUI)
-            {
-                ImGui.Begin("OBJ"+ ID);
-                ImGui.SetWindowFontScale(1.5f);
-                ImGui.Checkbox("Active", ref Active);
-                base.OnGui();
-                ShowGUI = !ImGui.Button("Dont Show");
-                ImGui.End();
-            }
-            ImGui.Checkbox("OBJ " + ID, ref ShowGUI);
+            ImGui.Checkbox("Active", ref Active);
+            base.OnGui();
+            ShowGUI = !ImGui.Button("Dont Show");
         }
 
         public override void OnRender()

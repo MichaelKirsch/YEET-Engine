@@ -78,10 +78,6 @@ namespace YEET
 
         public override void OnGui()
         {
-            if (ShowGUI)
-            {
-                ImGui.Begin("Grid "+ID);
-                ImGui.SetWindowFontScale(1.5f);
                 base.OnGui();
                 ImGui.Checkbox("Active", ref Active);
                 ImGui.BeginChild("Colors");
@@ -90,10 +86,6 @@ namespace YEET
                 ImGui.Checkbox("Show Plane",ref show_plane);
                 ImGui.EndChild();
                 ShowGUI = !ImGui.Button("Remove Grid-Gui");
-                ImGui.End();
-            }
-
-            ImGui.Checkbox("Grid " + ID, ref ShowGUI);
         }
 
 

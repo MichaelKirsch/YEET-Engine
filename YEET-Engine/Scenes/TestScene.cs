@@ -31,6 +31,8 @@ namespace YEET
         private Vector3 last_pos;
         private Random rnd = new Random();
         private string current_build = "";
+        
+        private Area.AreaType currentAreaType;
 
         SimpleTexturedButton house1 = new SimpleTexturedButton();
         SimpleTexturedButton house2 = new SimpleTexturedButton();
@@ -47,7 +49,6 @@ namespace YEET
         public override void OnStart()
         {
             wellmodel = AddEntity(new StaticOBJModel("house_type01", new Vector3(0, 0, 0), false));
-
             var t = AddEntity(new House());
             GetEntity(t).GetComponent<Transform>().Position = new Vector3(10, 0, 10);
 
@@ -98,18 +99,8 @@ namespace YEET
             ImGui.Text($"Active Entities {EntitiesCount()}");
             ImGui.Text($"Visible Chunks {SpatialManager.VisibleChunksAccordFrustum.Count}");
             ImGui.Text($"Mouse Delta:{picker.getIntersectionGround()}");
-            if (house1.Draw("Models/house_type01.png", new Vector2(100, 100)))
-            {
-                build_mode = true;
-                draw_mode = false;
-                wellmodel = ChangeEntity(wellmodel, new House("small_house", new Vector3(Convert.ToInt16(picker.getIntersectionGround().X), 0, Convert.ToInt16(picker.getIntersectionGround().Z))));
-                current_build = "house_type01";
-            }
-            if (pillar.Draw("Models/bridge_pillar.png", new Vector2(100, 100)))
-            {
-                build_mode = false;
-                draw_mode = true;
-            }
+            ImGui.TextColored(ColorHelper.ConvertColor4(Color.DarkRed),"Hello World");
+            
 
             StateMaschine.Context.WireMode(_WireFrame);
             if (build_mode)
@@ -123,6 +114,28 @@ namespace YEET
                 ImGui.ShowDemoWindow();
             }
             ImGui.End();
+
+            ImGui.SetNextWindowSize(new Vector2(1000,120));
+            ImGui.SetNextWindowPos(new Vector2(StateMaschine.Context.Size.X/2f-500,StateMaschine.Context.Size.Y-200));
+            ImGui.Begin("",ImGuiWindowFlags.NoScrollbar|ImGuiWindowFlags.NoResize|ImGuiWindowFlags.NoCollapse|ImGuiWindowFlags.NoTitleBar);
+            if (house1.Draw("Models/house_type01.png", new Vector2(100, 100)))
+            {
+                build_mode = false;
+                draw_mode = true;
+                currentAreaType = Area.AreaType.SmallSuburb;
+            }
+            ImGui.SameLine();
+            if (house2.Draw("Models/bridge_pillar.png", new Vector2(100, 100)))
+            {
+                build_mode = false;
+                draw_mode = true;
+                currentAreaType = Area.AreaType.DenseHouses;
+            }
+
+            ImGui.End();
+            Skybox.OnGui();
+
+            
         }
 
         public override void OnUpdate(FrameEventArgs e)
@@ -139,6 +152,7 @@ namespace YEET
 
         public override void OnInput()
         {
+            if(ImGui.GetIO().WantCaptureMouse){return;};//if the mouse is over gui dont act
             if (StateMaschine.Context.MouseState.IsButtonDown(MouseButton.Middle))
             {
                 Camera.Grab();
@@ -182,7 +196,7 @@ namespace YEET
                         if (StateMaschine.Context.MouseState.IsButtonDown(MouseButton.Left))
                         {
                             item.Color = new Vector3(0.478f, 0.752f, 0.207f);
-                            item.ShowGUI = true;
+                            selected = item;
                         }
                     }
                     else
@@ -201,6 +215,7 @@ namespace YEET
 
             if (draw_mode)
             {
+                
                 if (!wasdown && StateMaschine.Context.MouseState.IsButtonDown(MouseButton.Left))
                 {
                     first_click = pos;
@@ -229,12 +244,17 @@ namespace YEET
                     draw_mode = false;
                     Vector3 distance = last_click - first_click;
                     RemoveEntity(tmp);
-                    AddEntity(new Area(first_click, last_click, ColorHelper.ConvertColor(Color.Aqua)));
+                    switch(currentAreaType){
+                        case Area.AreaType.SmallSuburb:
+                            AddEntity(new Area(first_click, last_click, ColorHelper.ConvertColor(Color.Aqua)));
+                            break;
+                        default:
+                            AddEntity(new Area(first_click, last_click, ColorHelper.ConvertColor(Color.Aqua),Area.AreaType.DenseHouses));
+                            break;
+                    }
+                    
                 }
             }
-
-
-
 
             if (!build_mode)
             {

@@ -8,17 +8,17 @@ namespace YEET
     {
         public string Name = "default";
 
-        private Dictionary<Guid,Component> _components;
-        private Dictionary<Guid,Entity> _childEntities;
+        private Dictionary<Guid, Component> _components;
+        private Dictionary<Guid, Entity> _childEntities;
         public Guid ID { get; }
         public bool Active = true;
         public bool ShowGUI = true;
-        public Entity(bool GuiVisible=false)
+        public Entity(bool GuiVisible = false)
         {
             ShowGUI = GuiVisible;
-            _components = new Dictionary<Guid,Component>();
+            _components = new Dictionary<Guid, Component>();
             _childEntities = new Dictionary<Guid, Entity>();
-            _components.Add(new Guid(),new Transform(this));
+            _components.Add(new Guid(), new Transform(this));
             ID = Guid.NewGuid();
         }
 
@@ -64,79 +64,114 @@ namespace YEET
 
         public virtual void OnGui()
         {
-            if(ShowGUI)
-                if(ImGui.Button("Remove")){
-                    StateMaschine.GetCurrentScene().AddToRemoveList(this.ID);
-                }
-                foreach (var component in _components)
-                {
-                    component.Value.OnGUI();
-                }
-            foreach (var child in _childEntities)
+            foreach (var component in _components)
             {
-                child.Value.OnGui();
+                component.Value.OnGUI();
+                ImGui.Separator();
+            }
+            if (ImGui.Button("Delete"))
+            {
+                StateMaschine.GetCurrentScene().AddToRemoveList(this.ID);
+                StateMaschine.GetCurrentScene().selected = new Entity();
+            }
+            if (_childEntities.Count > 0)
+            {
+                ImGui.Separator();
+                ImGui.BeginChild("Child Entities");
+                ImGui.Text("Child Entities");
+                foreach (var child in _childEntities)
+                {
+                    if(ImGui.Selectable($"{child.Value.ID}")){
+                        StateMaschine.GetCurrentScene().selected = child.Value;
+                    }
+                }
+                ImGui.EndChild();
+
             }
         }
+
+        /// <summary>
+        /// attachement point for the fixed menu boxes on top
+        /// add new tabs here if you got some complex stuff
+        /// </summary>
+        public virtual void OnMenuGui()
+        {
+
+        }
+
+        /// <summary>
+        /// if the entity contains settings that are relevant for all other it can go into the global scene settings
+        /// </summary>
+        public virtual void OnMenuSettingsGui()
+        {
+
+        }
+
 
         public virtual void OnLeave()
         {
             foreach (var child in _childEntities)
             {
                 child.Value.OnLeave();
-                
+
             }
 
         }
-        
+
         public Guid AddComponent(Component toadd)
         {
             var id = Guid.NewGuid();
-            _components.Add(id,toadd); 
+            _components.Add(id, toadd);
             return id;
         }
-        
-        public bool RemoveComponent(Guid to_remove){
+
+        public bool RemoveComponent(Guid to_remove)
+        {
             return _components.Remove(to_remove);
         }
 
         public T GetComponent<T>() where T : Component//get a derivative of Component
         {
-           foreach( var x in _components){
-               if(x.Value is T)
+            foreach (var x in _components)
+            {
+                if (x.Value is T)
                     return (T)x.Value;
-           }
-           return null;
+            }
+            return null;
         }
 
         public T GetComponent<T>(Guid to_find) where T : Component//get a derivative of Component
         {
-            if(_components.ContainsKey(to_find))
+            if (_components.ContainsKey(to_find))
                 return (T)_components[to_find];
             return null;
         }
-        
-        public List<T> GetComponents<T>() where T:Component{
+
+        public List<T> GetComponents<T>() where T : Component
+        {
             List<T> to_ret = new List<T>();
             foreach (var component in _components)
             {
-                if(component.Value is T){
+                if (component.Value is T)
+                {
                     to_ret.Add((T)component.Value);
-                } 
+                }
             }
             return to_ret;
         }
 
 
-        public Guid AddChildEntity(Entity toAdd){
-             var id = Guid.NewGuid();
-            _childEntities.Add(id,toAdd); 
+        public Guid AddChildEntity(Entity toAdd)
+        {
+            var id = Guid.NewGuid();
+            _childEntities.Add(id, toAdd);
             return id;
         }
 
 
         public T GetChildEntity<T>(Guid to_find) where T : Entity//get a derivative of Component
         {
-            if(_childEntities.ContainsKey(to_find))
+            if (_childEntities.ContainsKey(to_find))
                 return (T)_childEntities[to_find];
             return null;
         }

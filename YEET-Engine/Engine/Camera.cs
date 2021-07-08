@@ -79,14 +79,15 @@ namespace YEET
                 {
                     Pitch = -89.0f;
                 }
-                
+
             }
-            else{
+            else
+            {
                 WasDown = false;
             }
-           
-             Front.X = (float)Math.Cos(MathHelper.DegreesToRadians(Pitch)) *
-                            (float)Math.Cos(MathHelper.DegreesToRadians(Yaw));
+
+            Front.X = (float)Math.Cos(MathHelper.DegreesToRadians(Pitch)) *
+                           (float)Math.Cos(MathHelper.DegreesToRadians(Yaw));
             Front.Y = (float)Math.Sin(MathHelper.DegreesToRadians(Pitch));
             Front.Z = (float)Math.Cos(MathHelper.DegreesToRadians(Pitch)) *
                         (float)Math.Sin(MathHelper.DegreesToRadians(Yaw));
@@ -101,7 +102,7 @@ namespace YEET
 
         public static void ProcessKeyboard()
         {
-            float velocity = Math.Abs(.11f * Convert.ToSingle(StateMaschine.GetElapsedTime() - lasttime));
+            float velocity = Math.Abs(.02f * Convert.ToSingle(StateMaschine.GetElapsedTime() - lasttime));
             lasttime = StateMaschine.GetElapsedTime();
             if (StateMaschine.Context.KeyboardState[Keys.W])
                 Position += new Vector3(Front.X, 0, Front.Z).Normalized() * velocity;
@@ -111,7 +112,11 @@ namespace YEET
                 Position += new Vector3(Right.X, 0, Right.Z).Normalized() * velocity;
             if (StateMaschine.Context.KeyboardState[Keys.D])
                 Position -= new Vector3(Right.X, 0, Right.Z).Normalized() * velocity;
-            Position.Y = StateMaschine.Context.MouseState.Scroll.Y * -4;
+            if (!ImGui.GetIO().WantCaptureMouse)
+            {
+                Position.Y = StateMaschine.Context.MouseState.Scroll.Y * -4; //TODO: fix that shit
+            }//if the mouse is over gui dont act
+
             if (Position.X < 0)
                 Position.X = 0;
             if (Position.Y < 0)

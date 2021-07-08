@@ -13,7 +13,7 @@ namespace YEET
 
         public void JumpToObject(){
             var t =  Owner.GetComponent<Transform>().GetPosition();
-                    Camera.Position = new Vector3(t.X+1,1,t.Z+1);
+                    Camera.Position = new Vector3(t.X+1,t.Y+1,t.Z+1);
             SnapCameraToObject();
         }
 

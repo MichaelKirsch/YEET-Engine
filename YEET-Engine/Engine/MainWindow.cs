@@ -58,6 +58,7 @@ namespace YEET
         {
             var watch = new Util.StopWatchMilliseconds();
             GL.Enable(EnableCap.DepthTest);
+            //GL.Enable(EnableCap.CullFace);
             GL.DepthMask(true);
             base.OnRenderFrame(e);
             _controller.Update(this, (float)e.Time);

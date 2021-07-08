@@ -27,6 +27,10 @@ namespace YEET
         public static Vector3 ConvertColor(System.Drawing.Color input){
             return new Vector3(input.R,input.G,input.B);
         }
+
+        public static System.Numerics.Vector4 ConvertColor4(System.Drawing.Color input){
+            return new System.Numerics.Vector4(input.R,input.G,input.B,1);
+        }
     }
 
     public class AxisAllignedCube
