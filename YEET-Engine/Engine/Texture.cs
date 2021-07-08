@@ -118,6 +118,7 @@ namespace YEET
             GL.TextureParameter(GLTexture, TextureParameterName.TextureMaxLevel, MipmapLevels - 1);
         }
 
+
         public void SetMinFilter(TextureMinFilter filter)
         {
             GL.TextureParameter(GLTexture, TextureParameterName.TextureMinFilter, (int)filter);

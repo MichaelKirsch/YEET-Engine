@@ -64,10 +64,15 @@ namespace YEET
 
         public virtual void OnGui()
         {
+            int counter=0;
             foreach (var component in _components)
             {
-                component.Value.OnGUI();
-                ImGui.Separator();
+                if (ImGui.TreeNode(component.Value.ToString()+$"##{counter}"))
+                {
+                    component.Value.OnGUI();
+                    ImGui.Separator();
+                }
+                counter++;
             }
             if (ImGui.Button("Delete"))
             {
@@ -81,7 +86,8 @@ namespace YEET
                 ImGui.Text("Child Entities");
                 foreach (var child in _childEntities)
                 {
-                    if(ImGui.Selectable($"{child.Value.ID}")){
+                    if (ImGui.Selectable($"{child.Value.ID}"))
+                    {
                         StateMaschine.GetCurrentScene().selected = child.Value;
                     }
                 }
