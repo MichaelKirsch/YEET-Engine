@@ -20,7 +20,7 @@ using Vector3 = OpenTK.Mathematics.Vector3;
 
 namespace YEET
 {
-    public class RenderingTest : Scene
+    public class MainGame : Scene
     {
         private bool _WireFrame, wasdown;
         private Vector3 _LightPosition;
@@ -42,7 +42,7 @@ namespace YEET
         SimpleTexturedButton pillar = new SimpleTexturedButton();
 
         private MousePicker picker = new MousePicker();
-        public RenderingTest()
+        public MainGame()
         {
             Console.WriteLine("State1 construct");
         }

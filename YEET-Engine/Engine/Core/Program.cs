@@ -8,7 +8,7 @@ namespace YEET
     {
         static void Main(string[] args)
         {
-            StateMaschine.Run(new RenderingTest(), 60, 60);
+            StateMaschine.Run(new MainGame(), 60, 60);
         }
     }
 }
