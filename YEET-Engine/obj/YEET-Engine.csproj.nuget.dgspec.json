@@ -49,11 +49,11 @@
             },
             "OpenTK": {
               "target": "Package",
-              "version": "[4.6.3, )"
+              "version": "[4.6.4, )"
             },
             "OpenTK.Input": {
               "target": "Package",
-              "version": "[4.6.3, )"
+              "version": "[4.6.4, )"
             },
             "SimplexNoise": {
               "target": "Package",

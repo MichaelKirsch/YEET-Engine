@@ -14,6 +14,7 @@ using Buffer = System.Buffer;
 using System.IO;
 using System.Drawing;
 using System.Numerics;
+using OpenTK.Windowing.Common.Input;
 using Vector3 = OpenTK.Mathematics.Vector3;
 
 
@@ -60,7 +61,7 @@ namespace YEET
             LightManager.OnStart();
             SpatialManager.GeneratedHeightNeg = 10;
             SpatialManager.GeneratedHeightPos = 20;
-
+            CursorControl.SetPredefined(MouseCursor.Hand);
             base.OnStart();
         }
 
@@ -118,7 +119,7 @@ namespace YEET
             ImGui.SetNextWindowSize(new Vector2(1000,120));
             ImGui.SetNextWindowPos(new Vector2(StateMaschine.Context.Size.X/2f-500,StateMaschine.Context.Size.Y-200));
             ImGui.Begin("",ImGuiWindowFlags.NoScrollbar|ImGuiWindowFlags.NoResize|ImGuiWindowFlags.NoCollapse|ImGuiWindowFlags.NoTitleBar);
-            if (house1.Draw("Models/Icons/MiningIcons_33_t.PNG", new Vector2(100, 100)))
+            if (house1.Draw("Data/Icons/MiningIcons_33_t.PNG", new Vector2(100, 100)))
             {
                 build_mode = false;
                 draw_mode = true;
@@ -126,7 +127,7 @@ namespace YEET
                 
             }
             ImGui.SameLine();
-            if (house2.Draw("Models/bridge_pillar.png", new Vector2(100, 100)))
+            if (house2.Draw("Data/Models/bridge_pillar.png", new Vector2(100, 100)))
             {
                 build_mode = false;
                 draw_mode = true;
@@ -275,6 +276,7 @@ namespace YEET
                             var t = AddEntity(new House("small_house", new Vector3(Convert.ToInt16(pos.X), 0, Convert.ToInt16(pos.Z))));
                             build_mode = false;
                             StateMaschine.Context.CursorVisible = true;
+                            
                         }
 
                     }
