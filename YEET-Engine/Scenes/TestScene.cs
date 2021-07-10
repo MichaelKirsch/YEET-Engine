@@ -118,11 +118,12 @@ namespace YEET
             ImGui.SetNextWindowSize(new Vector2(1000,120));
             ImGui.SetNextWindowPos(new Vector2(StateMaschine.Context.Size.X/2f-500,StateMaschine.Context.Size.Y-200));
             ImGui.Begin("",ImGuiWindowFlags.NoScrollbar|ImGuiWindowFlags.NoResize|ImGuiWindowFlags.NoCollapse|ImGuiWindowFlags.NoTitleBar);
-            if (house1.Draw("Models/house_type01.png", new Vector2(100, 100)))
+            if (house1.Draw("Models/Icons/MiningIcons_33_t.PNG", new Vector2(100, 100)))
             {
                 build_mode = false;
                 draw_mode = true;
                 currentAreaType = Area.AreaType.SmallSuburb;
+                
             }
             ImGui.SameLine();
             if (house2.Draw("Models/bridge_pillar.png", new Vector2(100, 100)))
@@ -133,7 +134,7 @@ namespace YEET
             }
 
             ImGui.End();
-            Skybox.OnGui();
+            
 
             
         }

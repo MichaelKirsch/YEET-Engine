@@ -50,14 +50,14 @@ namespace YEET
             else
             {
                 string VertexShaderSource;
-                using (StreamReader reader = new StreamReader("Shaders/" + vertexShader+".glsl", Encoding.UTF8))
+                using (StreamReader reader = new StreamReader("Shaders/" + vertexShader+".vert", Encoding.UTF8))
                 {
                     VertexShaderSource = reader.ReadToEnd();
                 }
 
                 string FragmentShaderSource;
 
-                using (StreamReader reader = new StreamReader("Shaders/" +fragmentShader+".glsl", Encoding.UTF8))
+                using (StreamReader reader = new StreamReader("Shaders/" +fragmentShader+".frag", Encoding.UTF8))
                 {
                     FragmentShaderSource = reader.ReadToEnd();
                 }
@@ -73,14 +73,14 @@ namespace YEET
         {
             Name = name;
             string VertexShaderSource;
-                using (StreamReader reader = new StreamReader("Shaders/" + name+"Vert.glsl", Encoding.UTF8))
+                using (StreamReader reader = new StreamReader("Shaders/" + name+".vert", Encoding.UTF8))
                 {
                     VertexShaderSource = reader.ReadToEnd();
                 }
 
                 string FragmentShaderSource;
 
-                using (StreamReader reader = new StreamReader("Shaders/" +name+"Frag.glsl", Encoding.UTF8))
+                using (StreamReader reader = new StreamReader("Shaders/" +name+".frag", Encoding.UTF8))
                 {
                     FragmentShaderSource = reader.ReadToEnd();
                 }
@@ -96,14 +96,14 @@ namespace YEET
             string name = "FlatShadedModel";
             Name = name;
             string VertexShaderSource;
-            using (StreamReader reader = new StreamReader("Shaders/" + name+"Vert.glsl", Encoding.UTF8))
+            using (StreamReader reader = new StreamReader("Shaders/" + name+".vert", Encoding.UTF8))
             {
                 VertexShaderSource = reader.ReadToEnd();
             }
 
             string FragmentShaderSource;
 
-            using (StreamReader reader = new StreamReader("Shaders/" +name+"Frag.glsl", Encoding.UTF8))
+            using (StreamReader reader = new StreamReader("Shaders/" +name+".frag", Encoding.UTF8))
             {
                 FragmentShaderSource = reader.ReadToEnd();
             }

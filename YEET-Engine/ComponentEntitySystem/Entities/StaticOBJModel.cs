@@ -11,15 +11,15 @@ namespace YEET.ComponentEntitySystem.Entities
         public StaticOBJModel(string path,Vector3 position, bool GuiVisible) : base(GuiVisible)
         {
             Name ="OBJ";
-            _loader = new OBJLoader(path, new ShaderLoader("Model", "FlatShadedModelVert",
-                "FlatShadedModelFrag", true));
+            _loader = new OBJLoader(path, new ShaderLoader("Model", "FlatShadedModel",
+                "FlatShadedModel", true));
             GetComponent<Transform>().SetPosition(position);
             AddComponent(new RotateToObject(this));
         }
         
         public void ChangeModel(string path){
-            _loader = new OBJLoader(path, new ShaderLoader("Model", "FlatShadedModelVert",
-                "FlatShadedModelFrag", true));
+            _loader = new OBJLoader(path, new ShaderLoader("Model", "FlatShadedModel",
+                "FlatShadedModel", true));
         }
 
         public override void OnGui()
