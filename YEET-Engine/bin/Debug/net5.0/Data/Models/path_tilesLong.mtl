@@ -1,0 +1,8 @@
+# Created by Kenney (www.kenney.nl)
+
+newmtl pavement
+Kd 0.7568628 0.7568628 0.8
+
+newmtl _defaultMat
+Kd 0.9528302 0.3747798 0.2921413
+
