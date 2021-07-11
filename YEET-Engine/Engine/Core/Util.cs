@@ -11,7 +11,7 @@ using OpenTK.Graphics.OpenGL4;
 using System.Drawing;
 using System.IO;
 using ImGuiNET;
-namespace YEET
+namespace YEET.Engine.Core
 {
     static class Util
     {

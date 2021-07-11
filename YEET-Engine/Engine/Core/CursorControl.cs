@@ -4,7 +4,7 @@ using System.Drawing;
 using Assimp;
 using Image = System.Drawing.Image;
 
-namespace YEET
+namespace YEET.Engine.Core
 {
     public static class CursorControl
     {

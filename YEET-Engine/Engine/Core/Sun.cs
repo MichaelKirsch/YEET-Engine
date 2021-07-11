@@ -1,7 +1,7 @@
 using OpenTK.Mathematics;
 using ImGuiNET;
 
-namespace YEET{
+namespace YEET.Engine.Core{
     public static class Sun{
         private static Vector3 _currentPosition, _origin,_currentColor;
         private static float _radius, _length_one_day;

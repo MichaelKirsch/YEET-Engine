@@ -3,7 +3,7 @@ using ImGuiNET;
 using OpenTK.Mathematics;
 using OpenTK.Windowing.GraphicsLibraryFramework;
 
-namespace YEET
+namespace YEET.Engine.Core
 {
     public static class Camera
     {

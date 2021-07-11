@@ -9,18 +9,19 @@ using OpenTK;
 using OpenTK.Input;
 using OpenTK.Windowing.Common;
 using SimplexNoise;
-using YEET.ComponentEntitySystem.Entities;
+using YEET.Engine.ECS;
 using Buffer = System.Buffer;
 using System.IO;
 using System.Drawing;
 using System.Numerics;
 using OpenTK.Windowing.Common.Input;
+using YEET.Engine.Core;
 using Vector3 = OpenTK.Mathematics.Vector3;
 
 
 namespace YEET
 {
-    public class MainGame : Scene
+    public class MainGame : Engine.Core.Scene
     {
         private bool _WireFrame, wasdown;
         private Vector3 _LightPosition;
@@ -59,7 +60,6 @@ namespace YEET
             _LightPosition = new Vector3(100, 100, 0);
             Console.WriteLine("State1 onstart");
             Camera.Start();
-            LightManager.OnStart();
             SpatialManager.GeneratedHeightNeg = 10;
             SpatialManager.GeneratedHeightPos = 20;
             CursorControl.SetPredefined(MouseCursor.Hand);

@@ -3,8 +3,10 @@ using OpenTK.Mathematics;
 using ImGuiNET;
 using System.Xml;
 using System.Collections.Generic;
-namespace YEET.ComponentEntitySystem.Entities
-{
+using YEET.Engine.Core;
+
+namespace YEET.Engine.ECS{
+    
     public class Square : Entity
     {
         private Guid mesh;

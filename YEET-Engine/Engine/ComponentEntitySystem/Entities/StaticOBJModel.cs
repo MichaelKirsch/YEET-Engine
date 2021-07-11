@@ -1,8 +1,9 @@
 ﻿using ImGuiNET;
 using OpenTK.Graphics.OpenGL;
 using OpenTK.Mathematics;
+using YEET.Engine.Core;
 
-namespace YEET.ComponentEntitySystem.Entities
+namespace YEET.Engine.ECS
 {
     public class StaticOBJModel : Entity
     {

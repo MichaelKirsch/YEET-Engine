@@ -3,8 +3,9 @@ using System.Collections.Generic;
 using OpenTK.Mathematics;
 using ImGuiNET;
 using OpenTK.Graphics.OpenGL4;
+using YEET.Engine.Core;
 
-namespace YEET{
+namespace YEET.Engine.ECS{
     public  class Skybox : Entity{
         
         System.Guid _gradient;

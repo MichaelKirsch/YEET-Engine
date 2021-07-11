@@ -10,7 +10,7 @@ using System.Threading;
 using ImGuiNET;
 
 
-namespace YEET
+namespace YEET.Engine.Core
 {
     public class MainWindow : GameWindow
     {

@@ -5,6 +5,8 @@ using System.Diagnostics;
 using System.Collections.Generic;
 using ImGuiNET;
 using System.Linq;
+using YEET.Engine.Core;
+
 namespace YEET{
 
     public class TimeSlot{

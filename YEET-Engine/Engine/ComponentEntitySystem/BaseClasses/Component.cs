@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace YEET
+namespace YEET.Engine.ECS
 {
     public class Component
     {

@@ -1,6 +1,6 @@
 ﻿using OpenTK.Mathematics;
 
-namespace YEET.ComponentEntitySystem.Entities
+namespace YEET.Engine.ECS
 {
     public class PointLight : Component
     {

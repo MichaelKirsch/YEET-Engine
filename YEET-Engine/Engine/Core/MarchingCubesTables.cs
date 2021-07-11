@@ -1,6 +1,6 @@
 ﻿//these triangulation tables are based on this here: http://paulbourke.net/geometry/polygonise/
 
-namespace YEET
+namespace YEET.Engine.Core
 {
     public static class MarchingCubesTables
     {

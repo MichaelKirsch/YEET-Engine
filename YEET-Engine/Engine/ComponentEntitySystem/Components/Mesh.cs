@@ -8,8 +8,9 @@ using System.Globalization;
 using System.IO;
 using System.Text;
 using  ImGuiNET;
+using YEET.Engine.Core;
 
-namespace YEET
+namespace YEET.Engine.ECS
 {
     public class Mesh : Component
     {
@@ -40,7 +41,7 @@ namespace YEET
 
 
         bool OBJMesh = false;
-        private OBJLoader _objloader;
+        private Engine.Core.OBJLoader _objloader;
 
         public void EnableBatchRendering(){
             BatchRendering = true;

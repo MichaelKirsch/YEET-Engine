@@ -7,6 +7,7 @@ using OpenTK.Mathematics;
 using OpenTK.Windowing.Common.Input;
 using OpenTK.Windowing.Desktop;
 using OpenTK.Windowing.GraphicsLibraryFramework;
+using YEET.Engine.Core;
 
 namespace YEET
 {

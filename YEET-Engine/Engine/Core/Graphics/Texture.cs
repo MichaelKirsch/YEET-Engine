@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using OpenTK.Graphics.OpenGL4;
+using YEET.Engine.Core;
 using PixelFormat = OpenTK.Graphics.OpenGL4.PixelFormat;
 
 namespace YEET

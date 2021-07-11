@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace YEET{
+namespace YEET.Engine.ECS{
 
     public class Terrain : Entity{
 

@@ -1,8 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using OpenTK.Mathematics;
+using YEET.Engine.ECS;
 
-namespace YEET
+namespace YEET.Engine.Core
 {
     
     public class Chunk

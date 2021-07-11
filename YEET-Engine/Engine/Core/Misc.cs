@@ -2,7 +2,7 @@
 using OpenTK.Mathematics;
 using System.Collections.Generic;
 
-namespace YEET
+namespace YEET.Engine.Core
 {
     public static class MakeForm
     {

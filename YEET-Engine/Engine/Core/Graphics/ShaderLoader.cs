@@ -9,6 +9,7 @@ using System.Runtime.CompilerServices;
 using System.Threading;
 using OpenTK.Graphics.OpenGL4;
 using OpenTK.Mathematics;
+using YEET.Engine.Core;
 
 namespace YEET
 {

@@ -5,13 +5,14 @@ using System.Drawing.Drawing2D;
 using OpenTK.Graphics.OpenGL4;
 using System.IO;
 using System.Numerics;
+using YEET.Engine.Core;
 using Vector3 = OpenTK.Mathematics.Vector3;
 using Vector4 = OpenTK.Mathematics.Vector4;
 
 
 
 
-namespace YEET
+namespace YEET.Engine.ECS
 {
     public class Gradient : Component
     {

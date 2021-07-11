@@ -2,7 +2,7 @@
 using OpenTK.Mathematics;
 using ImGuiNET;
 using System.Xml;
-namespace YEET.ComponentEntitySystem.Entities
+namespace YEET.Engine.ECS
 {
     public class House : Entity
     {

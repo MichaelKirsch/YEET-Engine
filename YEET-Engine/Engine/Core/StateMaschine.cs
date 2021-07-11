@@ -7,7 +7,9 @@ using OpenTK.Windowing.Common;
 using Vector3 = System.Numerics.Vector3;
 using Vector4 = System.Numerics.Vector4;
 
-namespace YEET
+using YEET.Engine.ECS;
+
+namespace YEET.Engine.Core
 {
     public static class StateMaschine
     {

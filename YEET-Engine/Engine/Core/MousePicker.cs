@@ -1,4 +1,5 @@
 using OpenTK.Mathematics;
+using YEET.Engine.Core;
 
 namespace YEET
 {

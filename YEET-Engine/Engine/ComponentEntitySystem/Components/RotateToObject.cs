@@ -2,8 +2,9 @@
 using System;
 using ImGuiNET;
 using OpenTK.Mathematics;
+using YEET.Engine.Core;
 
-namespace YEET
+namespace YEET.Engine.ECS
 {
     public class RotateToObject : Component
     {

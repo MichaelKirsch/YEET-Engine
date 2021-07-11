@@ -3,7 +3,7 @@ using System;
 using ImGuiNET;
 using OpenTK.Mathematics;
 
-namespace YEET
+namespace YEET.Engine.ECS
 {
     public class Transform : Component
     {

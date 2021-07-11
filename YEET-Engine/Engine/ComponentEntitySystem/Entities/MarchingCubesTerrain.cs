@@ -7,9 +7,10 @@ using ImGuiNET;
 using OpenTK.Graphics.OpenGL4;
 using OpenTK.Mathematics;
 using SimplexNoise;
+using YEET.Engine.Core;
 
 
-namespace YEET
+namespace YEET.Engine.ECS
 {
     public class MarchingCubeTerrain : Entity
     {

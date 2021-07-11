@@ -2,7 +2,9 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using ImGuiNET;
-namespace YEET
+using YEET.Engine.Core;
+
+namespace YEET.Engine.ECS
 {
     public class Entity
     {
