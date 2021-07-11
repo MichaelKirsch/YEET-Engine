@@ -1,14 +1,17 @@
-﻿namespace YEET
+﻿using System;
+
+namespace YEET
 {
     public class Component
     {
         protected Entity Owner { get; }
-
+        public Guid CompID;
         private bool Active { get; set; }
         
         public Component(Entity owner)
         {
             Owner = owner;
+            CompID = Guid.NewGuid();
         }
         
         public virtual void OnStart()

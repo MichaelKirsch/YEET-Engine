@@ -15,7 +15,6 @@ namespace YEET.ComponentEntitySystem.Entities
             house = AddComponent(new Mesh(this,"house_type12"));
             AddComponent(new RotateToObject(this));
             AddComponent(new Collider(this,new Vector3(0,0,0),new Vector3(2,2,2)));
-            AddComponent(new Gradient(this));
         }
         
         public House(Vector3 position)

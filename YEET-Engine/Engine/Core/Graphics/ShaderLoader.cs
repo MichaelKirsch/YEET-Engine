@@ -251,6 +251,11 @@ namespace YEET
         {
             GL.Uniform3(GetUniformLocation(name),new Vector3(x,y,z));
         }
+
+        public void SetUniformInt(string name,int i)
+        {
+            GL.Uniform1(GetUniformLocation(name),i);
+        }
         
     }
 }

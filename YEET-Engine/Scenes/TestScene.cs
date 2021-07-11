@@ -24,7 +24,7 @@ namespace YEET
     {
         private bool _WireFrame, wasdown;
         private Vector3 _LightPosition;
-        private Guid Grid, wellmodel, tmp;
+        private Guid Grid, wellmodel, tmp, groundplane;
         public bool ShowImGUIDemoWindow = false;
         public bool drawlines = false;
         bool build_mode = false;
@@ -32,7 +32,7 @@ namespace YEET
         private Vector3 last_pos;
         private Random rnd = new Random();
         private string current_build = "";
-        
+
         private Area.AreaType currentAreaType;
 
         SimpleTexturedButton house1 = new SimpleTexturedButton();
@@ -49,15 +49,16 @@ namespace YEET
 
         public override void OnStart()
         {
-            wellmodel = AddEntity(new StaticOBJModel("house_type01", new Vector3(0, 0, 0), false));
-            var t = AddEntity(new House());
-            GetEntity(t).GetComponent<Transform>().Position = new Vector3(10, 0, 10);
-
+            Camera.Position = new Vector3(10000, 0, 10000);
+            groundplane = AddEntity(new Square(new Vector3(0, -0.21f, 0), new Vector3(20000, -0.21f, 20000), new Vector3(0, 0.901f, 0.44f)));
+            //skybox = AddEntity(new Skybox());
+            tmp = AddEntity(new House("small_house", Camera.Position));
+            wellmodel = AddEntity(new StaticOBJModel("house_type01", new Vector3(Camera.Position.X - 100, 0, Camera.Position.X - 100), false));
             Grid = AddEntity(new Grid((100, 100), 0.02f));
+            GetEntity(Grid).GetComponent<Transform>().Position = (10000, 0.01f, 10000);
             _LightPosition = new Vector3(100, 100, 0);
             Console.WriteLine("State1 onstart");
             Camera.Start();
-            Camera.Position = (50, 50, 50);
             LightManager.OnStart();
             SpatialManager.GeneratedHeightNeg = 10;
             SpatialManager.GeneratedHeightPos = 20;
@@ -100,8 +101,11 @@ namespace YEET
             ImGui.Text($"Active Entities {EntitiesCount()}");
             ImGui.Text($"Visible Chunks {SpatialManager.VisibleChunksAccordFrustum.Count}");
             ImGui.Text($"Mouse Delta:{picker.getIntersectionGround()}");
-            ImGui.TextColored(ColorHelper.ConvertColor4(Color.DarkRed),"Hello World");
-            
+            ImGui.Separator();
+            ImGui.Text("Framebuffer");
+            ImGui.Image(new System.IntPtr(StateMaschine.texture),new Vector2(300,150),new Vector2(1,1),new Vector2(0,0));
+            ImGui.Text("Depthbuffer");
+            ImGui.Image(new System.IntPtr(StateMaschine.depth_texture),new Vector2(300,150),new Vector2(1,1),new Vector2(0,0));
 
             StateMaschine.Context.WireMode(_WireFrame);
             if (build_mode)
@@ -116,15 +120,14 @@ namespace YEET
             }
             ImGui.End();
 
-            ImGui.SetNextWindowSize(new Vector2(1000,120));
-            ImGui.SetNextWindowPos(new Vector2(StateMaschine.Context.Size.X/2f-500,StateMaschine.Context.Size.Y-200));
-            ImGui.Begin("",ImGuiWindowFlags.NoScrollbar|ImGuiWindowFlags.NoResize|ImGuiWindowFlags.NoCollapse|ImGuiWindowFlags.NoTitleBar);
+            ImGui.SetNextWindowSize(new Vector2(1000, 120));
+            ImGui.SetNextWindowPos(new Vector2(StateMaschine.Context.Size.X / 2f - 500, StateMaschine.Context.Size.Y - 200));
+            ImGui.Begin("", ImGuiWindowFlags.NoScrollbar | ImGuiWindowFlags.NoResize | ImGuiWindowFlags.NoCollapse | ImGuiWindowFlags.NoTitleBar);
             if (house1.Draw("Data/Icons/MiningIcons_33_t.PNG", new Vector2(100, 100)))
             {
                 build_mode = false;
                 draw_mode = true;
                 currentAreaType = Area.AreaType.SmallSuburb;
-                
             }
             ImGui.SameLine();
             if (house2.Draw("Data/Models/bridge_pillar.png", new Vector2(100, 100)))
@@ -133,11 +136,12 @@ namespace YEET
                 draw_mode = true;
                 currentAreaType = Area.AreaType.DenseHouses;
             }
-
             ImGui.End();
+        
+            
+            
             
 
-            
         }
 
         public override void OnUpdate(FrameEventArgs e)
@@ -154,7 +158,7 @@ namespace YEET
 
         public override void OnInput()
         {
-            if(ImGui.GetIO().WantCaptureMouse){return;};//if the mouse is over gui dont act
+            if (ImGui.GetIO().WantCaptureMouse) { return; };//if the mouse is over gui dont act
             if (StateMaschine.Context.MouseState.IsButtonDown(MouseButton.Middle))
             {
                 Camera.Grab();
@@ -180,7 +184,7 @@ namespace YEET
                 pos_raw = pos;
                 if (pos.Y < 0)
                 {
-                    pos.Y = 0;
+                    pos.Y = 0.0f;
                     pos.X = Convert.ToSingle(Math.Floor(pos.X));
                     pos.Z = Convert.ToSingle(Math.Floor(pos.Z));
                     break;
@@ -217,7 +221,7 @@ namespace YEET
 
             if (draw_mode)
             {
-                
+
                 if (!wasdown && StateMaschine.Context.MouseState.IsButtonDown(MouseButton.Left))
                 {
                     first_click = pos;
@@ -246,15 +250,16 @@ namespace YEET
                     draw_mode = false;
                     Vector3 distance = last_click - first_click;
                     RemoveEntity(tmp);
-                    switch(currentAreaType){
+                    switch (currentAreaType)
+                    {
                         case Area.AreaType.SmallSuburb:
                             AddEntity(new Area(first_click, last_click, ColorHelper.ConvertColor(Color.Aqua)));
                             break;
                         default:
-                            AddEntity(new Area(first_click, last_click, ColorHelper.ConvertColor(Color.Aqua),Area.AreaType.DenseHouses));
+                            AddEntity(new Area(first_click, last_click, ColorHelper.ConvertColor(Color.Aqua), Area.AreaType.DenseHouses));
                             break;
                     }
-                    
+
                 }
             }
 
@@ -276,7 +281,7 @@ namespace YEET
                             var t = AddEntity(new House("small_house", new Vector3(Convert.ToInt16(pos.X), 0, Convert.ToInt16(pos.Z))));
                             build_mode = false;
                             StateMaschine.Context.CursorVisible = true;
-                            
+
                         }
 
                     }
