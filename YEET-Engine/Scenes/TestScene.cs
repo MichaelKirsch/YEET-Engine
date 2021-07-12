@@ -78,7 +78,8 @@ namespace YEET
             ImGui.ColorEdit4("ClearColor", ref ClearColor);
             ImGui.Text("Avg Rendertime:" +
                        StateMaschine.Context.AverageLastFrameRenderTime.ToString("0.000") + "ms");
-
+            ImGui.Text("FPS:" +
+                       (1000f/StateMaschine.Context.AverageLastFrameRenderTime).ToString("0.0") + "fps");
             if (ImGui.Button("Tree"))
             {
 
@@ -138,7 +139,7 @@ namespace YEET
             }
             ImGui.End();
         
-            
+            InstanceRenderer.OnGui();
             
             
 

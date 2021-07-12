@@ -140,6 +140,7 @@ namespace YEET.Engine.Core
             Sun.OnGui();
             guits.Stop();
             Profiler.StopFrame();
+            InstanceRenderer.ClearStacks(); //should be done after all rendering is done
             Profiler.RenderProfilerWindow();
         }
 
@@ -309,6 +310,7 @@ namespace YEET.Engine.Core
                 if (entity.Active)
                     entity.OnUpdate();
             }
+            InstanceRenderer.OnUpdate();
         }
 
         /// <summary>
@@ -322,6 +324,10 @@ namespace YEET.Engine.Core
                 if (entity.Active)
                     entity.OnRender();
             }
+            GL.Enable(EnableCap.CullFace);
+            //instancerenderer NEEDS to be after the Entities as they fill it up in their Rendercalls
+            InstanceRenderer.OnRender();
+            GL.Disable(EnableCap.CullFace);
         }
 
         /// <summary>

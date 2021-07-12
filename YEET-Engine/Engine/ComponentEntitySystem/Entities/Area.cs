@@ -81,7 +81,7 @@ namespace YEET.Engine.ECS
             {
                 var which = new_rand.Next(housestoBuild.Count-1);
                 counter++;
-                if (new_rand.Next()%400<70)
+                if (new_rand.Next()%400<300)
                 {
                     counter =0;
                     //AddChildEntity(new StaticOBJModel("road_drivewaySingle",housestoBuild[which],false));

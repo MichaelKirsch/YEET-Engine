@@ -282,3 +282,5 @@ C:\Users\micha\RiderProjects\YEET-Engine\YEET-Engine\bin\Debug\net5.0\Data\Textu
 C:\Users\micha\RiderProjects\YEET-Engine\YEET-Engine\bin\Debug\net5.0\Data\Textures\_defaultMat(Clone).png
 C:\Users\micha\RiderProjects\YEET-Engine\YEET-Engine\bin\Debug\net5.0\Data\Shaders\default.frag
 C:\Users\micha\RiderProjects\YEET-Engine\YEET-Engine\bin\Debug\net5.0\Data\Shaders\default.vert
+C:\Users\micha\RiderProjects\YEET-Engine\YEET-Engine\bin\Debug\net5.0\Data\Shaders\FlatShadedModelInstanced.frag
+C:\Users\micha\RiderProjects\YEET-Engine\YEET-Engine\bin\Debug\net5.0\Data\Shaders\FlatShadedModelInstanced.vert

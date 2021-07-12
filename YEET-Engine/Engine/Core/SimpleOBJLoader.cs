@@ -21,7 +21,7 @@ namespace YEET.Engine.Core
         private Dictionary<string,int> MaterialsIndices;
         public Vector3 Position;
         public ShaderLoader Loader;
-        private int counter;
+        public int counter;
         public float MaxX, MinX, MaxY, MinY, MaxZ, MinZ;
         public Vector3 ExtremeMin,ExtremeMax;
         /// <summary>
@@ -55,6 +55,18 @@ namespace YEET.Engine.Core
             GL.DrawArrays(PrimitiveType.Triangles, 0, counter / 3);
             GL.BindVertexArray(0);
         }
+
+        public void InstanceDraw(int amount)
+        {
+            Loader.UseShader();
+            Loader.SetUniformMatrix4F("projection", Camera.Projection);
+            Loader.SetUniformMatrix4F("view", Camera.View);
+            Loader.SetUniformVec3("LightPosition",Sun.getSunPosition());
+            Loader.SetUniformVec3("lightColor",Sun.getColor());
+            GL.BindVertexArray(VAO);
+            GL.DrawArraysInstanced(PrimitiveType.Triangles, 0, counter/3,amount);
+        }
+        
 
         private void SplitFLine(string[] line)
         {

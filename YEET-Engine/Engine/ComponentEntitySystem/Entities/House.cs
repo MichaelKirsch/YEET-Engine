@@ -1,13 +1,17 @@
 ﻿using System;
+using System.Collections.Generic;
 using OpenTK.Mathematics;
 using ImGuiNET;
 using System.Xml;
+using YEET.Engine.Core;
+
 namespace YEET.Engine.ECS
 {
     public class House : Entity
     {
         private Guid grassMesh, house;
-        
+        public bool isInstanced;
+        private List<string> modelnames=new List<string>();
         public House()
         {
             Name = "House";
@@ -31,8 +35,9 @@ namespace YEET.Engine.ECS
         /// </summary>
         /// <param name="name"></param>
         /// <param name="position"></param>
-        public House(String name,Vector3 position)
+        public House(String name,Vector3 position,bool Instanced=true)
         {
+            isInstanced = Instanced;
             Name = "House";
             XmlDocument doc = new XmlDocument();
             doc.Load($"Data/Models/{name}.xml");
@@ -43,7 +48,14 @@ namespace YEET.Engine.ECS
 
             for (int i = 0; i < chosen.ChildNodes.Count; i++)
             {
-                AddComponent(new Mesh(this,chosen.ChildNodes[i].InnerText));
+                if (isInstanced)
+                {
+                      modelnames.Add(chosen.ChildNodes[i].InnerText);
+                }
+                else
+                {
+                    AddComponent(new Mesh(this,chosen.ChildNodes[i].InnerText));
+                }
             }
             GetComponent<Transform>().Position = position;
             AddComponent(new RotateToObject(this));
@@ -58,8 +70,26 @@ namespace YEET.Engine.ECS
 
         }
 
+        public override void OnUpdate()
+        {
+            base.OnUpdate();
+        }
+
 
         public override void OnRender(){
+            if (isInstanced)
+            {
+                foreach (var modelname in modelnames)
+                {
+                    List<float> data = new List<float>();
+                    //TODO transform all the data to a float array
+                    data.Add(GetComponent<Transform>().Position.X);
+                    data.Add(GetComponent<Transform>().Position.Y);
+                    data.Add(GetComponent<Transform>().Position.Z);
+                    InstanceRenderer.AddToStack(modelname,data);
+                }
+                return;
+            }
             foreach (var item in GetComponents<Mesh>())
             {
                 item.SetUniform("UsingOverwriteColor",true);
