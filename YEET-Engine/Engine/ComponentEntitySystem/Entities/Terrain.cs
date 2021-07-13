@@ -6,7 +6,8 @@ namespace YEET.Engine.ECS{
     public class Terrain : Entity{
 
         List<Guid> ChunkIds = new List<Guid>();
-        public Terrain(){
+        public Terrain(int sizex,int sizey, float tree_density){
+            
 
         }
 

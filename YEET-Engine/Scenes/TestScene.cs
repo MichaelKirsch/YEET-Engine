@@ -25,7 +25,7 @@ namespace YEET
     {
         private bool _WireFrame, wasdown;
         private Vector3 _LightPosition;
-        private Guid Grid, wellmodel, tmp, groundplane;
+        private Guid Grid, wellmodel, tmp;
         public bool ShowImGUIDemoWindow = false;
         public bool drawlines = false;
         bool build_mode = false;
@@ -50,13 +50,14 @@ namespace YEET
 
         public override void OnStart()
         {
-            Camera.Position = new Vector3(10000, 0, 10000);
-            groundplane = AddEntity(new Square(new Vector3(0, -0.21f, 0), new Vector3(20000, -0.21f, 20000), new Vector3(0, 0.901f, 0.44f)));
+            Camera.Position = new Vector3(3000, 0, 3000);
+            
+            //groundplane = AddEntity(new Square(new Vector3(0, -1f, 0), new Vector3(6000, -1f, 6000), new Vector3(0, 0.901f, 0.44f)));
             //skybox = AddEntity(new Skybox());
             tmp = AddEntity(new House("small_house", Camera.Position));
             wellmodel = AddEntity(new StaticOBJModel("house_type01", new Vector3(Camera.Position.X - 100, 0, Camera.Position.X - 100), false));
             Grid = AddEntity(new Grid((100, 100), 0.02f));
-            GetEntity(Grid).GetComponent<Transform>().Position = (10000, 0.01f, 10000);
+            GetEntity(Grid).GetComponent<Transform>().Position = (3000, 0.01f, 3000);
             _LightPosition = new Vector3(100, 100, 0);
             Console.WriteLine("State1 onstart");
             Camera.Start();
@@ -225,7 +226,7 @@ namespace YEET
 
                 if (!wasdown && StateMaschine.Context.MouseState.IsButtonDown(MouseButton.Left))
                 {
-                    first_click = pos;
+                    first_click = new Vector3(pos.X,0.2f,pos.Z);
                     wasdown = true;
                     tmp = AddEntity(new Square(first_click, first_click, ColorHelper.ConvertColor(Color.Aqua)));
                 }
@@ -240,13 +241,11 @@ namespace YEET
                 }
                 if (wasdown && !StateMaschine.Context.MouseState.IsButtonDown(MouseButton.Left))
                 {
-                    last_click = pos;
+                    last_click = new Vector3(pos.X,0.2f,pos.Z);;
                     for (int x = 0; x < (last_pos - first_click).Length; x += 2)
                     {
                         var dir = (last_pos - first_click).Normalized();
-                        //AddEntity(new House("small_house",first_click+dir*x));   
                     }
-
                     wasdown = false;
                     draw_mode = false;
                     Vector3 distance = last_click - first_click;

@@ -27,7 +27,6 @@ namespace YEET.Engine.ECS
             grassMesh = AddComponent(new Mesh(this,"2x2_grass"));
             house = AddComponent(new Mesh(this,"house_type12"));
             GetComponent<Transform>().Position = position;
-            AddComponent(new RotateToObject(this));
             AddComponent(new Collider(this,new Vector3(0,0,0),new Vector3(2,2,2)));
         }
         /// <summary>
@@ -58,7 +57,6 @@ namespace YEET.Engine.ECS
                 }
             }
             GetComponent<Transform>().Position = position;
-            AddComponent(new RotateToObject(this));
             AddComponent(new Collider(this,new Vector3(0,0,0),new Vector3(2,2,2)));
         }
 
@@ -79,13 +77,14 @@ namespace YEET.Engine.ECS
         public override void OnRender(){
             if (isInstanced)
             {
+                if(Math.Abs(new Vector3(GetComponent<Transform>().Position-Camera.Position).Length)>Camera.RenderingDistance){return;}
                 foreach (var modelname in modelnames)
                 {
                     List<float> data = new List<float>();
                     //TODO transform all the data to a float array
-                    data.Add(GetComponent<Transform>().Position.X);
-                    data.Add(GetComponent<Transform>().Position.Y);
                     data.Add(GetComponent<Transform>().Position.Z);
+                    data.Add(GetComponent<Transform>().Position.Y);
+                    data.Add(GetComponent<Transform>().Position.X);
                     InstanceRenderer.AddToStack(modelname,data);
                 }
                 return;
@@ -96,6 +95,5 @@ namespace YEET.Engine.ECS
                 item.OnDraw();
             }
         }
-        
     }
 }

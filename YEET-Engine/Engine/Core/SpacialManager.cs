@@ -22,6 +22,7 @@ namespace YEET.Engine.Core
         public static int GeneratedHeightPos = 100, GeneratedHeightNeg = 100;
         public static bool ShowChunksInFrustrum = false;
 
+        public static bool Active = false;
 
         public const UInt16 ChunkSize = 32;
 
@@ -159,6 +160,8 @@ namespace YEET.Engine.Core
 
         public static void OnUpdate()
         {
+            if(!Active)
+                return;
             UpdateFrustrum();
             if (GetCurrentChunkOfCamera() == LastChunkPositionOfCamera &&
                 Convert.ToInt32(LastViewDistance) == Convert.ToInt32(Camera.RenderingDistance))

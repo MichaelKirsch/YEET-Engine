@@ -6,7 +6,9 @@ using ImGuiNET;
 
 namespace YEET.Engine.Core
 {
-    
+    /// <summary>
+    /// Global instance renderer. You can add as many models as you want. It needs dynamic data in form of a float array about every object that is part of the pipeline
+    /// </summary>
     public static class InstanceRenderer
     {
         class PerModel
@@ -58,12 +60,15 @@ namespace YEET.Engine.Core
 
         public static void OnGui(){
             ImGui.Begin("instanceRenderer");
+            int total_assets = 0;
             foreach (var item in _modelLists)
             {
                 ImGui.Text(item.Key);
                 ImGui.SameLine();
                 ImGui.Text($"{item.Value.InstaceCounter}");
+                total_assets += item.Value.InstaceCounter;
             }
+            ImGui.TextColored(ColorHelper.ConvertColor4(System.Drawing.Color.Chartreuse),$"Total Assets:{total_assets}");
             ImGui.End();
         }
 
@@ -71,11 +76,13 @@ namespace YEET.Engine.Core
         {
             
         }
-
+        /// <summary>
+        /// You need to reset the instance counter after all rendering passes are over
+        /// </summary>
         public static void ClearStacks(){
             foreach (var item in _modelLists)
             {
-                //item.Value.data.Clear();
+                //the stacks are cleared by this point. but the instance count is still needed for further render passes
                 item.Value.InstaceCounter=0;
             }
         }
@@ -89,8 +96,8 @@ namespace YEET.Engine.Core
                 var data = modelList.Value.GetData();
                 GL.BufferData(BufferTarget.ShaderStorageBuffer,data.Length*sizeof(float),data,BufferUsageHint.DynamicDraw);
                 GL.BindBufferBase(BufferRangeTarget.ShaderStorageBuffer,0,modelList.Value.SSBO);
-                modelList.Value.loader.InstanceDraw(modelList.Value.InstaceCounter);
                 //render that model
+                modelList.Value.loader.InstanceDraw(modelList.Value.InstaceCounter);
                 GL.BindBuffer(BufferTarget.ShaderStorageBuffer,0);
             }
         }

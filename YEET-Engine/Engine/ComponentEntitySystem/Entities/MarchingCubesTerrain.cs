@@ -27,7 +27,7 @@ namespace YEET.Engine.ECS
 
         Guid mesh;
 
-        public MarchingCubeTerrain(Vector3 _Dimensions)
+        public MarchingCubeTerrain(Vector3 _Dimensions, Vector3i origin)
         {
             _chunks = new List<MarchingCubeChunk>();
             Dimensions = _Dimensions;
@@ -42,7 +42,7 @@ namespace YEET.Engine.ECS
                 {
                     for (int z = 0; z < Dimensions.Z; z++)
                     {
-                        _chunks.Add(new MarchingCubeChunk(Seed, new Vector3i(x * 32, y * 32, z * 32), _loader));
+                        _chunks.Add(new MarchingCubeChunk(Seed, new Vector3i((x * 32), (y * 32), (z * 32)), _loader));
                     }
                 }
             }
@@ -99,7 +99,8 @@ namespace YEET.Engine.ECS
                     chunk.Scale = Scale;
                     chunk.Divider = Divider;
                     chunk.SurfaceLevel = SurfaceLevel;
-                    chunk.Generate();
+                    var x =GetComponent<Transform>().Position;
+                    chunk.Generate(new Vector3i(Convert.ToInt32(x.X),Convert.ToInt32(x.Y),Convert.ToInt32(x.Z)));
                 }
 
                 Console.WriteLine("Generated " + _chunks.Count + " Chunks.Took: " + watch.Result() + "ms");
@@ -149,7 +150,7 @@ namespace YEET.Engine.ECS
             Noise.Seed = noise_seed;
         }
 
-        public void Generate()
+        public void Generate(Vector3i origin)
         {
             if (lastscale != Scale || lastsurface != SurfaceLevel || NeedsUpdate || last_divider != Divider)
             {
@@ -167,7 +168,7 @@ namespace YEET.Engine.ECS
                         {
                             Parallel.For(0, Dimension, z =>
                             {
-                                March((x, y, z));
+                                March((x+origin.X, y+origin.Y, z+origin.Z));
                             });
                         });
                     });
@@ -282,11 +283,12 @@ namespace YEET.Engine.ECS
                     //Vector3 Color = new Vector3(Noise.CalcPixel1D(CubePosition.X,Scale)/255f,Noise.CalcPixel1D(CubePosition.Y,Scale)/255f,
                     //    Noise.CalcPixel1D(CubePosition.Z,Scale)/255f);
                     
-                    Vector3 v1 = interpolateVerts((cubeCornerOffsets[a0] + CubePosition), (cubeCornerOffsets[b0] + CubePosition));
-                    Vector3 v2 = interpolateVerts((cubeCornerOffsets[a1] + CubePosition), (cubeCornerOffsets[b1] + CubePosition));
-                    Vector3 v3 = interpolateVerts((cubeCornerOffsets[a2] + CubePosition), (cubeCornerOffsets[b2] + CubePosition));
+                    Vector3 v1 = ((cubeCornerOffsets[a0] + CubePosition)+(cubeCornerOffsets[b0] + CubePosition))/2;//interpolateVerts((cubeCornerOffsets[a0] + CubePosition), (cubeCornerOffsets[b0] + CubePosition));
+                    Vector3 v2 = ((cubeCornerOffsets[a1] + CubePosition)+(cubeCornerOffsets[b1] + CubePosition))/2;//interpolateVerts((cubeCornerOffsets[a1] + CubePosition), (cubeCornerOffsets[b1] + CubePosition));
+                    Vector3 v3 = ((cubeCornerOffsets[a2] + CubePosition)+(cubeCornerOffsets[b2] + CubePosition))/2;//interpolateVerts((cubeCornerOffsets[a2] + CubePosition), (cubeCornerOffsets[b2] + CubePosition));
                     var dir = Vector3.Cross(v2 - v1, v3 - v1);
                     Vector3 norm = -Vector3.Normalize(dir);
+                    
                     lock (FinalTriangleVertices)
                     {
                         FinalTriangleVertices.AddRange(new List<Vector3>()

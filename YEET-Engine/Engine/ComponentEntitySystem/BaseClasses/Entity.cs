@@ -34,6 +34,9 @@ namespace YEET.Engine.ECS
 
         public virtual void OnUpdate()
         {
+            //if(Math.Abs((GetComponent<Transform>().Position-Camera.Position).Length)>Camera.RenderingDistance){
+            //  return;  
+            //}  
             foreach (var component in _components)
             {
                 component.Value.OnUpdate();
@@ -50,6 +53,7 @@ namespace YEET.Engine.ECS
 
         public virtual void OnRender()
         {
+            
             foreach (var child in _childEntities)
             {
                 child.Value.OnRender();
@@ -94,7 +98,6 @@ namespace YEET.Engine.ECS
                     }
                 }
                 ImGui.EndChild();
-
             }
         }
 
