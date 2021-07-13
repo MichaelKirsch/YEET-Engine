@@ -105,9 +105,9 @@ namespace YEET
             ImGui.Text($"Mouse Delta:{picker.getIntersectionGround()}");
             ImGui.Separator();
             ImGui.Text("Framebuffer");
-            ImGui.Image(new System.IntPtr(StateMaschine.texture),new Vector2(300,150),new Vector2(1,1),new Vector2(0,0));
+            ImGui.Image(new System.IntPtr(StateMaschine.GetCurrentScene().texture),new Vector2(300,150),new Vector2(1,1),new Vector2(0,0));
             ImGui.Text("Depthbuffer");
-            ImGui.Image(new System.IntPtr(StateMaschine.depth_texture),new Vector2(300,150),new Vector2(1,1),new Vector2(0,0));
+            ImGui.Image(new System.IntPtr(StateMaschine.GetCurrentScene().depth_texture),new Vector2(300,150),new Vector2(1,1),new Vector2(0,0));
 
             StateMaschine.Context.WireMode(_WireFrame);
             if (build_mode)
