@@ -11,6 +11,8 @@ namespace YEET.Engine.Core
         private static long _startTime, _startTicks;
         private static Stopwatch _stopwatch;
 
+        private static ulong _globalID;
+
         static float[] rectangleVertices =
         {
             // Coords    // texCoords
@@ -30,8 +32,16 @@ namespace YEET.Engine.Core
             _stopwatch.Start();
             _startTime = DateTime.Now.Ticks / TimeSpan.TicksPerMillisecond;
             _startTicks = DateTime.Now.Ticks;
+            //if you dont load old games than counter starts at 0
+            _globalID = 0;
         }
 
+        public static ulong GetNewID()
+        {
+            return _globalID++;
+        }
+        
+        
         /// <summary>
         /// 
         /// </summary>
@@ -70,12 +80,12 @@ namespace YEET.Engine.Core
 
         public static void Render()
         {
-            var ts = new TimeSlot("Main Render");
+            new TimeSlot("Main Render");
             _currentScene.OnRender();
-            ts.Stop();
-            var guits = new TimeSlot("Gui Render");
+            Profiler.StopTimeSlot("Main Render");
+            new TimeSlot("Gui Render");
             _currentScene.OnGui();
-            guits.Stop();
+            Profiler.StopTimeSlot("Gui Render");
             Profiler.StopFrame();
             InstanceRenderer.ClearStacks(); //should be done after all rendering is done
             Profiler.RenderProfilerWindow();
@@ -84,9 +94,9 @@ namespace YEET.Engine.Core
         public static void Input()
         {
             Profiler.StartFrame();
-            var ts = new TimeSlot("Input");
+            Profiler.StartTimeSlot("Input");
             _currentScene.OnInput();
-            ts.Stop();
+            Profiler.StopTimeSlot("Input");
         }
 
         public static void Update(FrameEventArgs e)

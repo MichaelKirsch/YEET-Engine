@@ -18,7 +18,7 @@ namespace YEET{
         public TimeSlot(string name){
             StartTime = StateMaschine.GetElapsedTimeTicks();
             Name = name;
-            Profiler.AddTimeSlot(this);
+            Profiler.StartTimeSlot(this);
         }
         public void Stop(){
             EndTime = StateMaschine.GetElapsedTimeTicks();
@@ -76,8 +76,16 @@ namespace YEET{
             }
         }
 
-        public static void AddTimeSlot(TimeSlot to_add){
+        public static void StartTimeSlot(TimeSlot to_add){
             _timeSlots.Add(to_add);
+        }
+
+        public static void StartTimeSlot(string to_add){
+            _timeSlots.Add(new TimeSlot(to_add));
+        }
+
+        public static void StopTimeSlot(string name){
+            _timeSlots.Find(x=>(x.Name==name)).Stop();
         }
     }
 }

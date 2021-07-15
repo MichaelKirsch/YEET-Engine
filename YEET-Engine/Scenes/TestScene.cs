@@ -52,7 +52,9 @@ namespace YEET
         {
             Camera.Position = new Vector3(3000, 0, 3000);
             
-            //groundplane = AddEntity(new Square(new Vector3(0, -1f, 0), new Vector3(6000, -1f, 6000), new Vector3(0, 0.901f, 0.44f)));
+            var groundplane = AddEntity(new Square(new Vector3(0, -0.1f, 0), new Vector3(6000, -0.1f, 6000), new Vector3(0f, 0, 0f)));
+            //var skyplane = AddEntity(new Square(new Vector3(0, 500f, 0), new Vector3(6000, 500f, 6000), new Vector3(0f, 0, 0f)));
+            AddEntity(new Terrain(3000,3000,1));
             //skybox = AddEntity(new Skybox());
             tmp = AddEntity(new House("small_house", Camera.Position));
             wellmodel = AddEntity(new StaticOBJModel("house_type01", new Vector3(Camera.Position.X - 100, 0, Camera.Position.X - 100), false));
@@ -64,6 +66,10 @@ namespace YEET
             SpatialManager.GeneratedHeightNeg = 10;
             SpatialManager.GeneratedHeightPos = 20;
             CursorControl.SetPredefined(MouseCursor.Hand);
+            if (true) //testing
+            {
+                AddEntity(new Area(new Vector3(3000,0,3000), new Vector3(3200,0,3200), new Vector3()));
+            }
             base.OnStart();
         }
 

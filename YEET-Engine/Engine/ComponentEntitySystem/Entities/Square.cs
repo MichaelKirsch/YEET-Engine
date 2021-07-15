@@ -17,10 +17,10 @@ namespace YEET.Engine.ECS{
             var _loader = new ShaderLoader("Grid");
             Color = color;
             mesh = AddComponent(new Mesh(this,_loader));
-            GetComponent<Mesh>(mesh).SetData(MakeForm.MakeQuad(new Vector3(point_one.X,0,point_one.Z),
-            new Vector3(point_one.X,0,point_two.Z),
-            new Vector3(point_two.X,0,point_two.Z),
-            new Vector3(point_two.X,0,point_one.Z)),new List<Mesh.VertexAttribType>(){Mesh.VertexAttribType.V3});
+            GetComponent<Mesh>(mesh).SetData(MakeForm.MakeQuad(new Vector3(point_one.X,point_one.Y,point_one.Z),
+            new Vector3(point_one.X,point_one.Y,point_two.Z),
+            new Vector3(point_two.X,point_one.Y,point_two.Z),
+            new Vector3(point_two.X,point_one.Y,point_one.Z)),new List<Mesh.VertexAttribType>(){Mesh.VertexAttribType.V3});
             AddComponent(new Collider(this,point_one,new Vector3(point_two.X,point_two.Y+0.1f,point_two.Z)));
         }
         

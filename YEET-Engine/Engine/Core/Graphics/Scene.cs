@@ -264,6 +264,18 @@ namespace YEET.Engine.Core
             GL.BindTexture(TextureTarget.Texture2D, depth_texture);
             stmLoader.SetUniformInt("colorTexture", 0);
             stmLoader.SetUniformInt("depthTexture", 1);
+            stmLoader.SetUniformVec3("cameraPos",Camera.Position);
+            stmLoader.SetUniformVec3("cameraFront",Camera.Front);
+            stmLoader.SetUniformVec3("sunpos",Sun.getSunPosition());
+            stmLoader.SetUniformVec3("suncolor",Sun.getColor());
+            OpenTK.Mathematics.Matrix4 invper;
+            OpenTK.Mathematics.Matrix4.Invert(Camera.Projection,out invper);
+            OpenTK.Mathematics.Matrix4 invview;
+            OpenTK.Mathematics.Matrix4.Invert(Camera.View,out invview);
+            stmLoader.SetUniformMatrix4F("invperspective",invper);
+            stmLoader.SetUniformMatrix4F("invview",invview);
+            stmLoader.SetUniformFloat("time",Convert.ToSingle(StateMaschine.GetElapsedTime()));
+            stmLoader.SetUniformVec3("screen",new OpenTK.Mathematics.Vector3(StateMaschine.Context.Size.X,StateMaschine.Context.Size.Y,0));
             GL.DrawArrays(PrimitiveType.Triangles, 0, 6);
             GL.Enable(EnableCap.DepthTest);
         }

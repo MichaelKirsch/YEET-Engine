@@ -2,50 +2,36 @@
 <house>
   <variant>
     <models>
-      <model>2x2_grass</model>
-      <model>Well</model>
       <model>house_type15</model>
     </models>
   </variant>
   <variant>
     <models>
-      <model>2x2_grass</model>
-      <model>Well</model>
       <model>house_type16</model>
     </models>
   </variant>
   <variant>
     <models>
-      <model>2x2_grass</model>
-      <model>Well</model>
       <model>house_type17</model>
     </models>
   </variant>
   <variant>
     <models>
-      <model>2x2_grass</model>
-      <model>Well</model>
       <model>house_type18</model>
     </models>
   </variant>
   <variant>
     <models>
-      <model>2x2_grass</model>
-      <model>Well</model>
       <model>house_type19</model>
     </models>
   </variant>
   <variant>
     <models>
-      <model>2x2_grass</model>
-      <model>Well</model>
       <model>house_type20</model>
     </models>
   </variant>
   <variant>
     <models>
-      <model>2x2_grass</model>
-      <model>Well</model>
       <model>house_type21</model>
     </models>
   </variant>
