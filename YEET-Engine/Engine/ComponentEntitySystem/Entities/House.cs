@@ -9,8 +9,11 @@ namespace YEET.Engine.ECS
 {
     public class House : Entity
     {
+        Random t = new Random();
         private Guid grassMesh, house;
         public bool isInstanced;
+
+        private float highlightTest;
         private List<string> modelnames=new List<string>();
         public House()
         {
@@ -40,7 +43,7 @@ namespace YEET.Engine.ECS
             Name = "House";
             XmlDocument doc = new XmlDocument();
             doc.Load($"Data/Models/{name}.xml");
-            Random t = new Random();
+            
             var variants = doc.GetElementsByTagName("variant");
             
             var chosen = variants[t.Next(variants.Count-1)].FirstChild;
@@ -56,6 +59,8 @@ namespace YEET.Engine.ECS
                     AddComponent(new Mesh(this,chosen.ChildNodes[i].InnerText));
                 }
             }
+            
+            highlightTest = t.Next()%100>20?0f:1f;
             GetComponent<Transform>().Position = position;
             AddComponent(new Collider(this,new Vector3(0,0,0),new Vector3(2,2,2)));
         }
@@ -82,6 +87,7 @@ namespace YEET.Engine.ECS
                 {
                     List<float> data = new List<float>();
                     //TODO transform all the data to a float array
+                    data.Add(highlightTest);
                     data.Add(GetComponent<Transform>().Position.Z);
                     data.Add(GetComponent<Transform>().Position.Y);
                     data.Add(GetComponent<Transform>().Position.X);

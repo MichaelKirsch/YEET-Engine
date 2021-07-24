@@ -9,6 +9,13 @@ using YEET.Engine.ECS;
 
 namespace YEET.Engine.Core
 {
+    [Flags]
+    public enum SceneOptions
+    {
+        Debug, ShadowMapping, GammaCorrection
+    }
+
+
     public class Scene
     {
         public int framebuffer, texture, depth_texture, stmVAO, stmVBO;
@@ -17,6 +24,9 @@ namespace YEET.Engine.Core
         private List<Entity> Entities = new List<Entity>();
         public Vector4 ClearColor = new Vector4(0.415f, 0.439f, 0.4f, 1.0f);
         public ShaderLoader stmLoader;
+
+        public SceneOptions Options;
+
         public int EntitiesCount()
         {
             return Entities.Count;
@@ -154,11 +164,14 @@ namespace YEET.Engine.Core
         /// </summary>
         public virtual void OnRender()
         {
-            ClearFramebuffer();
+            ClearFramebuffer(); //Framebuffer is attached
             foreach (var entity in Entities)
             {
                 if (entity.Active)
                     entity.OnRender();
+            }
+            if(Options.HasFlag(SceneOptions.ShadowMapping)){ //when shadow mapping is enabled we need to fill the new depthbuffer
+                GL.Viewport(0,0,1024,1024);
             }
 
             GL.Enable(EnableCap.CullFace);

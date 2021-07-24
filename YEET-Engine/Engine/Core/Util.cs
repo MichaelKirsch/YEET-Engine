@@ -35,6 +35,7 @@ namespace YEET.Engine.Core
         public static void LabelObject(ObjectLabelIdentifier objLabelIdent, int glObject, string name)
         {
             GL.ObjectLabel(objLabelIdent, glObject, name.Length, name);
+            
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
