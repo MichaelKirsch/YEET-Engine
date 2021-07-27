@@ -15,6 +15,7 @@ namespace YEET.Engine.ECS
         public Guid ID { get; }
         public bool Active = true;
         public bool ShowGUI = true;
+        public bool OpenInInspector = false;
         public Entity(bool GuiVisible = false)
         {
             ShowGUI = GuiVisible;
