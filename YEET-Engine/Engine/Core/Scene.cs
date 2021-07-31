@@ -142,10 +142,6 @@ namespace YEET.Engine.Core
                 if (entity.Active)
                     entity.OnRender();
             }
-            if(Options.HasFlag(SceneOptions.ShadowMapping)){ //when shadow mapping is enabled we need to fill the new depthbuffer
-                GL.Viewport(0,0,1024,1024);
-            }
-
             GL.Enable(EnableCap.CullFace);
             //instancerenderer NEEDS to be after the Entities as they fill it up in their Rendercalls
             InstanceRenderer.OnRender();
@@ -238,9 +234,9 @@ namespace YEET.Engine.Core
             //GL.DrawBuffers(1, drawBuffersEnum);
         }
 
-        protected void DisplayCurrentScene()
+        protected void DisplayCurrentScene(int bufferid=0)
         {
-            GL.BindFramebuffer(FramebufferTarget.Framebuffer, 0);
+            GL.BindFramebuffer(FramebufferTarget.Framebuffer, bufferid);
             stmLoader.UseShader();
             GL.Disable(EnableCap.DepthTest);
             GL.BindVertexArray(stmVAO);

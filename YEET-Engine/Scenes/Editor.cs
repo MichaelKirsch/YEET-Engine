@@ -1,4 +1,5 @@
-﻿using System.Numerics;
+﻿using System;
+using System.Numerics;
 using YEET.Engine.Core;
 using ImGuiNET;
 using OpenTK.Mathematics;
@@ -125,17 +126,17 @@ namespace YEET
             selected.OnGui();
             ImGui.EndChild();
             ImGui.EndGroup();
-
             ImGui.End();
-            
-            
-            
-            
-            
             ImGui.SetNextWindowSize(new Vector2(window_size.X*0.2f,window_size.Y*0.7f));
             ImGui.SetNextWindowPos(new Vector2(0f,0));
             ImGui.Begin("##r3r", ImGuiWindowFlags.NoCollapse|ImGuiWindowFlags.NoResize|ImGuiWindowFlags.NoNav|ImGuiWindowFlags.NoTitleBar);
             ImGui.Text("ajdwiadjiawodjaiod");
+            ImGui.Separator();
+            ImGui.End();
+            ImGui.SetNextWindowSize(new Vector2(window_size.X*0.6f,window_size.Y*0.7f));
+            ImGui.SetNextWindowPos(new Vector2(window_size.X*0.2f,0));
+            ImGui.Begin("##framebuffer", ImGuiWindowFlags.NoCollapse|ImGuiWindowFlags.NoResize|ImGuiWindowFlags.NoNav|ImGuiWindowFlags.NoTitleBar);
+            ImGui.Image(new IntPtr(texture),new Vector2(window_size.X*0.5f,window_size.Y*0.7f));
             ImGui.Separator();
             ImGui.End();
 
@@ -152,6 +153,8 @@ namespace YEET
             ClearFramebuffer();
             RenderScene();
             DisplayCurrentScene();
+            
+            
         }
     }
 }
