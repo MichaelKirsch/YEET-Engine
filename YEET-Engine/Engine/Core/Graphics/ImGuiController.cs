@@ -1,6 +1,7 @@
 ﻿using ImGuiNET;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Runtime.CompilerServices;
 using OpenTK.Graphics.OpenGL4;
 using OpenTK.Mathematics;
@@ -44,10 +45,18 @@ namespace YEET
             IntPtr context = ImGui.CreateContext();
             ImGui.SetCurrentContext(context);
             var io = ImGui.GetIO();
-            io.Fonts.AddFontDefault();
-
+            ImFontPtr deffont;
+            foreach (var VARIABLE in  Directory.GetFiles("Data/Fonts/"))
+            {
+                var x =io.Fonts.AddFontFromFileTTF(VARIABLE,40);
+                if (VARIABLE == "Data/Fonts/Ruda.ttf")
+                {
+                    deffont = x;
+                }       
+            }
+            
             io.BackendFlags |= ImGuiBackendFlags.RendererHasVtxOffset;
-
+            
             CreateDeviceResources();
             SetKeyMappings();
 

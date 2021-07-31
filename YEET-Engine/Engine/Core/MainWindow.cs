@@ -40,7 +40,9 @@ namespace YEET.Engine.Core
             Title += ": OpenGL Version: " + GL.GetString(StringName.Version);
             
             _controller = new ImGuiController(ClientSize.X, ClientSize.Y);
-            var x  = ImGui.GetIO().FontGlobalScale = 2.0f;
+            var x = ImGui.GetIO();
+            x.FontGlobalScale = 0.5f;
+            
         }
         
         protected override void OnResize(ResizeEventArgs e)

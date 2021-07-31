@@ -21,7 +21,7 @@ namespace YEET.Engine.Core
         public int framebuffer, texture, depth_texture, stmVAO, stmVBO;
         public Entity selected = new Entity();
         private Queue<Guid> removeList = new Queue<Guid>();
-        private List<Entity> Entities = new List<Entity>();
+        protected List<Entity> Entities = new List<Entity>();
         public Vector4 ClearColor = new Vector4(0.415f, 0.439f, 0.4f, 1.0f);
         public ShaderLoader stmLoader;
 
@@ -96,48 +96,13 @@ namespace YEET.Engine.Core
         /// </summary>
         public virtual void OnGui()
         {
-            ImGui.SetNextWindowSize(new System.Numerics.Vector2(800, 800));
-            //ImGui.BeginMenuBar();
-            //
-            //ImGui.EndMenuBar();        
-            //foreach (var entity in Entities)
-            //{
-            //    entity.OnMenuGui();
-            //}
-
-            ImGui.Begin("Entities");
-            //ImGui.BeginMenuBar();
-            //ImGui.EndMenuBar();
-
-            ImGui.BeginChild("letft_pane", new System.Numerics.Vector2(150, 0), true);
-            foreach (var entity in Entities)
-            {
-                if (ImGui.Selectable($"{entity.Name}##{entity.ID}"))
-                {
-                    selected = entity;
-                }
-
-                ;
-            }
-
-            ImGui.EndChild();
-            ImGui.SameLine();
-            ImGui.BeginGroup();
-            ImGui.BeginChild($"Selected Entity:{selected.ID}",
-                new System.Numerics.Vector2(0, -ImGui.GetFrameHeightWithSpacing()));
-            ImGui.Text($"Type:{selected.Name} ID:{selected.ID}");
-            ImGui.Separator();
-            selected.OnGui();
-            ImGui.EndChild();
-            ImGui.EndGroup();
-
-            ImGui.End();
             Camera.OnGui();
             Sun.OnGui();
         }
 
         public virtual void OnInput()
         {
+            
         }
 
         /// <summary>
@@ -145,6 +110,8 @@ namespace YEET.Engine.Core
         /// </summary>
         public virtual void OnUpdate(FrameEventArgs e)
         {
+            Camera.ProcessKeyboard();
+            Camera.processMouse();
             //generate ActiveChunks;
             while (removeList.Count > 0)
                 RemoveEntity(removeList.Dequeue());
@@ -164,7 +131,12 @@ namespace YEET.Engine.Core
         /// </summary>
         public virtual void OnRender()
         {
-            ClearFramebuffer(); //Framebuffer is attached
+            
+            
+        }
+
+        public void RenderScene()
+        {
             foreach (var entity in Entities)
             {
                 if (entity.Active)
@@ -178,7 +150,6 @@ namespace YEET.Engine.Core
             //instancerenderer NEEDS to be after the Entities as they fill it up in their Rendercalls
             InstanceRenderer.OnRender();
             GL.Disable(EnableCap.CullFace);
-            DisplayCurrentScene();
         }
 
         /// <summary>
@@ -186,11 +157,13 @@ namespace YEET.Engine.Core
         /// </summary>
         public virtual void OnStart()
         {
+            Camera.Start();
             foreach (var entity in Entities)
             {
                 entity.OnStart();
             }
             GenerateBuffers();
+            
         }
 
         /// <summary>
@@ -234,7 +207,7 @@ namespace YEET.Engine.Core
                 new IntPtr(2 * sizeof(float)));
         }
         
-        private void ClearFramebuffer()
+       public void ClearFramebuffer()
         {
             GL.BindFramebuffer(FramebufferTarget.Framebuffer, framebuffer);
             GL.Clear(ClearBufferMask.DepthBufferBit |
@@ -265,7 +238,7 @@ namespace YEET.Engine.Core
             //GL.DrawBuffers(1, drawBuffersEnum);
         }
 
-        private void DisplayCurrentScene()
+        protected void DisplayCurrentScene()
         {
             GL.BindFramebuffer(FramebufferTarget.Framebuffer, 0);
             stmLoader.UseShader();

@@ -44,7 +44,6 @@ C:\Users\micha\RiderProjects\YEET-Engine\YEET-Engine\obj\Debug\net5.0\YEET-Engin
 C:\Users\micha\RiderProjects\YEET-Engine\YEET-Engine\obj\Debug\net5.0\ref\YEET-Engine.dll
 C:\Users\micha\RiderProjects\YEET-Engine\YEET-Engine\obj\Debug\net5.0\YEET-Engine.pdb
 C:\Users\micha\RiderProjects\YEET-Engine\YEET-Engine\obj\Debug\net5.0\YEET-Engine.genruntimeconfig.cache
-C:\Users\micha\RiderProjects\YEET-Engine\YEET-Engine\obj\Debug\net5.0\YEET-Engine.csprojAssemblyReference.cache
 C:\Users\micha\RiderProjects\YEET-Engine\YEET-Engine\bin\Debug\net5.0\Data\Icons\MiningIcons_33_t.PNG
 C:\Users\micha\RiderProjects\YEET-Engine\YEET-Engine\bin\Debug\net5.0\Data\Shaders\FlatShadedModel.frag
 C:\Users\micha\RiderProjects\YEET-Engine\YEET-Engine\bin\Debug\net5.0\Data\Shaders\FlatShadedModel.vert
@@ -286,3 +285,6 @@ C:\Users\micha\RiderProjects\YEET-Engine\YEET-Engine\bin\Debug\net5.0\Data\Shade
 C:\Users\micha\RiderProjects\YEET-Engine\YEET-Engine\bin\Debug\net5.0\Data\Shaders\FlatShadedModelInstanced.vert
 C:\Users\micha\RiderProjects\YEET-Engine\YEET-Engine\bin\Debug\net5.0\Data\Shaders\Terrain.frag
 C:\Users\micha\RiderProjects\YEET-Engine\YEET-Engine\bin\Debug\net5.0\Data\Shaders\Terrain.vert
+C:\Users\micha\RiderProjects\YEET-Engine\YEET-Engine\obj\Debug\net5.0\YEET-Engine.csproj.AssemblyReference.cache
+C:\Users\micha\RiderProjects\YEET-Engine\YEET-Engine\bin\Debug\net5.0\Data\Fonts\Sweet16.ttf
+C:\Users\micha\RiderProjects\YEET-Engine\YEET-Engine\bin\Debug\net5.0\Data\Fonts\Ruda.ttf

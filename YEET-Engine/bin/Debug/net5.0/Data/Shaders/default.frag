@@ -75,6 +75,8 @@ void main()
     vec4 col=texture(colorTexture,TexCoord);
     vec4 depth=texture(depthTexture,TexCoord);
     vec4 sppos=calc_pos();
+    
+    float distance = length(vec3(cameraPos-sppos.xyz));
 
 
     if(sppos.y<=0.0){
@@ -83,11 +85,15 @@ void main()
         float diff = max(dot(norm, lightDir), 0.0);
         vec3 diffuse = diff *  suncolor;
         vec3 result = (diffuse+0.5) * vec3(0.3255, 0.2824, 0.902);
+        result = vec3(0.447, 1, 0.439);
         FragColor = vec4(result, 1.0);
         return;
     }
 
-    
+    if(distance>499){
+        FragColor = vec4(0,0,1, 1.0);
+        return;
+    }
 
     else{
         if(depth.x>0.99998){

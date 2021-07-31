@@ -26,6 +26,12 @@
             <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         </Content>
     </ItemGroup>
+
+    <ItemGroup>
+        <Content Include="Data\Fonts\*.ttf">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+    </ItemGroup>
     
     <ItemGroup>
       <Content Include="Data\Shaders\*">
@@ -46,7 +52,7 @@
     </ItemGroup>
     
     <ItemGroup>
-      <Folder Include="Data" />
+      <Folder Include="Data\Fonts" />
     </ItemGroup>
   
 

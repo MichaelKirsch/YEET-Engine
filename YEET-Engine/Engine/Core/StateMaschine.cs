@@ -11,6 +11,9 @@ namespace YEET.Engine.Core
         private static long _startTime, _startTicks;
         private static Stopwatch _stopwatch;
 
+        private static Scene _currentScene;
+        public static MainWindow Context;
+        
         private static ulong _globalID;
 
         static float[] rectangleVertices =
@@ -96,6 +99,7 @@ namespace YEET.Engine.Core
             Profiler.StartFrame();
             Profiler.StartTimeSlot("Input");
             _currentScene.OnInput();
+            
             Profiler.StopTimeSlot("Input");
         }
 
@@ -125,7 +129,6 @@ namespace YEET.Engine.Core
             return _currentScene;
         }
         
-        private static Scene _currentScene;
-        public static MainWindow Context;
+        
     }
 }

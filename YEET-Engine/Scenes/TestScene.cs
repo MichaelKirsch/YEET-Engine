@@ -62,7 +62,7 @@ namespace YEET
             GetEntity(Grid).GetComponent<Transform>().Position = (3000, 0.01f, 3000);
             _LightPosition = new Vector3(100, 100, 0);
             Console.WriteLine("State1 onstart");
-            Camera.Start();
+            
             SpatialManager.GeneratedHeightNeg = 10;
             SpatialManager.GeneratedHeightPos = 20;
             CursorControl.SetPredefined(MouseCursor.Hand);
@@ -160,7 +160,9 @@ namespace YEET
         public override void OnRender()
         {
             base.OnRender();
-
+            ClearFramebuffer();
+            RenderScene();
+            DisplayCurrentScene();
         }
 
 
@@ -179,8 +181,7 @@ namespace YEET
                 _WireFrame = !_WireFrame;
 
             base.OnInput();
-            Camera.ProcessKeyboard();
-            Camera.processMouse();
+            
 
 
             Vector3 pos = new Vector3();
