@@ -1,17 +1,18 @@
 ﻿using System;
+using YEET.Engine.Core;
 
 namespace YEET.Engine.ECS
 {
     public class Component
     {
         protected Entity Owner { get; }
-        public Guid CompID;
+        public UInt32 CompID;
         private bool Active { get; set; }
         
         public Component(Entity owner)
         {
             Owner = owner;
-            CompID = Guid.NewGuid();
+            CompID = StateMaschine.GenerateId();
         }
         
         public virtual void OnStart()

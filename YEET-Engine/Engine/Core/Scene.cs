@@ -20,7 +20,7 @@ namespace YEET.Engine.Core
     {
         public int framebuffer, texture, depth_texture, stmVAO, stmVBO;
         public Entity selected = new Entity();
-        private Queue<Guid> removeList = new Queue<Guid>();
+        private Queue<UInt32> removeList = new Queue<UInt32>();
         protected List<Entity> Entities = new List<Entity>();
         public Vector4 ClearColor = new Vector4(0.415f, 0.439f, 0.4f, 1.0f);
         public ShaderLoader stmLoader;
@@ -36,17 +36,17 @@ namespace YEET.Engine.Core
         {
         }
 
-        public void AddToRemoveList(Guid to_remove)
+        public void AddToRemoveList(UInt32 to_remove)
         {
             removeList.Enqueue(to_remove);
         }
 
-        public void RemoveEntity(Guid id)
+        public void RemoveEntity(UInt32 id)
         {
             Entities.Remove(Entities.Find(x => x.ID == id));
         }
 
-        public Guid ChangeEntity(Guid id, Entity new_entt)
+        public UInt32 ChangeEntity(UInt32 id, Entity new_entt)
         {
             Entities.Remove(Entities.Find(x => x.ID == id));
             GC.Collect();
@@ -54,13 +54,13 @@ namespace YEET.Engine.Core
         }
 
 
-        public Guid AddEntity(Entity toadd)
+        public UInt32 AddEntity(Entity toadd)
         {
             Entities.Add(toadd);
             return toadd.ID;
         }
 
-        public T GetEntity<T>(Guid tofind) where T : Entity
+        public T GetEntity<T>(UInt32 tofind) where T : Entity
         {
             foreach (var item in Entities)
             {
@@ -86,7 +86,7 @@ namespace YEET.Engine.Core
         }
 
 
-        public Entity GetEntity(Guid tofind)
+        public Entity GetEntity(UInt32 tofind)
         {
             return (Entities.Find(item => item.ID == tofind));
         }

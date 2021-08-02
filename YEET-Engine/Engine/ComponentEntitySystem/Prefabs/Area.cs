@@ -9,7 +9,7 @@ namespace YEET.Engine.ECS
 {
     public class Area : Entity
     {
-        private Guid mesh;
+        private UInt32 mesh;
         public Vector3 Color, Point_one, Point_two;
         public float minX, minZ, maxX, maxZ;
         private Random new_rand = new Random();

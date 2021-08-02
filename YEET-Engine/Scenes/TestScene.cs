@@ -25,8 +25,8 @@ namespace YEET
     {
         private bool _WireFrame, wasdown;
         private Vector3 _LightPosition;
-        private Guid Grid, wellmodel, tmp;
-        public bool ShowImGUIDemoWindow = false;
+        private UInt32 Grid, wellmodel, tmp;
+        public bool ShowImUInt32emoWindow = false;
         public bool drawlines = false;
         bool build_mode = false;
         bool draw_mode = false;
@@ -102,7 +102,7 @@ namespace YEET
             ImGui.Checkbox("Camera Gui", ref Camera.ShowGUI);
             ImGui.Checkbox("Wireframe", ref _WireFrame);
             ImGui.Checkbox("Sun Gui", ref Sun.ShowGUI);
-            ImGui.Checkbox("Gui Demo Window", ref ShowImGUIDemoWindow);
+            ImGui.Checkbox("Gui Demo Window", ref ShowImUInt32emoWindow);
             ImGui.Checkbox("Show Profiler Window", ref Profiler.RenderProfiler);
             ImGui.Text($"Current Chunk ID {SpatialManager.GetTupelChunkIDAndInChunkPos(SpatialManager.GetIDfromWorldPos(Camera.Position))}");
             ImGui.Text($"Chunks {SpatialManager._Chunks.Count}");
@@ -122,7 +122,7 @@ namespace YEET
             }
 
             float[] x = StateMaschine.Context.ListLastFrameTimes.ToArray();
-            if (ShowImGUIDemoWindow)
+            if (ShowImUInt32emoWindow)
             {
                 ImGui.ShowDemoWindow();
             }

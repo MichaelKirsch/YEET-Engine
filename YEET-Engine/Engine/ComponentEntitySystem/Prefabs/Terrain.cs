@@ -8,8 +8,8 @@ namespace YEET.Engine.ECS{
 
     public class Terrain : Entity{
         
-        Guid mesh;
-        List<Guid> ChunkIds = new List<Guid>();
+        UInt32 mesh;
+        List<UInt32> ChunkIds = new List<UInt32>();
         
         public Terrain(int sizex,int sizey, float tree_density){
             var heights = Noise.Calc2D(sizex,sizey,0.01f);

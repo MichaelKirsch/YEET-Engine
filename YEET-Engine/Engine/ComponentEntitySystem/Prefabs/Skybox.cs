@@ -11,7 +11,7 @@ namespace YEET.Engine.ECS{
     /// </summary>
     public  class Skybox : Entity{
         
-        System.Guid _gradient;
+        UInt32 _gradient;
         private ShaderLoader _loader = new ("Skybox");
         public int size = 1000;
         private int VBO,VAO,cubeTexture;

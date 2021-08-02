@@ -9,7 +9,7 @@ namespace YEET.Engine.ECS{
     
     public class Square : Entity
     {
-        private Guid mesh;
+        private UInt32 mesh;
         public Vector3 Color;
         public Square(Vector3 point_one,Vector3 point_two,Vector3 color = new Vector3())
         {

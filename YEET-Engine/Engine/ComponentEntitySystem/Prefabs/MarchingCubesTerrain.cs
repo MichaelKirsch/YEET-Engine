@@ -551,7 +551,7 @@ namespace YEET.Engine.ECS
         private float lastsurface = 0, lastscale = 0;
         private int lastSeed = 0, lastDivider = 0;
 
-        Guid mesh;
+        UInt32 mesh;
 
         public MarchingCubeTerrain(Vector3 _Dimensions, Vector3i origin)
         {

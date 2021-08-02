@@ -10,19 +10,21 @@ namespace YEET.Engine.ECS
     {
         public string Name = "default";
 
-        private Dictionary<Guid, Component> _components;
-        private Dictionary<Guid, Entity> _childEntities;
-        public Guid ID { get; }
+        private Dictionary<UInt32, Component> _components;
+        private Dictionary<UInt32, Entity> _childEntities;
+        public UInt32 ID { get; }
         public bool Active = true;
         public bool ShowGUI = true;
         public bool OpenInInspector = false;
+        public bool IsTrigger;
+        
         public Entity(bool GuiVisible = false)
         {
             ShowGUI = GuiVisible;
-            _components = new Dictionary<Guid, Component>();
-            _childEntities = new Dictionary<Guid, Entity>();
-            _components.Add(new Guid(), new Transform(this));
-            ID = Guid.NewGuid();
+            _components = new Dictionary<UInt32, Component>();
+            _childEntities = new Dictionary<UInt32, Entity>();
+            _components.Add(StateMaschine.GenerateId(), new Transform(this));
+            ID = StateMaschine.GenerateId();
         }
 
         public virtual void OnStart()
@@ -130,14 +132,14 @@ namespace YEET.Engine.ECS
 
         }
 
-        public Guid AddComponent(Component toadd)
+        public UInt32 AddComponent(Component toadd)
         {
-            var id = Guid.NewGuid();
+            var id = StateMaschine.GenerateId();
             _components.Add(id, toadd);
             return id;
         }
 
-        public bool RemoveComponent(Guid to_remove)
+        public bool RemoveComponent(UInt32 to_remove)
         {
             return _components.Remove(to_remove);
         }
@@ -152,7 +154,7 @@ namespace YEET.Engine.ECS
             return null;
         }
 
-        public T GetComponent<T>(Guid to_find) where T : Component//get a derivative of Component
+        public T GetComponent<T>(UInt32 to_find) where T : Component//get a derivative of Component
         {
             if (_components.ContainsKey(to_find))
                 return (T)_components[to_find];
@@ -173,15 +175,15 @@ namespace YEET.Engine.ECS
         }
 
 
-        public Guid AddChildEntity(Entity toAdd)
+        public UInt32 AddChildEntity(Entity toAdd)
         {
-            var id = Guid.NewGuid();
+            var id = StateMaschine.GenerateId();
             _childEntities.Add(id, toAdd);
             return id;
         }
 
 
-        public T GetChildEntity<T>(Guid to_find) where T : Entity//get a derivative of Component
+        public T GetChildEntity<T>(UInt32 to_find) where T : Entity//get a derivative of Component
         {
             if (_childEntities.ContainsKey(to_find))
                 return (T)_childEntities[to_find];

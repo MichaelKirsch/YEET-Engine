@@ -10,7 +10,7 @@ namespace YEET.Engine.ECS
     public class House : Entity
     {
         Random t = new Random();
-        private Guid grassMesh, house;
+        private UInt32 grassMesh, house;
         public bool isInstanced;
 
         private float highlightTest;

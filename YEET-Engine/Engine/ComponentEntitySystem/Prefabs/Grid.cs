@@ -14,7 +14,7 @@ namespace YEET.Engine.ECS
         public System.Numerics.Vector3 rgb_grid, rgb_plane;
 
         public bool show_plane = false;
-        Guid mesh,plane;
+        UInt32 mesh,plane;
         
 
         public Grid(Vector2i _dimensions, float _line_thickness=0.2f, bool drawGui=false) : base(drawGui)

@@ -13,8 +13,8 @@ namespace YEET.Engine.Core
 
         private static Scene _currentScene;
         public static MainWindow Context;
-        
-        private static ulong _globalID;
+
+        private static UInt32 globalCounter;
 
         static float[] rectangleVertices =
         {
@@ -36,12 +36,12 @@ namespace YEET.Engine.Core
             _startTime = DateTime.Now.Ticks / TimeSpan.TicksPerMillisecond;
             _startTicks = DateTime.Now.Ticks;
             //if you dont load old games than counter starts at 0
-            _globalID = 0;
+            globalCounter = 0;
         }
 
-        public static ulong GetNewID()
+        public static UInt32 GenerateId()
         {
-            return _globalID++;
+            return globalCounter++;
         }
         
         
