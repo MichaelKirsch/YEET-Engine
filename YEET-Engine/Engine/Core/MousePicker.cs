@@ -1,10 +1,20 @@
 using OpenTK.Mathematics;
 using YEET.Engine.Core;
+using YEET.Engine.ECS;
 
 namespace YEET
 {
     public class MousePicker
     {
+        public Entity lastPickedEntity;
+        public float distanceToLastPicked;
+        public float positionOfIntersectionLastPicked;
+
+        public bool stupidIntersection()
+        {
+            return false;
+        }
+        
         public MousePicker(){
 
         }
@@ -12,10 +22,13 @@ namespace YEET
         public Vector3 getIntersectionGround(){
             return calculateMouseRay();
         }
-        public Vector3 getIntersectionGroundSnap(bool middle){
-            return new Vector3();
+        public Vector3 getMouseVector(){
+            return calculateMouseRay();
         }
+        
+        
 
+        
 
         private Vector3 calculateMouseRay(){
             Vector2 mousePos = StateMaschine.Context.MouseState.Position;

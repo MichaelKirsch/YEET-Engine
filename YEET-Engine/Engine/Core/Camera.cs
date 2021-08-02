@@ -18,6 +18,7 @@ namespace YEET.Engine.Core
         static public bool ShowGUI;
         static public bool WasDown = false;
         private static Vector2 PositionWhenLockStarted;
+        public static MousePicker MousePicker;
 
         public static bool InvertY = false;
 
