@@ -31,18 +31,21 @@ namespace YEET.Engine.Core
                 GL.PolygonMode(MaterialFace.FrontAndBack, PolygonMode.Fill);
             }
         }
-        
-        
+
+
+        private Query testQuery;
         protected override void OnLoad()
         {
             base.OnLoad();
+            
             Title = "YEET-Engine";
             Title += ": OpenGL Version: " + GL.GetString(StringName.Version);
             
             _controller = new ImGuiController(ClientSize.X, ClientSize.Y);
             var x = ImGui.GetIO();
             x.FontGlobalScale = 0.5f;
-            
+
+            testQuery = new Query(1000); // update every second (low values can result in performance decrease < 30)
         }
         
         protected override void OnResize(ResizeEventArgs e)
@@ -55,26 +58,40 @@ namespace YEET.Engine.Core
             // Tell ImGui of the new size
             _controller.WindowResized(ClientSize.X, ClientSize.Y);
         }
+
         
         protected override void OnRenderFrame(FrameEventArgs e)
         {
             var watch = new Util.StopWatchMilliseconds();
-            GL.Enable(EnableCap.DepthTest);
-            //GL.Enable(EnableCap.CullFace);
-            GL.DepthMask(true);
-            base.OnRenderFrame(e);
-            _controller.Update(this, (float)e.Time);
-            GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit | ClearBufferMask.StencilBufferBit);
-            StateMaschine.Render();
-            _controller.Render();
+            testQuery.Start();
+            {
+                GL.Enable(EnableCap.DepthTest);
+                //GL.Enable(EnableCap.CullFace);
+                GL.DepthMask(true);
+                GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit | ClearBufferMask.StencilBufferBit);
+
+                _controller.Update(this, (float)e.Time);
+
+                StateMaschine.Render();
+                _controller.Render();
+            }
+            testQuery.StopAndReset(); // everthing that runs on the gpu from testQuery.Start() to here will precisely be messured in ms
+            
+            //LastFrameRenderTime = Convert.ToSingle(watch.Result());
+            LastFrameRenderTime = testQuery.ElapsedMilliseconds;
+            
             SwapBuffers();
-            LastFrameRenderTime = Convert.ToSingle(watch.Result());
+            
             GenerateAverageFrameRenderTime();
+            Console.WriteLine($"System.Diagnostics.Stopwatch: {watch.Result()}ms");
+            Console.WriteLine($"Actual GPU render time: {testQuery.ElapsedMilliseconds}ms");
+
+            base.OnRenderFrame(e);
         }
 
         protected override void OnUpdateFrame(FrameEventArgs e)
         {
-            var watch = new Util.StopWatchMilliseconds();
+            var watch = new Util.StopWatchMilliseconds(); // i would suggest creating only one timer and simply reseting that instead of creating a new instance every update
             base.OnUpdateFrame(e);
             StateMaschine.Input();
             StateMaschine.Update(e);
