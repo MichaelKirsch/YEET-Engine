@@ -98,3 +98,6 @@ C:\Users\micha\RiderProjects\YEET-Engine\YEET-Tests\obj\Debug\net5.0\YEET-Tests.
 C:\Users\micha\RiderProjects\YEET-Engine\YEET-Tests\obj\Debug\net5.0\ref\YEET-Tests.dll
 C:\Users\micha\RiderProjects\YEET-Engine\YEET-Tests\obj\Debug\net5.0\YEET-Tests.pdb
 C:\Users\micha\RiderProjects\YEET-Engine\YEET-Tests\obj\Debug\net5.0\YEET-Tests.genruntimeconfig.cache
+C:\Users\Julian\Desktop\Programming\Visual Basic Studio 2019\Forked\YEET-Engine\YEET-Tests\obj\Debug\net5.0\YEET-Tests.dll
+C:\Users\Julian\Desktop\Programming\Visual Basic Studio 2019\Forked\YEET-Engine\YEET-Tests\obj\Debug\net5.0\ref\YEET-Tests.dll
+C:\Users\Julian\Desktop\Programming\Visual Basic Studio 2019\Forked\YEET-Engine\YEET-Tests\obj\Debug\net5.0\YEET-Tests.pdb
