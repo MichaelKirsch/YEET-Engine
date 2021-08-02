@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Threading.Tasks;
 using ImGuiNET;
 using YEET.Engine.Core;
@@ -17,6 +18,7 @@ namespace YEET.Engine.ECS
         public bool ShowGUI = true;
         public bool OpenInInspector = false;
         public bool IsTrigger;
+        private bool new_component_menu;
         
         public Entity(bool GuiVisible = false)
         {
@@ -88,6 +90,32 @@ namespace YEET.Engine.ECS
                 StateMaschine.GetCurrentScene().AddToRemoveList(this.ID);
                 StateMaschine.GetCurrentScene().selected = new Entity();
             }
+
+            if (ImGui.Button("Add Component"))
+            {
+                new_component_menu = true;
+            }
+
+            if (new_component_menu)
+            {
+                ImGui.Begin("Add_new_compinent");
+                foreach (var VARIABLE in Directory.GetFiles("Engine/ComponentEntitySystem/Components"))
+                {
+                    string name = VARIABLE.Substring("Engine/ComponentEntitySystem/Components".Length + 1,
+                        VARIABLE.Length - "Engine/ComponentEntitySystem/Components".Length - 4);
+                    if (ImGui.Button(name))
+                    {
+                        var full = "YEET.Engine.ECS." + name;
+                        Type t = Type.GetType(full);
+                        Console.WriteLine(t);
+                        Object[] args = new[] {this};
+                        var x = AddComponent((Component)Activator.CreateInstance(t,args));
+                        new_component_menu = false;
+                    }
+                }
+                ImGui.End();
+            }
+            
             if (_childEntities.Count > 0)
             {
                 ImGui.Separator();

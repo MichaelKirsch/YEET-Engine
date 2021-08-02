@@ -28,6 +28,18 @@
     </ItemGroup>
 
     <ItemGroup>
+        <Content Include="Engine/ComponentEntitySystem/Prefabs\*">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+    </ItemGroup>
+
+    <ItemGroup>
+        <Content Include="Engine/ComponentEntitySystem/Components\*">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+    </ItemGroup>
+    
+    <ItemGroup>
         <Content Include="Data\Fonts\*.ttf">
             <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         </Content>

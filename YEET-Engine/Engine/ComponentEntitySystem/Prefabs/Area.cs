@@ -20,6 +20,42 @@ namespace YEET.Engine.ECS
             SmallSuburb,DenseHouses,Industry,Financial,CommercialSmall,CommercialDense,Holiday,Tourist
         };
 
+        public Area()
+        {
+            
+            
+            Areatype = AreaType.SmallSuburb;
+            Name = "Area";
+            Point_two = Camera.Position;
+            Point_one = Camera.Position + Camera.Front * 100;
+            var point_one = Point_one;
+            var point_two = Point_two;
+            var _loader = new ShaderLoader("Grid");
+            Color =  ColorHelper.ConvertColor(System.Drawing.Color.Blue);
+            mesh = AddComponent(new Mesh(this, _loader));
+            GetComponent<Mesh>(mesh).SetData(MakeForm.MakeQuad(new Vector3(point_one.X, 0, point_one.Z),
+                new Vector3(point_one.X, 0, point_two.Z),
+                new Vector3(point_two.X, 0, point_two.Z),
+                new Vector3(point_two.X, 0, point_one.Z)), new List<Mesh.VertexAttribType>() { Mesh.VertexAttribType.V3 });
+            var col = new Collider(this, point_one, new Vector3(point_two.X, point_two.Y + 0.1f, point_two.Z));
+            var bbox = col.GetBox();
+            AddComponent(col);
+            minX = bbox.minX;
+            minZ = bbox.minZ;
+            maxX = bbox.maxX;
+            maxZ = bbox.maxZ;
+
+            int nbr_houses_x = Convert.ToInt32(maxX - minX) / 2;
+            int nbr_houses_z = Convert.ToInt32(maxZ - minZ) / 2;
+            var startpoint = new Vector3(minX, 0, minZ);
+            for (int x = 0; x < nbr_houses_x; x += 1)
+            {
+                for (int z = 0; z < nbr_houses_z; z += 1)
+                {
+                    housestoBuild.Add(new Vector3(startpoint.X+1 + x*2, startpoint.Y, startpoint.Z+1 + z*2));
+                }
+            }
+        }
 
         public AreaType Areatype = AreaType.SmallSuburb;
 
