@@ -8,6 +8,7 @@ using YEET.Engine.Core;
 namespace YEET.Engine.ECS{
     /// <summary>
     /// The skybox is just a simple box of a given size. the real texturing is done by the post processing shader.
+    /// it follows the camera
     /// </summary>
     public  class Skybox : Entity{
         

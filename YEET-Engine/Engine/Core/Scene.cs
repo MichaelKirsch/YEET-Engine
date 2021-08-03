@@ -115,7 +115,6 @@ namespace YEET.Engine.Core
             //generate ActiveChunks;
             while (removeList.Count > 0)
                 RemoveEntity(removeList.Dequeue());
-            SpatialManager.OnUpdate();
             GL.ClearColor(ClearColor.X, ClearColor.Y, ClearColor.Z, ClearColor.W);
             foreach (var entity in Entities)
             {
