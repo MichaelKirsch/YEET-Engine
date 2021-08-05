@@ -17,7 +17,7 @@ namespace YEET.Engine.ECS
         UInt32 mesh,plane;
         
 
-        public Grid(Vector2i _dimensions, float _line_thickness=0.2f, bool drawGui=false) : base(drawGui)
+        public Grid(Vector2i _dimensions, float _line_thickness=0.2f, bool drawGui=false)
         {
             
             _loader = new ShaderLoader("Grid");

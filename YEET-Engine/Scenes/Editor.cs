@@ -1,10 +1,12 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
 using System.Numerics;
 using System.Reflection;
 using YEET.Engine.Core;
 using ImGuiNET;
+using OpenTK.Graphics.OpenGL4;
 using OpenTK.Mathematics;
 using OpenTK.Windowing.Common;
 using YEET.Engine.ECS;
@@ -18,7 +20,8 @@ namespace YEET
         private bool new_prefab_menu=false;
         public Editor()
         {
-           
+            Buffer<float> b = new Buffer<float>(BufferTarget.ArrayBuffer);
+            b.BufferData(new List<float>());
         }
 
         public override void OnStart()
@@ -27,6 +30,8 @@ namespace YEET
             AddEntity(new Grid(new Vector2i(3000, 3000),0.02f));
             Camera.Position = new Vector3(1500, 10, 1500);
             AddEntity(new Skybox());
+            
+            
         }
 
         public override void OnGui()

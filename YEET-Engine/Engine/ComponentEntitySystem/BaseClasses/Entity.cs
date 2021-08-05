@@ -9,20 +9,18 @@ namespace YEET.Engine.ECS
 {
     public class Entity
     {
-        public string Name = "default";
+        public string Name = "New Game Object";
 
         private Dictionary<UInt32, Component> _components;
         private Dictionary<UInt32, Entity> _childEntities;
         public UInt32 ID { get; }
         public bool Active = true;
         public bool ShowGUI = true;
-        public bool OpenInInspector = false;
-        public bool IsTrigger;
         private bool new_component_menu;
+        public bool HasCollision = false;
         
-        public Entity(bool GuiVisible = false)
+        public Entity()
         {
-            ShowGUI = GuiVisible;
             _components = new Dictionary<UInt32, Component>();
             _childEntities = new Dictionary<UInt32, Entity>();
             _components.Add(StateMaschine.GenerateId(), new Transform(this));

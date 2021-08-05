@@ -9,7 +9,7 @@ namespace YEET.Engine.ECS
     {
         public OBJLoader _loader;
         
-        public StaticOBJModel(string path,Vector3 position, bool GuiVisible) : base(GuiVisible)
+        public StaticOBJModel(string path,Vector3 position, bool GuiVisible)
         {
             Name ="OBJ";
             _loader = new OBJLoader(path, new ShaderLoader("Model", "FlatShadedModel",

@@ -55,6 +55,7 @@ namespace YEET.Engine.ECS
         {
             Point_one= point_one;
             Point_two =point_two;
+            owner.HasCollision = true;
         }
 
 
